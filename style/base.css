@@ -3,3 +3,9 @@
 
     https://jupyterlab.readthedocs.io/en/stable/developer/css.html
 */
+
+.jp-themeEditorViewPanel{
+
+    background-color: var(--jp-layout-color0);
+    color: var(--jp-layout-color0);
+}
