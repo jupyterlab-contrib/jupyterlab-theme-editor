@@ -3,29 +3,14 @@ import {
   ColorPalette,
   ColorInterpolationSpace,
   ColorRGBA64,
-  /*contrastRatio,*/
+  contrastRatio,
   hslToRGB,
   rgbToHSL,
   ColorHSL
 } from '@microsoft/fast-colors';
 
-/*const black = new ColorRGBA64(0, 0, 0, 1);
+const black = new ColorRGBA64(0, 0, 0, 1);
 const white = new ColorRGBA64(1, 1, 1, 1);
-
-function set_black_or_white(
-  backgroundcolor: ColorRGBA64,
-  color: ColorRGBA64,
-  threshold: number
-) {
-  const ratio = contrastRatio(backgroundcolor, color);
-  if (ratio < threshold && color === black) {
-    color = white;
-  } else if (ratio < threshold && color === white) {
-    color = black;
-  }
-  console.log('ratio is:', ratio);
-  return color;
-} */
 
 function hexToRGBA(h: string) {
   let r = '0',
@@ -49,98 +34,47 @@ function hexToRGBA(h: string) {
   return rgba;
 }
 
-function set_layout_colors_light(palette: ColorPalette) {
-  document.body.style.setProperty(
-    '--jp-layout-color0',
-    palette.palette[0].toStringHexRGB()
+function rgba_string_to_ColorRGBA64(colorValueRGBAstr: number[]) {
+  const colorRGBA64 = new ColorRGBA64(
+    colorValueRGBAstr[0],
+    colorValueRGBAstr[1],
+    colorValueRGBAstr[2],
+    colorValueRGBAstr[3]
   );
-  document.body.style.setProperty(
-    '--jp-layout-color1',
-    palette.palette[1].toStringHexRGB()
-  );
-  document.body.style.setProperty(
-    '--jp-layout-color2',
-    palette.palette[2].toStringHexRGB()
-  );
-  document.body.style.setProperty(
-    '--jp-layout-color3',
-    palette.palette[3].toStringHexRGB()
-  );
-  document.body.style.setProperty(
-    '--jp-layout-color4',
-    palette.palette[4].toStringHexRGB()
-  );
+  return colorRGBA64;
 }
 
-function set_inverse_layout_colors_light(palette: ColorPalette) {
-  document.body.style.setProperty(
-    '--jp-inverse-layout-color0',
-    palette.palette[0].toStringHexRGB()
-  );
-  document.body.style.setProperty(
-    '--jp-inverse-layout-color1',
-    palette.palette[1].toStringHexRGB()
-  );
-  document.body.style.setProperty(
-    '--jp-inverse-layout-color2',
-    palette.palette[2].toStringHexRGB()
-  );
-  document.body.style.setProperty(
-    '--jp-inverse-layout-color3',
-    palette.palette[3].toStringHexRGB()
-  );
-  document.body.style.setProperty(
-    '--jp-inverse-layout-color4',
-    palette.palette[4].toStringHexRGB()
-  );
-}
-
-/* function switch_text_to_black_or_white_light(
-  palette: ColorPalette,
-  threshold: number
-) {
-  const element_color = [];
-  const color = black;
-  for (let i = 0; i < palette.palette.length; i++) {
-    element_color[i] = set_black_or_white(palette.palette[i], color, threshold);
+function set_css_properties(name: string, values: ColorRGBA64[], start = 0) {
+  let counter = start;
+  for (const v of values) {
+    document.body.style.setProperty(`${name}${counter++}`, v.toStringHexRGB());
   }
-
-  document.body.style.setProperty(
-    '--jp-ui-font-color0',
-    element_color[0].toStringHexRGB()
-  );
-  document.body.style.setProperty(
-    '--jp-ui-font-color1',
-    element_color[1].toStringHexRGB()
-  );
-  document.body.style.setProperty(
-    '--jp-ui-font-color2',
-    element_color[2].toStringHexRGB()
-  );
-  document.body.style.setProperty(
-    '--jp-ui-font-color3',
-    element_color[3].toStringHexRGB()
-  );
-} */
-
-function set_ui_font_light(palette: ColorPalette) {
-  document.body.style.setProperty(
-    '--jp-ui-font-color0',
-    palette.palette[1].toStringHexRGB()
-  );
-  document.body.style.setProperty(
-    '--jp-ui-font-color1',
-    palette.palette[2].toStringHexRGB()
-  );
-  document.body.style.setProperty(
-    '--jp-ui-font-color2',
-    palette.palette[3].toStringHexRGB()
-  );
-  document.body.style.setProperty(
-    '--jp-ui-font-color3',
-    palette.palette[4].toStringHexRGB()
-  );
 }
+
+function set_text_to_black_or_white(
+  name: string,
+  values: ColorRGBA64[],
+  threshold: number,
+  start = 0
+) {
+  let color = black;
+  let counter = start;
+
+  for (const v of values) {
+    const ratio = contrastRatio(v, black);
+    if (ratio < threshold && color === black) {
+      color = white;
+    } else if (ratio < threshold && color === white) {
+      color = black;
+    }
+
+    document.body.style.setProperty(
+      `${name}${counter++}`,
+      color.toStringHexRGB()
+    );
+  }
+}
+
 export class ThemeEditorLightModel extends VDomModel {
   private _baseColor = '#FFFFFF';
 
@@ -153,42 +87,38 @@ export class ThemeEditorLightModel extends VDomModel {
       this._baseColor = colorHEXstr;
       const colorValueRGBAstr = hexToRGBA(colorHEXstr);
       this.stateChanged.emit();
-      const colorRGBA64 = new ColorRGBA64(
-        colorValueRGBAstr[0],
-        colorValueRGBAstr[1],
-        colorValueRGBAstr[2],
-        colorValueRGBAstr[3]
-      );
+      const colorRGBA64 = rgba_string_to_ColorRGBA64(colorValueRGBAstr);
 
       const palette: ColorPalette = new ColorPalette({
         baseColor: colorRGBA64,
         steps: 5,
         interpolationMode: ColorInterpolationSpace.RGB
       });
+      const threshold = 7;
       const colorHSL = rgbToHSL(colorRGBA64);
       const h = colorHSL.h;
       const s = colorHSL.s;
-      let l = 1 - colorHSL.l;
+      const l = colorHSL.l;
 
-      if (l > 0.2 && l <= 0.5) {
-        l = 0.05;
-      } else if (l > 0.5 && l <= 0.75) {
-        l = 0.95;
-      } else {
-        //pass
-      }
-
-      const inverseColorHSL = new ColorHSL(h, s, l);
+      const inverseColorHSL = new ColorHSL(h, s, 1 - l);
       const inverseColorRGBA64 = hslToRGB(inverseColorHSL, 1);
       const inversePalette: ColorPalette = new ColorPalette({
         baseColor: inverseColorRGBA64,
         steps: 5,
         interpolationMode: ColorInterpolationSpace.RGB
       });
-      set_layout_colors_light(palette);
-      set_inverse_layout_colors_light(inversePalette);
-      /*switch_text_to_black_or_white_light(palette, 5);*/
-      set_ui_font_light(inversePalette);
+      set_css_properties('--jp-layout-color', palette.palette);
+      set_css_properties('--jp-inverse-layout-color', inversePalette.palette);
+      set_text_to_black_or_white(
+        '--jp-ui-font-color',
+        palette.palette,
+        threshold
+      );
+      set_text_to_black_or_white(
+        '--jp-ui-inverse-font-color',
+        inversePalette.palette,
+        threshold
+      );
     }
   }
 }
