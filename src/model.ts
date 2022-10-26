@@ -144,27 +144,68 @@ export class ThemeEditorModel extends VDomModel {
     this._inverse_uiFontColor2,
     this._inverse_uiFontColor3
   ];
-  private _baseFontSize = 10;
+  private _uiFontSize = 10;
+  private _contentFontSize = 14;
+  private _codeFontSize = 14;
   private _borderWidth = 1;
   private _borderRadius = 2;
+  private _uiFontscale = Number(
+    document.body.style.getPropertyValue(`${'--jp-ui-font-scale-factor'}`)
+  );
+  private _contentFontscale = Number(
+    document.body.style.getPropertyValue(`${'--jp-content-font-scale-factor'}`)
+  );
 
-  public get baseFontSize(): number {
-    return this._baseFontSize;
+  public get uiFontSize(): number {
+    return this._uiFontSize;
   }
 
-  public set baseFontSize(fontsize: number) {
-    if (this._baseFontSize !== fontsize) {
-      this._baseFontSize = fontsize;
+  public set uiFontSize(fontsize: number) {
+    if (this._uiFontSize !== fontsize) {
+      this._uiFontSize = fontsize;
       this.stateChanged.emit();
-      const fontscale = 1.2;
-      const size_scale = [1 / fontscale, 1, fontscale, fontscale * fontscale];
+      const scale = this._uiFontscale;
+
       const fontsize_list = [];
-      for (let i = 0; i < size_scale.length; i++) {
-        fontsize_list[i] = String(size_scale[i] * fontsize) + 'px';
+      for (let i = 0; i < 4; i++) {
+        fontsize_list[i] = String(Math.pow(scale, i - 1) * fontsize) + 'px';
       }
       set_css_font_properties('--jp-ui-font-size', fontsize_list);
     }
   }
+
+  public get contentFontSize(): number {
+    return this._contentFontSize;
+  }
+
+  public set contentFontSize(fontsize: number) {
+    if (this._contentFontSize !== fontsize) {
+      this._contentFontSize = fontsize;
+      this.stateChanged.emit();
+      const scale = this._contentFontscale;
+      const fontsize_list = [];
+      for (let i = 0; i < 4; i++) {
+        fontsize_list[i] = String(Math.pow(scale, i - 1) * fontsize) + 'px';
+      }
+      set_css_font_properties('--jp-content-font-size', fontsize_list);
+    }
+  }
+
+  public get codeFontSize(): number {
+    return this._codeFontSize;
+  }
+
+  public set codeFontSize(font: number) {
+    if (this._codeFontSize !== font) {
+      this._codeFontSize = font;
+      this.stateChanged.emit();
+    }
+    document.body.style.setProperty(
+      `${'--jp-code-font-size'}`,
+      String(this._codeFontSize) + 'px'
+    );
+  }
+
   public get borderWidth(): number {
     return this._borderWidth;
   }
@@ -196,8 +237,14 @@ export class ThemeEditorModel extends VDomModel {
   }
   public getNumber(scope: string) {
     switch (scope) {
-      case 'font-size': {
-        return this._baseFontSize;
+      case 'ui-font-size': {
+        return this._uiFontSize;
+      }
+      case 'content-font-size': {
+        return this._contentFontSize;
+      }
+      case 'code-font-size': {
+        return this._codeFontSize;
       }
       case 'border-width': {
         return this._borderWidth;
@@ -210,8 +257,16 @@ export class ThemeEditorModel extends VDomModel {
 
   public setNumber(scope: string, value: number) {
     switch (scope) {
-      case 'font-size': {
-        this.baseFontSize = value;
+      case 'ui-font-size': {
+        this.uiFontSize = value;
+        break;
+      }
+      case 'content-font-size': {
+        this.contentFontSize = value;
+        break;
+      }
+      case 'code-font-size': {
+        this.codeFontSize = value;
         break;
       }
       case 'border-width': {

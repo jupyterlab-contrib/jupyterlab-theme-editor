@@ -26,7 +26,7 @@ export class ThemeEditorView extends VDomRenderer<ThemeEditorModel> {
       <input
         type="number"
         min="1"
-        max="20"
+        max="40"
         onChange={event => {
           this.model.setNumber(scope, event.target.valueAsNumber);
         }}
@@ -44,8 +44,16 @@ export class ThemeEditorView extends VDomRenderer<ThemeEditorModel> {
               type: 'object',
               title: 'Theme settings',
               properties: {
-                'font-size': {
-                  title: 'Font size',
+                'ui-font-size': {
+                  title: 'UI Font size',
+                  type: 'string'
+                },
+                'content-font-size': {
+                  title: 'Content font size',
+                  type: 'string'
+                },
+                'code-font-size': {
+                  title: 'Code font size',
                   type: 'string'
                 },
                 'border-width': {
@@ -91,9 +99,17 @@ export class ThemeEditorView extends VDomRenderer<ThemeEditorModel> {
         uiSchema={{
           classNames: 'form-class',
           base: {
-            'font-size': {
+            'ui-font-size': {
               'ui:widget': this.numberPicker,
-              'ui:options': { scope: 'font-size' }
+              'ui:options': { scope: 'ui-font-size' }
+            },
+            'content-font-size': {
+              'ui:widget': this.numberPicker,
+              'ui:options': { scope: 'content-font-size' }
+            },
+            'code-font-size': {
+              'ui:widget': this.numberPicker,
+              'ui:options': { scope: 'code-font-size' }
             },
             'border-width': {
               'ui:widget': this.numberPicker,
