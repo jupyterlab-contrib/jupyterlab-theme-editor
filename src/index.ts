@@ -4,8 +4,8 @@ import {
 } from '@jupyterlab/application';
 //import { settingsIcon } from '@jupyterlab/ui-components';
 //import { MainAreaWidget } from '@jupyterlab/apputils';
-import { ThemeEditorLightModel } from './model';
-import { ThemeEditorLightView } from './view';
+import { ThemeEditorModel } from './model';
+import { ThemeEditorView } from './view';
 
 /**
  * Initialization data for the jupyter-theme-editor extension.
@@ -14,7 +14,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
   id: 'jupyter-theme-editor:plugin',
   autoStart: true,
   activate: (app: JupyterFrontEnd) => {
-    const view = new ThemeEditorLightView(new ThemeEditorLightModel());
+    const view = new ThemeEditorView(new ThemeEditorModel());
     view.addClass('jp-themeEditorViewPanel');
     view.title.label = 'Theme Editor';
     //view.title.icon = settingsIcon;

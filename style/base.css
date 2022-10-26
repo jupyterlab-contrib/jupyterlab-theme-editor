@@ -7,5 +7,15 @@
 .jp-themeEditorViewPanel{
 
     background-color: var(--jp-layout-color0);
-    color: var(--jp-layout-color0);
+    color: var(--jp-ui-font-color0);
+}
+form.rjsf button[type='submit'] {
+    display: none;
+
+}
+
+.form-class{
+    display : flex;
+    background-color: var(--jp-layout-color0);
+    color: var(--jp-ui-font-color0);
 }

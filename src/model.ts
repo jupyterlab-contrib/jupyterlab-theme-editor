@@ -11,6 +11,27 @@ import {
 
 const black = new ColorRGBA64(0, 0, 0, 1);
 const white = new ColorRGBA64(1, 1, 1, 1);
+const threshold = 7;
+
+function isBlack(color: ColorRGBA64) {
+  let test = 'Undefined';
+  if (color.r === 0.0 && color.g === 0.0 && color.b === 0.0) {
+    test = 'True';
+  } else {
+    test = 'False';
+  }
+  return test;
+}
+
+function isWhite(color: ColorRGBA64) {
+  let test = 'Undefined';
+  if (color.r === 1.0 && color.g === 1.0 && color.b === 1.0) {
+    test = 'True';
+  } else {
+    test = 'False';
+  }
+  return test;
+}
 
 function hexToRGBA(h: string) {
   let r = '0',
@@ -44,57 +65,327 @@ function rgba_string_to_ColorRGBA64(colorValueRGBAstr: number[]) {
   return colorRGBA64;
 }
 
-function set_css_properties(name: string, values: ColorRGBA64[], start = 0) {
+function set_css_color_properties(
+  name: string,
+  values: ColorRGBA64[],
+  start = 0
+) {
   let counter = start;
   for (const v of values) {
     document.body.style.setProperty(`${name}${counter++}`, v.toStringHexRGB());
   }
 }
 
-function set_text_to_black_or_white(
-  name: string,
-  values: ColorRGBA64[],
-  threshold: number,
-  start = 0
-) {
-  let color = black;
+function set_css_font_properties(name: string, values: string[], start = 0) {
   let counter = start;
-
   for (const v of values) {
-    const ratio = contrastRatio(v, black);
-    if (ratio < threshold && color === black) {
-      color = white;
-    } else if (ratio < threshold && color === white) {
-      color = black;
-    }
-
-    document.body.style.setProperty(
-      `${name}${counter++}`,
-      color.toStringHexRGB()
-    );
+    document.body.style.setProperty(`${name}${counter++}`, v);
   }
 }
 
-export class ThemeEditorLightModel extends VDomModel {
-  private _baseColor = '#FFFFFF';
+function set_text_to_black_or_white(
+  name: string,
+  layoutValues: ColorRGBA64[],
+  fontValues: ColorRGBA64[],
+  threshold: number
+) {
+  for (let i = 0; i < fontValues.length; i++) {
+    const v2 = layoutValues[i];
+    for (let v1 of fontValues) {
+      const ratio = contrastRatio(v1, v2);
+      if (ratio < threshold && isBlack(v1) === 'True') {
+        v1 = white;
+      } else {
+        if (ratio < threshold && isWhite(v1) === 'True') {
+          v1 = black;
+        }
+      }
+      document.body.style.setProperty(`${name}${i}`, v1.toStringHexRGB());
+    }
+  }
+}
+function define_palette(color: ColorRGBA64, steps: number) {
+  const palette: ColorPalette = new ColorPalette({
+    baseColor: color,
+    steps: steps,
+    interpolationMode: ColorInterpolationSpace.RGB
+  });
+  return palette;
+}
+function apply_palette(palette: ColorPalette, cssVariable: string) {
+  set_css_color_properties(cssVariable, palette.palette);
+}
 
-  public get baseColor(): string {
-    return this._baseColor;
+export class ThemeEditorModel extends VDomModel {
+  private _accentColor = '#FFFFFF';
+  private _brandColor = '#FFFFFF';
+  private _errorColor = '#FFFFFF';
+  private _infoColor = '#FFFFFF';
+  private _layoutColor = '#FFFFFF';
+  private _successColor = '#FFFFFF';
+  private _warnColor = '#FFFFFF';
+  private _uiFontColor0 = rgba_string_to_ColorRGBA64([0, 0, 0, 0.87]);
+  private _uiFontColor1 = rgba_string_to_ColorRGBA64([0, 0, 0, 0.87]);
+  private _uiFontColor2 = rgba_string_to_ColorRGBA64([0, 0, 0, 0.54]);
+  private _uiFontColor3 = rgba_string_to_ColorRGBA64([0, 0, 0, 0.38]);
+  private _uiFontColorList = [
+    this._uiFontColor0,
+    this._uiFontColor1,
+    this._uiFontColor2,
+    this._uiFontColor3
+  ];
+  private _inverse_uiFontColor0 = rgba_string_to_ColorRGBA64([1, 1, 1, 1]);
+  private _inverse_uiFontColor1 = rgba_string_to_ColorRGBA64([1, 1, 1, 0.7]);
+  private _inverse_uiFontColor2 = rgba_string_to_ColorRGBA64([1, 1, 1, 0.7]);
+  private _inverse_uiFontColor3 = rgba_string_to_ColorRGBA64([1, 1, 1, 0.5]);
+  private _inverse_uiFontColorList = [
+    this._inverse_uiFontColor0,
+    this._inverse_uiFontColor1,
+    this._inverse_uiFontColor2,
+    this._inverse_uiFontColor3
+  ];
+  private _baseFontSize = 10;
+  private _borderWidth = 1;
+  private _borderRadius = 2;
+
+  public get baseFontSize(): number {
+    return this._baseFontSize;
   }
 
-  public set baseColor(colorHEXstr: string) {
-    if (this._baseColor !== colorHEXstr) {
-      this._baseColor = colorHEXstr;
+  public set baseFontSize(fontsize: number) {
+    if (this._baseFontSize !== fontsize) {
+      this._baseFontSize = fontsize;
+      this.stateChanged.emit();
+      const fontscale = 1.2;
+      const size_scale = [1 / fontscale, 1, fontscale, fontscale * fontscale];
+      const fontsize_list = [];
+      for (let i = 0; i < size_scale.length; i++) {
+        fontsize_list[i] = String(size_scale[i] * fontsize) + 'px';
+      }
+      set_css_font_properties('--jp-ui-font-size', fontsize_list);
+    }
+  }
+  public get borderWidth(): number {
+    return this._borderWidth;
+  }
+
+  public set borderWidth(width: number) {
+    if (this._borderWidth !== width) {
+      this._borderWidth = width;
+      this.stateChanged.emit();
+    }
+    document.body.style.setProperty(
+      `${'--jp-border-width'}`,
+      String(this._borderWidth) + 'px'
+    );
+  }
+
+  public get borderRadius(): number {
+    return this._borderRadius;
+  }
+
+  public set borderRadius(radius: number) {
+    if (this._borderRadius !== radius) {
+      this._borderRadius = radius;
+      this.stateChanged.emit();
+    }
+    document.body.style.setProperty(
+      `${'--jp-border-radius'}`,
+      String(this._borderRadius) + 'px'
+    );
+  }
+  public getNumber(scope: string) {
+    switch (scope) {
+      case 'font-size': {
+        return this._baseFontSize;
+      }
+      case 'border-width': {
+        return this._borderWidth;
+      }
+      case 'border-radius': {
+        return this._borderRadius;
+      }
+    }
+  }
+
+  public setNumber(scope: string, value: number) {
+    switch (scope) {
+      case 'font-size': {
+        this.baseFontSize = value;
+        break;
+      }
+      case 'border-width': {
+        this.borderWidth = value;
+        break;
+      }
+      case 'border-radius': {
+        this.borderRadius = value;
+        break;
+      }
+    }
+  }
+
+  public getColor(scope: string) {
+    switch (scope) {
+      case 'accent': {
+        return this._accentColor;
+      }
+      case 'brand': {
+        return this._brandColor;
+      }
+      case 'error': {
+        return this._errorColor;
+      }
+      case 'info': {
+        return this._infoColor;
+      }
+      case 'layout': {
+        return this._layoutColor;
+      }
+      case 'success': {
+        return this._successColor;
+      }
+      case 'warn': {
+        return this._warnColor;
+      }
+    }
+  }
+
+  public setColor(scope: string, value: string) {
+    switch (scope) {
+      case 'accent': {
+        this.accentColor = value;
+        break;
+      }
+      case 'brand': {
+        this.brandColor = value;
+        break;
+      }
+      case 'error': {
+        this.errorColor = value;
+        break;
+      }
+      case 'info': {
+        this.infoColor = value;
+        break;
+      }
+      case 'layout': {
+        this.layoutColor = value;
+        break;
+      }
+      case 'success': {
+        this.successColor = value;
+        break;
+      }
+      case 'warn': {
+        this.warnColor = value;
+        break;
+      }
+    }
+  }
+
+  public get accentColor(): string {
+    return this._accentColor;
+  }
+  public set accentColor(colorHEXstr: string) {
+    if (this._accentColor !== colorHEXstr) {
+      this._accentColor = colorHEXstr;
+      this.stateChanged.emit();
+      const colorValueRGBAstr = hexToRGBA(colorHEXstr);
+      const colorRGBA64 = rgba_string_to_ColorRGBA64(colorValueRGBAstr);
+      const palette = define_palette(colorRGBA64, 4);
+      apply_palette(palette, '--jp-accent-color');
+    }
+  }
+
+  public get brandColor(): string {
+    return this._brandColor;
+  }
+
+  public set brandColor(colorHEXstr: string) {
+    if (this._brandColor !== colorHEXstr) {
+      this._brandColor = colorHEXstr;
+      this.stateChanged.emit();
+      const colorValueRGBAstr = hexToRGBA(colorHEXstr);
+      const colorRGBA64 = rgba_string_to_ColorRGBA64(colorValueRGBAstr);
+      const palette = define_palette(colorRGBA64, 4);
+      apply_palette(palette, '--jp-brand-color');
+    }
+  }
+
+  public get errorColor(): string {
+    return this._errorColor;
+  }
+
+  public set errorColor(colorHEXstr: string) {
+    if (this._errorColor !== colorHEXstr) {
+      this._errorColor = colorHEXstr;
       const colorValueRGBAstr = hexToRGBA(colorHEXstr);
       this.stateChanged.emit();
       const colorRGBA64 = rgba_string_to_ColorRGBA64(colorValueRGBAstr);
+      const palette = define_palette(colorRGBA64, 4);
+      apply_palette(palette, '--jp-error-color');
+    }
+  }
 
-      const palette: ColorPalette = new ColorPalette({
-        baseColor: colorRGBA64,
-        steps: 5,
-        interpolationMode: ColorInterpolationSpace.RGB
-      });
-      const threshold = 7;
+  public get warnColor(): string {
+    return this._warnColor;
+  }
+
+  public set warnColor(colorHEXstr: string) {
+    if (this._warnColor !== colorHEXstr) {
+      this._warnColor = colorHEXstr;
+      const colorValueRGBAstr = hexToRGBA(colorHEXstr);
+      this.stateChanged.emit();
+      const colorRGBA64 = rgba_string_to_ColorRGBA64(colorValueRGBAstr);
+      const palette = define_palette(colorRGBA64, 4);
+      apply_palette(palette, '--jp-warn-color');
+    }
+  }
+
+  public get successColor(): string {
+    return this._successColor;
+  }
+
+  public set successColor(colorHEXstr: string) {
+    if (this._successColor !== colorHEXstr) {
+      this._successColor = colorHEXstr;
+      const colorValueRGBAstr = hexToRGBA(colorHEXstr);
+      this.stateChanged.emit();
+      const colorRGBA64 = rgba_string_to_ColorRGBA64(colorValueRGBAstr);
+      const palette = define_palette(colorRGBA64, 4);
+      apply_palette(palette, '--jp-success-color');
+    }
+  }
+
+  public get infoColor(): string {
+    return this._successColor;
+  }
+
+  public set infoColor(colorHEXstr: string) {
+    if (this._infoColor !== colorHEXstr) {
+      this._infoColor = colorHEXstr;
+      const colorValueRGBAstr = hexToRGBA(colorHEXstr);
+      this.stateChanged.emit();
+      const colorRGBA64 = rgba_string_to_ColorRGBA64(colorValueRGBAstr);
+      const palette = define_palette(colorRGBA64, 4);
+      apply_palette(palette, '--jp-info-color');
+    }
+  }
+
+  public get layoutColor(): string {
+    return this._layoutColor;
+  }
+
+  public set layoutColor(colorHEXstr: string) {
+    if (this._layoutColor !== colorHEXstr) {
+      this._layoutColor = colorHEXstr;
+      const colorValueRGBAstr = hexToRGBA(colorHEXstr);
+      this.stateChanged.emit();
+      const colorRGBA64 = rgba_string_to_ColorRGBA64(colorValueRGBAstr);
+      const palette = define_palette(colorRGBA64, 4);
+      apply_palette(palette, '--jp-layout-color');
+
       const colorHSL = rgbToHSL(colorRGBA64);
       const h = colorHSL.h;
       const s = colorHSL.s;
@@ -102,21 +393,19 @@ export class ThemeEditorLightModel extends VDomModel {
 
       const inverseColorHSL = new ColorHSL(h, s, 1 - l);
       const inverseColorRGBA64 = hslToRGB(inverseColorHSL, 1);
-      const inversePalette: ColorPalette = new ColorPalette({
-        baseColor: inverseColorRGBA64,
-        steps: 5,
-        interpolationMode: ColorInterpolationSpace.RGB
-      });
-      set_css_properties('--jp-layout-color', palette.palette);
-      set_css_properties('--jp-inverse-layout-color', inversePalette.palette);
+      const inversePalette = define_palette(inverseColorRGBA64, 5);
+      apply_palette(inversePalette, '--jp-inverse-layout-color');
+
       set_text_to_black_or_white(
         '--jp-ui-font-color',
         palette.palette,
+        this._uiFontColorList,
         threshold
       );
       set_text_to_black_or_white(
         '--jp-ui-inverse-font-color',
         inversePalette.palette,
+        this._inverse_uiFontColorList,
         threshold
       );
     }
