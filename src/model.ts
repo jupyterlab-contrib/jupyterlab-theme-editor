@@ -43,7 +43,7 @@ function hexToRGBA(h: string) {
   return rgba;
 }
 
-function rgba_string_to_ColorRGBA64(colorValueRGBAstr: number[]) {
+function rgbaStringToColorRGBA64(colorValueRGBAstr: number[]) {
   const colorRGBA64 = new ColorRGBA64(
     colorValueRGBAstr[0],
     colorValueRGBAstr[1],
