@@ -81,7 +81,7 @@ function set_text_to_black_or_white(
     const v2 = layoutValues[i];
     for (let v1 of fontValues) {
       const ratio = contrastRatio(v1, v2);
-      if (ratio < threshold && isBlack(v1) === 'True') {
+      if (ratio < threshold && isBlack(v1)) {
         v1 = white;
       } else {
         if (ratio < threshold && isWhite(v1) === 'True') {
