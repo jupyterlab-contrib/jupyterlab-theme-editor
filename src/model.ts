@@ -17,14 +17,8 @@ function isBlack(color: ColorRGBA64): boolean {
   return color.r === 0.0 && color.g === 0.0 && color.b === 0.0;
 }
 
-function isWhite(color: ColorRGBA64) {
-  let test = 'Undefined';
-  if (color.r === 1.0 && color.g === 1.0 && color.b === 1.0) {
-    test = 'True';
-  } else {
-    test = 'False';
-  }
-  return test;
+function isWhite(color: ColorRGBA64): boolean {
+  return color.r === 1.0 && color.g === 1.0 && color.b === 1.0;
 }
 
 function hexToRGBA(h: string) {
