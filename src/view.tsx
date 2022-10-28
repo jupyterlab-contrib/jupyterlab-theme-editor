@@ -5,32 +5,32 @@ import Form from '@rjsf/core';
 
 export class ThemeEditorView extends VDomRenderer<ThemeEditorModel> {
   colorPicker = (props: any) => {
-    const { options } = props;
-    const { scope } = options;
-
+    const { scope } = props.options;
     return (
-      <input
-        type="color"
-        /*value={this.model.getColor(scope)}*/
-        onChange={event => {
-          this.model.setColor(scope, event.target.value);
-        }}
-      />
+      <div>
+        <input
+          type="color"
+          onChange={event => {
+            this.model.setColor(scope, event.target.value);
+          }}
+        />
+      </div>
     );
   };
 
   numberPicker = (props: any) => {
-    const { options } = props;
-    const { scope } = options;
+    const { scope } = props.options;
     return (
-      <input
-        type="number"
-        min="1"
-        max="40"
-        onChange={event => {
-          this.model.setNumber(scope, event.target.valueAsNumber);
-        }}
-      />
+      <div>
+        <input
+          type="number"
+          min="1"
+          max="40"
+          onChange={event => {
+            this.model.setNumber(scope, event.target.valueAsNumber);
+          }}
+        />
+      </div>
     );
   };
 
@@ -46,15 +46,18 @@ export class ThemeEditorView extends VDomRenderer<ThemeEditorModel> {
               properties: {
                 'ui-font-size': {
                   title: 'UI Font size',
-                  type: 'string'
+                  type: 'string',
+                  default: 13
                 },
                 'content-font-size': {
                   title: 'Content font size',
-                  type: 'string'
+                  type: 'string',
+                  default: 14
                 },
                 'code-font-size': {
                   title: 'Code font size',
-                  type: 'string'
+                  type: 'string',
+                  default: 14
                 },
                 'border-width': {
                   title: 'Border width',
@@ -66,6 +69,10 @@ export class ThemeEditorView extends VDomRenderer<ThemeEditorModel> {
                 },
                 'accent-color': {
                   title: 'Accent color',
+                  type: 'string'
+                },
+                'border-color': {
+                  title: 'Border color',
                   type: 'string'
                 },
                 'brand-color': {
@@ -122,6 +129,10 @@ export class ThemeEditorView extends VDomRenderer<ThemeEditorModel> {
             'accent-color': {
               'ui:widget': this.colorPicker,
               'ui:options': { scope: 'accent' }
+            },
+            'border-color': {
+              'ui:widget': this.colorPicker,
+              'ui:options': { scope: 'border' }
             },
             'brand-color': {
               'ui:widget': this.colorPicker,

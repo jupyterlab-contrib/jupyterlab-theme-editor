@@ -5,17 +5,14 @@
 */
 
 .jp-themeEditorViewPanel{
-
     background-color: var(--jp-layout-color0);
     color: var(--jp-ui-font-color0);
 }
-form.rjsf button[type='submit'] {
-    display: none;
-
+.form-class form.rjsf button[type='submit'] {
+    display : none;
 }
 
-.form-class{
-    display : flex;
+.form-class {
     background-color: var(--jp-layout-color0);
     color: var(--jp-ui-font-color0);
 }

@@ -3,15 +3,15 @@ import {
   ColorPalette,
   ColorInterpolationSpace,
   ColorRGBA64,
-  contrastRatio,
+  /*contrastRatio,*/
   hslToRGB,
   rgbToHSL,
   ColorHSL
 } from '@microsoft/fast-colors';
 
-const black = new ColorRGBA64(0, 0, 0, 1);
+/* const black = new ColorRGBA64(0, 0, 0, 1);
 const white = new ColorRGBA64(1, 1, 1, 1);
-const threshold = 7;
+const threshold = 7; */
 
 function isBlack(color: ColorRGBA64): boolean {
   return color.r === 0.0 && color.g === 0.0 && color.b === 0.0;
@@ -53,12 +53,12 @@ function rgbaStringToColorRGBA64(colorValueRGBAstr: number[]) {
   return colorRGBA64;
 }
 
-function setCssColorProperties(
-  name: string,
-  values: ColorRGBA64[],
-  start = 0
-) {
-  setCssProperties(name, values.map(v => v.toStringHexRGB()), start);
+function setCssColorProperties(name: string, values: ColorRGBA64[], start = 0) {
+  setCssProperties(
+    name,
+    values.map(v => v.toStringHexRGB()),
+    start
+  );
 }
 
 function setCssProperties(name: string, values: string[], start = 0) {
@@ -68,7 +68,7 @@ function setCssProperties(name: string, values: string[], start = 0) {
   }
 }
 
-function set_text_to_black_or_white(
+/* function set_css_font_properties(
   name: string,
   layoutValues: ColorRGBA64[],
   fontValues: ColorRGBA64[],
@@ -88,7 +88,7 @@ function set_text_to_black_or_white(
       document.body.style.setProperty(`${name}${i}`, v1.toStringHexRGB());
     }
   }
-}
+}  */
 function define_palette(color: ColorRGBA64, steps: number) {
   const palette: ColorPalette = new ColorPalette({
     baseColor: color,
@@ -98,49 +98,67 @@ function define_palette(color: ColorRGBA64, steps: number) {
   return palette;
 }
 function apply_palette(palette: ColorPalette, cssVariable: string) {
-  set_css_color_properties(cssVariable, palette.palette);
+  setCssColorProperties(cssVariable, palette.palette);
 }
 
 export class ThemeEditorModel extends VDomModel {
-  private _accentColor = '#FFFFFF';
+  private _accentColor = '#000000';
   private _brandColor = '#FFFFFF';
+  private _borderColor = '#FFFFFF';
   private _errorColor = '#FFFFFF';
   private _infoColor = '#FFFFFF';
   private _layoutColor = '#FFFFFF';
   private _successColor = '#FFFFFF';
   private _warnColor = '#FFFFFF';
-  private _uiFontColor0 = rgba_string_to_ColorRGBA64([0, 0, 0, 0.87]);
-  private _uiFontColor1 = rgba_string_to_ColorRGBA64([0, 0, 0, 0.87]);
-  private _uiFontColor2 = rgba_string_to_ColorRGBA64([0, 0, 0, 0.54]);
-  private _uiFontColor3 = rgba_string_to_ColorRGBA64([0, 0, 0, 0.38]);
-  private _uiFontColorList = [
-    this._uiFontColor0,
-    this._uiFontColor1,
-    this._uiFontColor2,
-    this._uiFontColor3
-  ];
-  private _inverse_uiFontColor0 = rgba_string_to_ColorRGBA64([1, 1, 1, 1]);
-  private _inverse_uiFontColor1 = rgba_string_to_ColorRGBA64([1, 1, 1, 0.7]);
-  private _inverse_uiFontColor2 = rgba_string_to_ColorRGBA64([1, 1, 1, 0.7]);
-  private _inverse_uiFontColor3 = rgba_string_to_ColorRGBA64([1, 1, 1, 0.5]);
-  private _inverse_uiFontColorList = [
-    this._inverse_uiFontColor0,
-    this._inverse_uiFontColor1,
-    this._inverse_uiFontColor2,
-    this._inverse_uiFontColor3
-  ];
-  private _uiFontSize = 10;
-  private _contentFontSize = 14;
-  private _codeFontSize = 14;
-  private _borderWidth = 1;
-  private _borderRadius = 2;
-  private _uiFontscale = Number(
-    document.body.style.getPropertyValue(`${'--jp-ui-font-scale-factor'}`)
-  );
-  private _contentFontscale = Number(
-    document.body.style.getPropertyValue(`${'--jp-content-font-scale-factor'}`)
-  );
+  /* private _uiFontColorList: ColorRGBA64[];
+  private _inverse_uiFontColorList: ColorRGBA64[]; */
+  private _uiFontSize: number;
+  private _contentFontSize: number;
+  private _codeFontSize: number;
+  private _borderWidth: number;
+  private _borderRadius: number;
+  private _uiFontScale: number;
+  private _contentFontScale: number;
 
+  constructor() {
+    super();
+    /* this._uiFontColorList = [
+      rgba_string_to_ColorRGBA64([0, 0, 0, 0.87]),
+      rgba_string_to_ColorRGBA64([0, 0, 0, 0.87]),
+      rgba_string_to_ColorRGBA64([0, 0, 0, 0.54]),
+      rgba_string_to_ColorRGBA64([0, 0, 0, 0.38])
+    ];
+
+    this._inverse_uiFontColorList = [
+      rgba_string_to_ColorRGBA64([1, 1, 1, 1]),
+      rgba_string_to_ColorRGBA64([1, 1, 1, 0.7]),
+      rgba_string_to_ColorRGBA64([1, 1, 1, 0.7]),
+      rgba_string_to_ColorRGBA64([1, 1, 1, 0.5])
+    ]; */
+    this._uiFontSize = Number(
+      document.body.style.getPropertyValue('--jp-ui-font-size')
+    );
+    this._contentFontSize = Number(
+      document.body.style.getPropertyValue('--jp-content-font-size')
+    );
+    this._codeFontSize = Number(
+      document.body.style.getPropertyValue('--jp-code-font-size')
+    );
+    this._borderWidth = Number(
+      document.body.style.getPropertyValue('--jp-border-width')
+    );
+    this._borderRadius = Number(
+      document.body.style.getPropertyValue('--jp-border-radius')
+    );
+    this._uiFontScale = Number(
+      document.body.style.getPropertyValue('--jp-ui-font-scale-factor')
+    );
+    this._contentFontScale = Number(
+      document.body.style.getPropertyValue(
+        `${'--jp-content-font-scale-factor'}`
+      )
+    );
+  }
   public get uiFontSize(): number {
     return this._uiFontSize;
   }
@@ -149,13 +167,16 @@ export class ThemeEditorModel extends VDomModel {
     if (this._uiFontSize !== fontsize) {
       this._uiFontSize = fontsize;
       this.stateChanged.emit();
-      const scale = this._uiFontscale;
+      const scale = this._uiFontScale;
 
       const fontsize_list = [];
       for (let i = 0; i < 4; i++) {
         fontsize_list[i] = String(Math.pow(scale, i - 1) * fontsize) + 'px';
       }
-      set_css_font_properties('--jp-ui-font-size', fontsize_list);
+      document.body.style.setProperty(
+        `${'--jp-content-font-size'}`,
+        String(this._uiFontSize) + 'px'
+      );
     }
   }
 
@@ -167,12 +188,15 @@ export class ThemeEditorModel extends VDomModel {
     if (this._contentFontSize !== fontsize) {
       this._contentFontSize = fontsize;
       this.stateChanged.emit();
-      const scale = this._contentFontscale;
+      const scale = this._contentFontScale;
       const fontsize_list = [];
       for (let i = 0; i < 4; i++) {
         fontsize_list[i] = String(Math.pow(scale, i - 1) * fontsize) + 'px';
       }
-      set_css_font_properties('--jp-content-font-size', fontsize_list);
+      document.body.style.setProperty(
+        `${'--jp-content-font-size'}`,
+        String(this._contentFontSize) + 'px'
+      );
     }
   }
 
@@ -199,6 +223,8 @@ export class ThemeEditorModel extends VDomModel {
     if (this._borderWidth !== width) {
       this._borderWidth = width;
       this.stateChanged.emit();
+      const test = document.body.style.getPropertyValue('--jp-border-width');
+      console.log('test:', test);
     }
     document.body.style.setProperty(
       `${'--jp-border-width'}`,
@@ -270,6 +296,9 @@ export class ThemeEditorModel extends VDomModel {
       case 'accent': {
         return this._accentColor;
       }
+      case 'border': {
+        return this._borderColor;
+      }
       case 'brand': {
         return this._brandColor;
       }
@@ -295,6 +324,10 @@ export class ThemeEditorModel extends VDomModel {
     switch (scope) {
       case 'accent': {
         this.accentColor = value;
+        break;
+      }
+      case 'border': {
+        this.borderColor = value;
         break;
       }
       case 'brand': {
@@ -332,9 +365,24 @@ export class ThemeEditorModel extends VDomModel {
       this._accentColor = colorHEXstr;
       this.stateChanged.emit();
       const colorValueRGBAstr = hexToRGBA(colorHEXstr);
-      const colorRGBA64 = rgba_string_to_ColorRGBA64(colorValueRGBAstr);
+      const colorRGBA64 = rgbaStringToColorRGBA64(colorValueRGBAstr);
       const palette = define_palette(colorRGBA64, 4);
       apply_palette(palette, '--jp-accent-color');
+    }
+  }
+
+  public get borderColor(): string {
+    return this._borderColor;
+  }
+
+  public set borderColor(colorHEXstr: string) {
+    if (this._borderColor !== colorHEXstr) {
+      this._borderColor = colorHEXstr;
+      this.stateChanged.emit();
+      const colorValueRGBAstr = hexToRGBA(colorHEXstr);
+      const colorRGBA64 = rgbaStringToColorRGBA64(colorValueRGBAstr);
+      const palette = define_palette(colorRGBA64, 4);
+      apply_palette(palette, '--jp-border-color');
     }
   }
 
@@ -347,7 +395,7 @@ export class ThemeEditorModel extends VDomModel {
       this._brandColor = colorHEXstr;
       this.stateChanged.emit();
       const colorValueRGBAstr = hexToRGBA(colorHEXstr);
-      const colorRGBA64 = rgba_string_to_ColorRGBA64(colorValueRGBAstr);
+      const colorRGBA64 = rgbaStringToColorRGBA64(colorValueRGBAstr);
       const palette = define_palette(colorRGBA64, 4);
       apply_palette(palette, '--jp-brand-color');
     }
@@ -362,7 +410,7 @@ export class ThemeEditorModel extends VDomModel {
       this._errorColor = colorHEXstr;
       const colorValueRGBAstr = hexToRGBA(colorHEXstr);
       this.stateChanged.emit();
-      const colorRGBA64 = rgba_string_to_ColorRGBA64(colorValueRGBAstr);
+      const colorRGBA64 = rgbaStringToColorRGBA64(colorValueRGBAstr);
       const palette = define_palette(colorRGBA64, 4);
       apply_palette(palette, '--jp-error-color');
     }
@@ -377,7 +425,7 @@ export class ThemeEditorModel extends VDomModel {
       this._warnColor = colorHEXstr;
       const colorValueRGBAstr = hexToRGBA(colorHEXstr);
       this.stateChanged.emit();
-      const colorRGBA64 = rgba_string_to_ColorRGBA64(colorValueRGBAstr);
+      const colorRGBA64 = rgbaStringToColorRGBA64(colorValueRGBAstr);
       const palette = define_palette(colorRGBA64, 4);
       apply_palette(palette, '--jp-warn-color');
     }
@@ -392,7 +440,7 @@ export class ThemeEditorModel extends VDomModel {
       this._successColor = colorHEXstr;
       const colorValueRGBAstr = hexToRGBA(colorHEXstr);
       this.stateChanged.emit();
-      const colorRGBA64 = rgba_string_to_ColorRGBA64(colorValueRGBAstr);
+      const colorRGBA64 = rgbaStringToColorRGBA64(colorValueRGBAstr);
       const palette = define_palette(colorRGBA64, 4);
       apply_palette(palette, '--jp-success-color');
     }
@@ -407,7 +455,7 @@ export class ThemeEditorModel extends VDomModel {
       this._infoColor = colorHEXstr;
       const colorValueRGBAstr = hexToRGBA(colorHEXstr);
       this.stateChanged.emit();
-      const colorRGBA64 = rgba_string_to_ColorRGBA64(colorValueRGBAstr);
+      const colorRGBA64 = rgbaStringToColorRGBA64(colorValueRGBAstr);
       const palette = define_palette(colorRGBA64, 4);
       apply_palette(palette, '--jp-info-color');
     }
@@ -422,7 +470,7 @@ export class ThemeEditorModel extends VDomModel {
       this._layoutColor = colorHEXstr;
       const colorValueRGBAstr = hexToRGBA(colorHEXstr);
       this.stateChanged.emit();
-      const colorRGBA64 = rgba_string_to_ColorRGBA64(colorValueRGBAstr);
+      const colorRGBA64 = rgbaStringToColorRGBA64(colorValueRGBAstr);
       const palette = define_palette(colorRGBA64, 4);
       apply_palette(palette, '--jp-layout-color');
 
@@ -430,13 +478,23 @@ export class ThemeEditorModel extends VDomModel {
       const h = colorHSL.h;
       const s = colorHSL.s;
       const l = colorHSL.l;
+      /* let isLight = 'Undefined';
+      if (l > 0.5) {
+        isLight = 'True';
+      } else {
+        isLight = 'False';
+      }
+      const delta = 0.2;
+      const direction = isLight ? 1 : -1;
 
+      console.log('isLight is:', isLight);*/
       const inverseColorHSL = new ColorHSL(h, s, 1 - l);
       const inverseColorRGBA64 = hslToRGB(inverseColorHSL, 1);
       const inversePalette = define_palette(inverseColorRGBA64, 5);
       apply_palette(inversePalette, '--jp-inverse-layout-color');
+      apply_palette(inversePalette, '--jp-ui-font-color');
 
-      set_text_to_black_or_white(
+      /*       set_text_to_black_or_white(
         '--jp-ui-font-color',
         palette.palette,
         this._uiFontColorList,
@@ -447,7 +505,7 @@ export class ThemeEditorModel extends VDomModel {
         inversePalette.palette,
         this._inverse_uiFontColorList,
         threshold
-      );
+      ); */
     }
   }
 }
