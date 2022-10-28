@@ -53,18 +53,15 @@ function rgbaStringToColorRGBA64(colorValueRGBAstr: number[]) {
   return colorRGBA64;
 }
 
-function set_css_color_properties(
+function setCssColorProperties(
   name: string,
   values: ColorRGBA64[],
   start = 0
 ) {
-  let counter = start;
-  for (const v of values) {
-    document.body.style.setProperty(`${name}${counter++}`, v.toStringHexRGB());
-  }
+  setCssProperties(name, values.map(v => v.toStringHexRGB()), start);
 }
 
-function set_css_font_properties(name: string, values: string[], start = 0) {
+function setCssProperties(name: string, values: string[], start = 0) {
   let counter = start;
   for (const v of values) {
     document.body.style.setProperty(`${name}${counter++}`, v);
