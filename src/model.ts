@@ -84,7 +84,7 @@ function set_text_to_black_or_white(
       if (ratio < threshold && isBlack(v1)) {
         v1 = white;
       } else {
-        if (ratio < threshold && isWhite(v1) === 'True') {
+        if (ratio < threshold && isWhite(v1)) {
           v1 = black;
         }
       }
