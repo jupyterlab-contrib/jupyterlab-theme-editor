@@ -13,14 +13,8 @@ const black = new ColorRGBA64(0, 0, 0, 1);
 const white = new ColorRGBA64(1, 1, 1, 1);
 const threshold = 7;
 
-function isBlack(color: ColorRGBA64) {
-  let test = 'Undefined';
-  if (color.r === 0.0 && color.g === 0.0 && color.b === 0.0) {
-    test = 'True';
-  } else {
-    test = 'False';
-  }
-  return test;
+function isBlack(color: ColorRGBA64): boolean {
+  return color.r === 0.0 && color.g === 0.0 && color.b === 0.0;
 }
 
 function isWhite(color: ColorRGBA64) {
