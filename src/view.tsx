@@ -10,6 +10,7 @@ export class ThemeEditorView extends VDomRenderer<ThemeEditorModel> {
       <div>
         <input
           type="color"
+          value={props.value}
           onChange={event => {
             this.model.setColor(scope, event.target.value);
           }}
@@ -26,6 +27,7 @@ export class ThemeEditorView extends VDomRenderer<ThemeEditorModel> {
           type="number"
           min="1"
           max="40"
+          value={props.value}
           onChange={event => {
             this.model.setNumber(scope, event.target.valueAsNumber);
           }}
@@ -46,13 +48,13 @@ export class ThemeEditorView extends VDomRenderer<ThemeEditorModel> {
               properties: {
                 'ui-font-size': {
                   title: 'UI Font size',
-                  type: 'string',
-                  default: 13
+                  type: 'number',
+                  default: 17
                 },
                 'content-font-size': {
                   title: 'Content font size',
-                  type: 'string',
-                  default: 14
+                  type: 'number',
+                  default: 15
                 },
                 'code-font-size': {
                   title: 'Code font size',
@@ -61,11 +63,13 @@ export class ThemeEditorView extends VDomRenderer<ThemeEditorModel> {
                 },
                 'border-width': {
                   title: 'Border width',
-                  type: 'string'
+                  type: 'string',
+                  default: 1
                 },
                 'border-radius': {
                   title: 'Border radius',
-                  type: 'string'
+                  type: 'string',
+                  default: 2
                 },
                 'accent-color': {
                   title: 'Accent color',
@@ -77,7 +81,8 @@ export class ThemeEditorView extends VDomRenderer<ThemeEditorModel> {
                 },
                 'brand-color': {
                   title: 'Brand color',
-                  type: 'string'
+                  type: 'string',
+                  default: ''
                 },
                 'error-color': {
                   title: 'Error color',

@@ -4,15 +4,16 @@
     https://jupyterlab.readthedocs.io/en/stable/developer/css.html
 */
 
-.jp-themeEditorViewPanel{
-    background-color: var(--jp-layout-color0);
-    color: var(--jp-ui-font-color0);
+.jp-theme-editor-view-panel {
+  background-color: var(--jp-layout-color0);
+  color: var(--jp-ui-font-color0);
 }
-.form-class form.rjsf button[type='submit'] {
-    display : none;
+
+.form.rjsf button[type='submit'] {
+  display: none;
 }
 
 .form-class {
-    background-color: var(--jp-layout-color0);
-    color: var(--jp-ui-font-color0);
+  background-color: var(--jp-layout-color1);
+  color: var(--jp-ui-font-color1);
 }
