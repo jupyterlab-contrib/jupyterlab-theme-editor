@@ -6,14 +6,17 @@ import {
   hslToRGB,
   rgbToHSL,
   ColorHSL
-  /*contrastRatio*/
 } from '@microsoft/fast-colors';
 
-/* function isDark(color: ColorRGBA64): boolean {
-  const colorHSL = rgbToHSL(color);
-  const l = colorHSL.l;
-  return l < 0.5;
-} */
+/* function isDark(color: ColorHSL) {
+  let isDark: boolean;
+  if (color.l > 0.5) {
+    isDark = true;
+  } else {
+    isDark = false;
+  }
+  return isDark;
+}*/
 function hexToRGBA(h: string) {
   let r = '0',
     g = '0',
@@ -85,6 +88,17 @@ function applyPalette(palette: ColorPalette, cssVariable: string) {
   setCssColorProperties(cssVariable, palette.palette);
 }
 
+/* function shiftToLuminance(
+  l: number,
+  a0: number,
+  sigma: number,
+  center: number
+) {
+  const x = Math.pow((l - center) / sigma, 2);
+  const y = a0 * Math.exp(-x);
+  return y;
+} */
+
 export class ThemeEditorModel extends VDomModel {
   private _accentColor: string;
   private _brandColor: string;
@@ -101,6 +115,9 @@ export class ThemeEditorModel extends VDomModel {
   private _codeFontSize: number;
   private _borderWidth: number;
   private _borderRadius: number;
+  private _schema: any;
+  private _formData: any;
+  private _formDataSetter: any;
 
   constructor() {
     super();
@@ -145,7 +162,158 @@ export class ThemeEditorModel extends VDomModel {
       CSSInfos,
       '--jp-border-radius'
     );
+
+    this._schema = {
+      type: 'object',
+      properties: {
+        'ui-font-size': {
+          title: 'UI Font size',
+          type: 'integer',
+          minimum: 10,
+          maximum: 25,
+          default: 17
+        },
+        'content-font-size': {
+          title: 'Content font size',
+          type: 'integer',
+          minimum: 6,
+          maximum: 30,
+          default: 15
+        },
+        'code-font-size': {
+          title: 'Code font size',
+          type: 'integer',
+          minimum: 12,
+          maximum: 20,
+          default: 14
+        },
+        'border-width': {
+          title: 'Border width',
+          type: 'integer',
+          minimum: 1,
+          maximum: 10,
+          default: 1
+        },
+        'border-radius': {
+          title: 'Border radius',
+          type: 'integer',
+          minimum: 1,
+          maximum: 10,
+          default: 2
+        },
+        'accent-color': {
+          title: 'Accent color',
+          type: 'string'
+        },
+        'border-color': {
+          title: 'Border color',
+          type: 'string'
+        },
+        'brand-color': {
+          title: 'Brand color',
+          type: 'string',
+          default: ''
+        },
+        'error-color': {
+          title: 'Error color',
+          type: 'string'
+        },
+        'info-color': {
+          title: 'Info color',
+          type: 'string'
+        },
+        'layout-color': {
+          title: 'Layout color',
+          type: 'string'
+        },
+        'success-color': {
+          title: 'Success color',
+          type: 'string'
+        },
+        'warn-color': {
+          title: 'Warn color',
+          type: 'string'
+        }
+      }
+    };
+
+    this._formData = {
+      'ui-font-size': `${this._uiFontSize}`,
+      'content-font-size': `${this._contentFontSize}`,
+      'code-font-size': `${this._codeFontSize}`,
+      'border-width': `${this._borderWidth}`,
+      'border-radius': `${this._borderRadius}`,
+      'accent-color': `${this._accentColor}`,
+      'border-color': `${this._borderColor}`,
+      'brand-color': `${this._brandColor}`,
+      'error-color': `${this._errorColor}`,
+      'info-color': `${this._infoColor}`,
+      'layout-color': `${this._layoutColor}`,
+      'success-color': `${this._successColor}`,
+      'warn-color': `${this._warnColor}`
+    };
+    this._formDataSetter = {
+      'ui-font-size': (value: any) => {
+        this.uiFontSize = value;
+      },
+      'content-font-size': (value: any) => {
+        this.contentFontSize = value;
+      },
+      'code-font-size': (value: any) => {
+        this.codeFontSize = value;
+      },
+      'border-width': (value: any) => {
+        this.borderWidth = value;
+      },
+      'border-radius': (value: any) => {
+        this.borderRadius = value;
+      },
+      'accent-color': (value: any) => {
+        this.accentColor = value;
+      },
+      'border-color': (value: any) => {
+        this.borderColor = value;
+      },
+      'brand-color': (value: any) => {
+        this.brandColor = value;
+      },
+      'error-color': (value: any) => {
+        this.errorColor = value;
+      },
+      'info-color': (value: any) => {
+        this.infoColor = value;
+      },
+      'layout-color': (value: any) => {
+        this.layoutColor = value;
+      },
+      'success-color': (value: any) => {
+        this._successColor = value;
+      },
+      'warn-color': (value: any) => {
+        this._warnColor = value;
+      }
+    };
   }
+
+  public get schema(): any {
+    return this._schema;
+  }
+
+  public get formData(): any {
+    return this._formData;
+  }
+
+  public set formData(data: any) {
+    if (this._formData !== data) {
+      this._formData = data;
+      for (const key in this._formData) {
+        const newValue = data[key];
+        this._formDataSetter[key](newValue);
+      }
+      this.stateChanged.emit();
+    }
+  }
+
   public get uiFontSize(): number {
     return this._uiFontSize;
   }
@@ -224,51 +392,6 @@ export class ThemeEditorModel extends VDomModel {
       String(this._borderRadius) + 'px'
     );
   }
-  public getNumber(scope: string) {
-    switch (scope) {
-      case 'ui-font-size': {
-        return this._uiFontSize;
-      }
-      case 'content-font-size': {
-        return this._contentFontSize;
-      }
-      case 'code-font-size': {
-        return this._codeFontSize;
-      }
-      case 'border-width': {
-        return this._borderWidth;
-      }
-      case 'border-radius': {
-        return this._borderRadius;
-      }
-    }
-  }
-
-  public setNumber(scope: string, value: number) {
-    switch (scope) {
-      case 'ui-font-size': {
-        this.uiFontSize = value;
-        break;
-      }
-      case 'content-font-size': {
-        this.contentFontSize = value;
-        break;
-      }
-      case 'code-font-size': {
-        this.codeFontSize = value;
-        break;
-      }
-      case 'border-width': {
-        this.borderWidth = value;
-        break;
-      }
-      case 'border-radius': {
-        this.borderRadius = value;
-        break;
-      }
-    }
-  }
-
   public getColor(scope: string) {
     switch (scope) {
       case 'accent': {
@@ -334,7 +457,6 @@ export class ThemeEditorModel extends VDomModel {
       }
     }
   }
-
   public get accentColor(): string {
     return this._accentColor;
   }
@@ -449,17 +571,25 @@ export class ThemeEditorModel extends VDomModel {
       const colorValueRGBAstr = hexToRGBA(colorHEXstr);
       this.stateChanged.emit();
       const colorRGBA64 = rgbaStringToColorRGBA64(colorValueRGBAstr);
-      const palette = definePalette(colorRGBA64, 4);
-      applyPalette(palette, '--jp-layout-color');
-
       const colorHSL = rgbToHSL(colorRGBA64);
       const h = colorHSL.h;
       const s = colorHSL.s;
       const l = colorHSL.l;
+      const palette = definePalette(colorRGBA64, 4);
+      applyPalette(palette, '--jp-layout-color');
+
       const complementaryL = 1 - l;
+      /*  const center = 0.5;
+      const sigma = 0.25;
+      const a0 = 0.4;
+      const shiftedLuminance =
+        complementaryL - shiftToLuminance(complementaryL, a0, sigma, center);
+      console.log('l is:', l);
+      console.log('complementaryL is:', complementaryL);
+      console.log('shifted l is:', shiftedLuminance);
 
+      const inverseColorHSL = new ColorHSL(h, s, shiftedLuminance); */
       const inverseColorHSL = new ColorHSL(h, s, complementaryL);
-
       const inverseColorRGBA64 = hslToRGB(inverseColorHSL, 1);
       const inversePalette = definePalette(inverseColorRGBA64, 5);
       applyPalette(inversePalette, '--jp-inverse-layout-color');

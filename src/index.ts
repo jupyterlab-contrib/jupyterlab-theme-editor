@@ -7,6 +7,7 @@ import { IThemeManager } from '@jupyterlab/apputils';
 //import { MainAreaWidget } from '@jupyterlab/apputils';
 import { ThemeEditorModel } from './model';
 import { ThemeEditorView } from './view';
+/*import { MyWidget } from './view';*/
 import { IChangedArgs } from '@jupyterlab/coreutils';
 
 /**
