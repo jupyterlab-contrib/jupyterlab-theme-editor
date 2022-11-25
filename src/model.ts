@@ -8,15 +8,6 @@ import {
   ColorHSL
 } from '@microsoft/fast-colors';
 
-/* function isDark(color: ColorHSL) {
-  let isDark: boolean;
-  if (color.l > 0.5) {
-    isDark = true;
-  } else {
-    isDark = false;
-  }
-  return isDark;
-}*/
 function hexToRGBA(h: string) {
   let r = '0',
     g = '0',
@@ -87,18 +78,6 @@ function definePalette(color: ColorRGBA64, steps: number) {
 function applyPalette(palette: ColorPalette, cssVariable: string) {
   setCssColorProperties(cssVariable, palette.palette);
 }
-
-/* function shiftToLuminance(
-  l: number,
-  a0: number,
-  sigma: number,
-  center: number
-) {
-  const x = Math.pow((l - center) / sigma, 2);
-  const y = a0 * Math.exp(-x);
-  return y;
-} */
-
 export class ThemeEditorModel extends VDomModel {
   private _accentColor: string;
   private _brandColor: string;
@@ -108,6 +87,9 @@ export class ThemeEditorModel extends VDomModel {
   private _layoutColor: string;
   private _successColor: string;
   private _warnColor: string;
+  private _uiFontFamily: string;
+  private _contentFontFamily: string;
+  private _codeFontFamily: string;
   private _uiFontSize: number;
   private _uiFontScale: number;
   private _contentFontSize: number;
@@ -118,7 +100,23 @@ export class ThemeEditorModel extends VDomModel {
   private _schema: any;
   private _formData: any;
   private _formDataSetter: any;
-
+  private _fontList = [
+    'system-ui',
+    'Segoe UI',
+    'helvetica',
+    'arial',
+    'sans-serif',
+    'Apple Color Emoji',
+    'Segoe UI Emoji',
+    'Segoe UI Symbol',
+    'JetBrains Mono'
+  ];
+  private _codeFontList = [
+    'menlo',
+    'consolas',
+    'DejaVu Sans Mono',
+    'monospace'
+  ];
   constructor() {
     super();
     const CSSInfos = window.getComputedStyle(document.body);
@@ -133,7 +131,18 @@ export class ThemeEditorModel extends VDomModel {
       '--jp-success-color1'
     );
     this._warnColor = getStringCSSProperties(CSSInfos, '--jp-warn-color1');
-
+    this._uiFontFamily = getStringCSSProperties(
+      CSSInfos,
+      '--jp-ui-font-family'
+    );
+    this._contentFontFamily = getStringCSSProperties(
+      CSSInfos,
+      '--jp-content-font-family'
+    );
+    this._codeFontFamily = getStringCSSProperties(
+      CSSInfos,
+      '--jp-code-font-family'
+    );
     this._uiFontSize = getNumberFromCSSProperties(
       CSSInfos,
       '--jp-ui-font-size1'
@@ -164,8 +173,44 @@ export class ThemeEditorModel extends VDomModel {
     );
 
     this._schema = {
+      title: 'THEME EDITOR',
+      description: 'You can tune the parameters',
       type: 'object',
       properties: {
+        type: 'object',
+        'layout-color': {
+          title: 'Layout color',
+          type: 'string'
+        },
+        'accent-color': {
+          title: 'Accent color',
+          type: 'string'
+        },
+        'border-color': {
+          title: 'Border color',
+          type: 'string'
+        },
+        'brand-color': {
+          title: 'Brand color',
+          type: 'string',
+          default: ''
+        },
+        'error-color': {
+          title: 'Error color',
+          type: 'string'
+        },
+        'info-color': {
+          title: 'Info color',
+          type: 'string'
+        },
+        'success-color': {
+          title: 'Success color',
+          type: 'string'
+        },
+        'warn-color': {
+          title: 'Warn color',
+          type: 'string'
+        },
         'ui-font-size': {
           title: 'UI Font size',
           type: 'integer',
@@ -201,43 +246,28 @@ export class ThemeEditorModel extends VDomModel {
           maximum: 10,
           default: 2
         },
-        'accent-color': {
-          title: 'Accent color',
-          type: 'string'
-        },
-        'border-color': {
-          title: 'Border color',
-          type: 'string'
-        },
-        'brand-color': {
-          title: 'Brand color',
+        'ui-font-family': {
+          title: 'User Interface Font family',
           type: 'string',
-          default: ''
+          enum: this._fontList
         },
-        'error-color': {
-          title: 'Error color',
-          type: 'string'
+        'content-font-family': {
+          title: 'Content Font family',
+          type: 'string',
+          enum: this._fontList
         },
-        'info-color': {
-          title: 'Info color',
-          type: 'string'
-        },
-        'layout-color': {
-          title: 'Layout color',
-          type: 'string'
-        },
-        'success-color': {
-          title: 'Success color',
-          type: 'string'
-        },
-        'warn-color': {
-          title: 'Warn color',
-          type: 'string'
+        'code-font-family': {
+          title: 'Code Font family',
+          type: 'string',
+          enum: this._codeFontList
         }
       }
     };
 
     this._formData = {
+      'ui-font-family': `${this._fontList}`,
+      'content-font-family': `${this._fontList}`,
+      'code-font-family': `${this._codeFontList}`,
       'ui-font-size': `${this._uiFontSize}`,
       'content-font-size': `${this._contentFontSize}`,
       'code-font-size': `${this._codeFontSize}`,
@@ -252,44 +282,54 @@ export class ThemeEditorModel extends VDomModel {
       'success-color': `${this._successColor}`,
       'warn-color': `${this._warnColor}`
     };
+
     this._formDataSetter = {
-      'ui-font-size': (value: any) => {
+      'ui-font-family': (value: string) => {
+        this.uiFontFamily = value;
+      },
+      'content-font-family': (value: string) => {
+        this.contentFontFamily = value;
+      },
+      'code-font-family': (value: string) => {
+        this.codeFontFamily = value;
+      },
+      'ui-font-size': (value: number) => {
         this.uiFontSize = value;
       },
-      'content-font-size': (value: any) => {
+      'content-font-size': (value: number) => {
         this.contentFontSize = value;
       },
-      'code-font-size': (value: any) => {
+      'code-font-size': (value: number) => {
         this.codeFontSize = value;
       },
-      'border-width': (value: any) => {
+      'border-width': (value: number) => {
         this.borderWidth = value;
       },
-      'border-radius': (value: any) => {
+      'border-radius': (value: number) => {
         this.borderRadius = value;
       },
-      'accent-color': (value: any) => {
+      'accent-color': (value: string) => {
         this.accentColor = value;
       },
-      'border-color': (value: any) => {
+      'border-color': (value: string) => {
         this.borderColor = value;
       },
-      'brand-color': (value: any) => {
+      'brand-color': (value: string) => {
         this.brandColor = value;
       },
-      'error-color': (value: any) => {
+      'error-color': (value: string) => {
         this.errorColor = value;
       },
-      'info-color': (value: any) => {
+      'info-color': (value: string) => {
         this.infoColor = value;
       },
-      'layout-color': (value: any) => {
+      'layout-color': (value: string) => {
         this.layoutColor = value;
       },
-      'success-color': (value: any) => {
+      'success-color': (value: string) => {
         this._successColor = value;
       },
-      'warn-color': (value: any) => {
+      'warn-color': (value: string) => {
         this._warnColor = value;
       }
     };
@@ -310,6 +350,39 @@ export class ThemeEditorModel extends VDomModel {
         const newValue = data[key];
         this._formDataSetter[key](newValue);
       }
+      this.stateChanged.emit();
+    }
+  }
+
+  public get uiFontFamily(): string {
+    return this._uiFontFamily;
+  }
+
+  public set uiFontFamily(fontfamily: string) {
+    if (this._uiFontFamily !== fontfamily) {
+      this._uiFontFamily = fontfamily;
+      this.stateChanged.emit();
+    }
+  }
+
+  public get contentFontFamily(): string {
+    return this._contentFontFamily;
+  }
+
+  public set contentFontFamily(fontfamily: string) {
+    if (this._contentFontFamily !== fontfamily) {
+      this._contentFontFamily = fontfamily;
+      this.stateChanged.emit();
+    }
+  }
+
+  public get codeFontFamily(): string {
+    return this._codeFontFamily;
+  }
+
+  public set codeFontFamily(fontfamily: string) {
+    if (this._codeFontFamily !== fontfamily) {
+      this._codeFontFamily = fontfamily;
       this.stateChanged.emit();
     }
   }
@@ -574,21 +647,39 @@ export class ThemeEditorModel extends VDomModel {
       const colorHSL = rgbToHSL(colorRGBA64);
       const h = colorHSL.h;
       const s = colorHSL.s;
-      const l = colorHSL.l;
-      const palette = definePalette(colorRGBA64, 4);
+      let l = colorHSL.l;
+
+      if (l > 0.3 && l < 0.4) {
+        l = l - 0.15;
+      }
+      if (l >= 0.4 && l < 0.5) {
+        l = l - 0.25;
+      }
+
+      if (l >= 0.5 && l < 0.6) {
+        l = l + 0.15;
+      } else if (l >= 0.6 && l < 0.7) {
+        l = l + 0.25;
+      }
+
+      const colorHSLshifted = new ColorHSL(h, s, l);
+      let isDark: boolean;
+      if (l < 0.5) {
+        isDark = true;
+      } else {
+        isDark = false;
+      }
+      if (isDark) {
+        console.log('Theme is dark, l is:', l);
+      } else {
+        console.log('Theme is light, l is:', l);
+      }
+
+      const colorRGBA64shifted = hslToRGB(colorHSLshifted);
+      const palette = definePalette(colorRGBA64shifted, 4);
       applyPalette(palette, '--jp-layout-color');
 
       const complementaryL = 1 - l;
-      /*  const center = 0.5;
-      const sigma = 0.25;
-      const a0 = 0.4;
-      const shiftedLuminance =
-        complementaryL - shiftToLuminance(complementaryL, a0, sigma, center);
-      console.log('l is:', l);
-      console.log('complementaryL is:', complementaryL);
-      console.log('shifted l is:', shiftedLuminance);
-
-      const inverseColorHSL = new ColorHSL(h, s, shiftedLuminance); */
       const inverseColorHSL = new ColorHSL(h, s, complementaryL);
       const inverseColorRGBA64 = hslToRGB(inverseColorHSL, 1);
       const inversePalette = definePalette(inverseColorRGBA64, 5);

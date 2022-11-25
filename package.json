@@ -62,7 +62,8 @@
     "@microsoft/fast-components": "^2.30.6",
     "@microsoft/fast-element": "^1.10.5",
     "@microsoft/fast-foundation": "^3.0.0-alpha.2",
-    "react": "^17.0.1"
+    "react": "^17.0.1",
+    "react-dropdown-select": "^4.9.0"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",

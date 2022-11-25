@@ -3,6 +3,7 @@ import { VDomRenderer } from '@jupyterlab/apputils';
 import { ThemeEditorModel } from './model';
 import React from 'react';
 import Form from '@rjsf/core';
+/*import Select from "react-dropdown-select"*/
 
 interface IProps {
   formData: any;
@@ -23,7 +24,6 @@ function FormComponent(props: IProps) {
     />
   );
 }
-
 
 export class ThemeEditorView extends VDomRenderer<ThemeEditorModel> {
   public uiSchema: any;
@@ -96,8 +96,6 @@ export class ThemeEditorView extends VDomRenderer<ThemeEditorModel> {
   };
 
   render() {
-    console.log(this.model.schema);
-
     return (
       <FormComponent
         schema={this.model.schema}
