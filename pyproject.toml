@@ -1,5 +1,5 @@
 [build-system]
-requires = ["hatchling>=1.3.1", "jupyterlab>=3.4.7,<4.0.0", "hatch-nodejs-version"]
+requires = ["hatchling>=1.4.0", "jupyterlab>=3.4.7,<4.0.0", "hatch-nodejs-version"]
 build-backend = "hatchling.build"
 
 [project]
@@ -20,6 +20,7 @@ classifiers = [
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
 ]
 dependencies = [
 ]
@@ -40,15 +41,16 @@ source = "nodejs"
 [tool.hatch.metadata.hooks.nodejs]
 fields = ["description", "authors", "urls"]
 
-[tool.hatch.build]
+[tool.hatch.build.targets.sdist]
 artifacts = ["jupyter_theme_editor/labextension"]
+exclude = [".github", "binder"]
 
 [tool.hatch.build.targets.wheel.shared-data]
 "jupyter_theme_editor/labextension" = "share/jupyter/labextensions/jupyter_theme_editor"
 "install.json" = "share/jupyter/labextensions/jupyter_theme_editor/install.json"
 
-[tool.hatch.build.targets.sdist]
-exclude = [".github"]
+[tool.hatch.build.hooks.version]
+path = "jupyter_theme_editor/_version.py"
 
 [tool.hatch.build.hooks.jupyter-builder]
 dependencies = ["hatch-jupyter-builder>=0.5"]
