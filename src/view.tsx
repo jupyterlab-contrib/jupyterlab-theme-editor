@@ -1,9 +1,7 @@
 import { VDomRenderer } from '@jupyterlab/apputils';
-/*import { ReactWidget } from '@jupyterlab/apputils';*/
 import { ThemeEditorModel } from './model';
 import React from 'react';
 import Form from '@rjsf/core';
-/*import Select from "react-dropdown-select"*/
 
 interface IProps {
   formData: any;
@@ -25,11 +23,27 @@ function FormComponent(props: IProps) {
   );
 }
 
+function colorPicker(props: any) {
+  return (
+    <div>
+      <input
+        type="color"
+        value={props.value}
+        onChange={event => props.onChange(event.target.value)}
+      />
+    </div>
+  );
+}
+
 export class ThemeEditorView extends VDomRenderer<ThemeEditorModel> {
   public uiSchema: any;
   constructor(model: ThemeEditorModel) {
     super(model);
     this.uiSchema = {
+      classNames: 'form-class',
+      'ui:submitButtonOptions': {
+        norender: true
+      },
       'ui-font-size': {
         'ui:widget': 'range'
       },
@@ -46,54 +60,31 @@ export class ThemeEditorView extends VDomRenderer<ThemeEditorModel> {
         'ui:widget': 'range'
       },
       'border-color': {
-        'ui:widget': this.colorPicker,
-        'ui:options': { scope: 'border' }
+        'ui:widget': colorPicker
       },
       'accent-color': {
-        'ui:widget': this.colorPicker,
-        'ui:options': { scope: 'accent' }
+        'ui:widget': colorPicker
       },
       'brand-color': {
-        'ui:widget': this.colorPicker,
-        'ui:options': { scope: 'brand' }
+        'ui:widget': colorPicker
       },
       'error-color': {
-        'ui:widget': this.colorPicker,
-        'ui:options': { scope: 'error' }
+        'ui:widget': colorPicker
       },
       'info-color': {
-        'ui:widget': this.colorPicker,
-        'ui:options': { scope: 'info' }
+        'ui:widget': colorPicker
       },
       'layout-color': {
-        'ui:widget': this.colorPicker,
-        'ui:options': { scope: 'layout' }
+        'ui:widget': colorPicker
       },
       'success-color': {
-        'ui:widget': this.colorPicker,
-        'ui:options': { scope: 'success' }
+        'ui:widget': colorPicker
       },
       'warn-color': {
-        'ui:widget': this.colorPicker,
-        'ui:options': { scope: 'warn' }
+        'ui:widget': colorPicker
       }
     };
   }
-
-  colorPicker = (props: any) => {
-    const { scope } = props.options;
-    return (
-      <div>
-        <input
-          type="color"
-          value={props.value}
-          onChange={event => {
-            this.model.setColor(scope, event.target.value);
-          }}
-        />
-      </div>
-    );
-  };
 
   render() {
     return (
@@ -103,7 +94,6 @@ export class ThemeEditorView extends VDomRenderer<ThemeEditorModel> {
         uiSchema={this.uiSchema}
         setformData={(value: any) => {
           this.model.formData = value;
-          this.update();
         }}
       />
     );

@@ -54,16 +54,17 @@
     "watch:labextension": "jupyter labextension watch ."
   },
   "dependencies": {
-    "@jupyterlab/application": "^3.1.0",
-    "@jupyterlab/apputils": "^3.4.7",
-    "@jupyterlab/coreutils": "^5.4.7",
-    "@jupyterlab/ui-components": "^3.4.7",
+    "@jupyterlab/application": "file:../jupyterlab/packages/application",
+    "@jupyterlab/apputils": "file:../jupyterlab/packages/apputils",
+    "@jupyterlab/coreutils": "file:../jupyterlab/packages/coreutils",
+    "@jupyterlab/ui-components": "file:../jupyterlab/packages/ui-components",
     "@microsoft/fast-colors": "^5.3.1",
     "@microsoft/fast-components": "^2.30.6",
     "@microsoft/fast-element": "^1.10.5",
     "@microsoft/fast-foundation": "^3.0.0-alpha.2",
-    "react": "^17.0.1",
-    "react-dropdown-select": "^4.9.0"
+    "@rjsf/core": "^4.2",
+
+    "react": "^17.0.2"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",

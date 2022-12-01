@@ -4,7 +4,11 @@
     https://jupyterlab.readthedocs.io/en/stable/developer/css.html
 */
 
-.jp-theme-editor-view-panel {
+
+
+
+.rjsf-class {
+  display: flex;
   background-color: var(--jp-layout-color1);
   color: var(--jp-ui-font-color1);
 }

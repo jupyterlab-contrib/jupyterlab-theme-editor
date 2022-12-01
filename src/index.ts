@@ -2,12 +2,10 @@ import {
   JupyterFrontEnd,
   JupyterFrontEndPlugin
 } from '@jupyterlab/application';
-import { IThemeManager } from '@jupyterlab/apputils';
-//import { settingsIcon } from '@jupyterlab/ui-components';
-//import { MainAreaWidget } from '@jupyterlab/apputils';
+import { IThemeManager, ICommandPalette } from '@jupyterlab/apputils';
+import { paletteIcon } from '@jupyterlab/ui-components';
 import { ThemeEditorModel } from './model';
 import { ThemeEditorView } from './view';
-/*import { MyWidget } from './view';*/
 import { IChangedArgs } from '@jupyterlab/coreutils';
 
 /**
@@ -16,22 +14,47 @@ import { IChangedArgs } from '@jupyterlab/coreutils';
 const plugin: JupyterFrontEndPlugin<void> = {
   id: 'jupyter-theme-editor:plugin',
   autoStart: true,
-  requires: [IThemeManager],
-  activate: (app: JupyterFrontEnd, themeManager: IThemeManager) => {
+  requires: [IThemeManager, ICommandPalette],
+  activate: (
+    app: JupyterFrontEnd,
+    themeManager: IThemeManager,
+    palette: ICommandPalette
+  ) => {
+    let model: ThemeEditorModel;
+    let view: ThemeEditorView;
     const onThemeChanged = (
       themeManager: IThemeManager,
       changes: IChangedArgs<string, string | null, string>
     ) => {
       themeManager.themeChanged.disconnect(onThemeChanged);
-      const model = new ThemeEditorModel();
-      const view = new ThemeEditorView(model);
-      view.addClass('jp-theme-editor-view-panel');
-      view.title.label = 'Theme Editor';
-      view.id = 'theme-editor';
-      app.shell.add(view, 'left');
+
+      model = new ThemeEditorModel();
+
       console.log('JupyterLab extension jupyter-theme-editor is activated!');
     };
     themeManager.themeChanged.connect(onThemeChanged);
+
+    const command = 'jupyter-theme-editor:open';
+    app.commands.addCommand(command, {
+      label: 'Open Theme Editor',
+      execute: () => {
+        if (!view || view.isDisposed) {
+          view = new ThemeEditorView(model);
+          view.addClass('jp-theme-editor-view-panel');
+          view.title.icon = paletteIcon;
+          view.id = 'theme-editor';
+        }
+        if (!view.isAttached) {
+          // Attach the widget to the main work area if it's not there
+          app.shell.add(view, 'left', { mode: 'split-bottom' });
+        }
+        // Activate the widget
+        app.shell.activateById(view.id);
+      }
+    });
+
+    // Add the command to the palette.
+    palette.addItem({ command, category: 'Tutorial' });
   }
 };
 
