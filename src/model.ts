@@ -78,56 +78,8 @@ function definePalette(color: ColorRGBA64, steps: number) {
 function applyPalette(palette: ColorPalette, cssVariable: string) {
   setCssColorProperties(cssVariable, palette.palette);
 }
-
-function defineAndApplyPaletteFrom1hexColor(
-  hexcolor: string,
-  steps: number,
-  cssVariable: string
-) {
-  const colorValueRGBAstr = hexToRGBA(hexcolor);
-  const colorRGBA64 = rgbaStringToColorRGBA64(colorValueRGBAstr);
-  const palette = definePalette(colorRGBA64, steps);
-  applyPalette(palette, cssVariable);
-}
-
-function shiftLuminanceRGBAColor(colorRGBA: ColorRGBA64) {
-  let l = getLuminanceRGBAColor(colorRGBA);
-  const h = getHueRGBAColor(colorRGBA);
-  const s = getSaturationRGBAColor(colorRGBA);
-
-  if (l > 0.3 && l < 0.4) {
-    l = l - 0.15;
-  }
-  if (l >= 0.4 && l < 0.5) {
-    l = l - 0.25;
-  }
-  if (l >= 0.5 && l < 0.6) {
-    l = l + 0.15;
-  } else if (l >= 0.6 && l < 0.7) {
-    l = l + 0.25;
-  }
-
-  const colorHSLshifted = new ColorHSL(h, s, l);
-  const colorRGBA64shifted = hslToRGB(colorHSLshifted);
-  return colorRGBA64shifted;
-}
-
-function getLuminanceRGBAColor(colorRGBA: ColorRGBA64) {
-  const colorHSL = rgbToHSL(colorRGBA);
-  return colorHSL.l;
-}
-
-function getSaturationRGBAColor(colorRGBA: ColorRGBA64) {
-  const colorHSL = rgbToHSL(colorRGBA);
-  return colorHSL.s;
-}
-
-function getHueRGBAColor(colorRGBA: ColorRGBA64) {
-  const colorHSL = rgbToHSL(colorRGBA);
-  return colorHSL.h;
-}
 export class ThemeEditorModel extends VDomModel {
-  /*   private _accentColor: string;
+  private _accentColor: string;
   private _brandColor: string;
   private _borderColor: string;
   private _errorColor: string;
@@ -137,32 +89,38 @@ export class ThemeEditorModel extends VDomModel {
   private _warnColor: string;
   private _uiFontFamily: string;
   private _contentFontFamily: string;
-  private _codeFontFamily: string; */
+  private _codeFontFamily: string;
+  private _uiFontSize: number;
   private _uiFontScale: number;
+  private _contentFontSize: number;
   private _contentFontScale: number;
+  private _codeFontSize: number;
+  private _borderWidth: number;
+  private _borderRadius: number;
   private _schema: any;
   private _formData: any;
   private _formDataSetter: any;
   private _fontList = [
     'system-ui',
+    'Segoe UI',
     'helvetica',
     'arial',
     'sans-serif',
-    'JetBrains Mono',
-    'Great Vibes',
-    'Little Days'
+    'Apple Color Emoji',
+    'Segoe UI Emoji',
+    'Segoe UI Symbol',
+    'JetBrains Mono'
   ];
   private _codeFontList = [
     'menlo',
     'consolas',
     'DejaVu Sans Mono',
-    'monospace',
-    'Space Mono'
+    'monospace'
   ];
   constructor() {
     super();
     const CSSInfos = window.getComputedStyle(document.body);
-    /* this._accentColor = getStringCSSProperties(CSSInfos, '--jp-accent-color1');
+    this._accentColor = getStringCSSProperties(CSSInfos, '--jp-accent-color1');
     this._borderColor = getStringCSSProperties(CSSInfos, '--jp-border-color1');
     this._brandColor = getStringCSSProperties(CSSInfos, '--jp-brand-color1');
     this._errorColor = getStringCSSProperties(CSSInfos, '--jp-error-color1');
@@ -173,15 +131,45 @@ export class ThemeEditorModel extends VDomModel {
       '--jp-success-color1'
     );
     this._warnColor = getStringCSSProperties(CSSInfos, '--jp-warn-color1');
-*/
-
+    this._uiFontFamily = getStringCSSProperties(
+      CSSInfos,
+      '--jp-ui-font-family'
+    );
+    this._contentFontFamily = getStringCSSProperties(
+      CSSInfos,
+      '--jp-content-font-family'
+    );
+    this._codeFontFamily = getStringCSSProperties(
+      CSSInfos,
+      '--jp-code-font-family'
+    );
+    this._uiFontSize = getNumberFromCSSProperties(
+      CSSInfos,
+      '--jp-ui-font-size1'
+    );
     this._uiFontScale = getNumberFromCSSProperties(
       CSSInfos,
       '--jp-ui-font-scale-factor'
     );
+    this._contentFontSize = getNumberFromCSSProperties(
+      CSSInfos,
+      '--jp-content-font-size1'
+    );
     this._contentFontScale = getNumberFromCSSProperties(
       CSSInfos,
       '--jp-content-font-scale-factor'
+    );
+    this._codeFontSize = getNumberFromCSSProperties(
+      CSSInfos,
+      '--jp-code-font-size'
+    );
+    this._borderWidth = getNumberFromCSSProperties(
+      CSSInfos,
+      '--jp-border-width'
+    );
+    this._borderRadius = getNumberFromCSSProperties(
+      CSSInfos,
+      '--jp-border-radius'
     );
 
     this._schema = {
@@ -189,6 +177,7 @@ export class ThemeEditorModel extends VDomModel {
       description: 'You can tune the parameters',
       type: 'object',
       properties: {
+        type: 'object',
         'layout-color': {
           title: 'Layout color',
           type: 'string'
@@ -225,40 +214,37 @@ export class ThemeEditorModel extends VDomModel {
         'ui-font-size': {
           title: 'UI Font size',
           type: 'integer',
-          minimum: 6,
-          maximum: 30,
-          default: getNumberFromCSSProperties(CSSInfos, '--jp-ui-font-size1')
+          minimum: 10,
+          maximum: 25,
+          default: 17
         },
         'content-font-size': {
           title: 'Content font size',
           type: 'integer',
           minimum: 6,
           maximum: 30,
-          default: getNumberFromCSSProperties(
-            CSSInfos,
-            '--jp-content-font-size1'
-          )
+          default: 15
         },
         'code-font-size': {
           title: 'Code font size',
           type: 'integer',
-          minimum: 6,
-          maximum: 30,
-          default: getNumberFromCSSProperties(CSSInfos, '--jp-code-font-size1')
+          minimum: 12,
+          maximum: 20,
+          default: 14
         },
         'border-width': {
           title: 'Border width',
           type: 'integer',
           minimum: 1,
           maximum: 10,
-          default: getNumberFromCSSProperties(CSSInfos, '--jp-border-width')
+          default: 1
         },
         'border-radius': {
           title: 'Border radius',
           type: 'integer',
           minimum: 1,
           maximum: 10,
-          default: getNumberFromCSSProperties(CSSInfos, '--jp-border-radius')
+          default: 2
         },
         'ui-font-family': {
           title: 'User Interface Font family',
@@ -279,115 +265,72 @@ export class ThemeEditorModel extends VDomModel {
     };
 
     this._formData = {
-      'ui-font-family': 'helvetica',
-      'content-font-family': 'system-ui',
-      'code-font-family': 'consolas',
-      'ui-font-size': 13,
-      'content-font-size': 14,
-      'code-font-size': 14,
-      'border-width': 1,
-      'border-radius': 2,
-      'accent-color': '#ffffff',
-      'border-color': '#ffffff',
-      'brand-color': '#ffffff',
-      'error-color': '#ffffff',
-      'info-color': '#ffffff',
-      'layout-color': '#ffffff',
-      'success-color': '#ffffff',
-      'warn-color': '#ffffff'
+      'ui-font-family': `${this._fontList}`,
+      'content-font-family': `${this._fontList}`,
+      'code-font-family': `${this._codeFontList}`,
+      'ui-font-size': `${this._uiFontSize}`,
+      'content-font-size': `${this._contentFontSize}`,
+      'code-font-size': `${this._codeFontSize}`,
+      'border-width': `${this._borderWidth}`,
+      'border-radius': `${this._borderRadius}`,
+      'accent-color': `${this._accentColor}`,
+      'border-color': `${this._borderColor}`,
+      'brand-color': `${this._brandColor}`,
+      'error-color': `${this._errorColor}`,
+      'info-color': `${this._infoColor}`,
+      'layout-color': `${this._layoutColor}`,
+      'success-color': `${this._successColor}`,
+      'warn-color': `${this._warnColor}`
     };
 
     this._formDataSetter = {
       'ui-font-family': (value: string) => {
-        document.body.style.setProperty(`${'--jp-ui-font-family'}`, value);
+        this.uiFontFamily = value;
       },
       'content-font-family': (value: string) => {
-        document.body.style.setProperty(`${'--jp-content-font-family'}`, value);
+        this.contentFontFamily = value;
       },
       'code-font-family': (value: string) => {
-        document.body.style.setProperty(`${'--jp-code-font-family'}`, value);
+        this.codeFontFamily = value;
       },
       'ui-font-size': (value: number) => {
-        const fontsize_list = [];
-        for (let i = 0; i < 4; i++) {
-          fontsize_list[i] =
-            String(Math.pow(this._uiFontScale, i - 1) * value) + 'px';
-        }
-        setCssProperties('--jp-ui-font-size', fontsize_list);
+        this.uiFontSize = value;
       },
       'content-font-size': (value: number) => {
-        const fontsize_list = [];
-        for (let i = 0; i < 6; i++) {
-          fontsize_list[i] =
-            String(Math.pow(this._contentFontScale, i - 1) * value) + 'px';
-        }
-        setCssProperties('--jp-content-font-size', fontsize_list);
+        this.contentFontSize = value;
       },
       'code-font-size': (value: number) => {
-        document.body.style.setProperty(
-          `${'--jp-code-font-size'}`,
-          String(value) + 'px'
-        );
-        this.stateChanged.emit();
+        this.codeFontSize = value;
       },
       'border-width': (value: number) => {
-        document.body.style.setProperty(
-          `${'--jp-border-width'}`,
-          String(value) + 'px'
-        );
-        this.stateChanged.emit();
+        this.borderWidth = value;
       },
       'border-radius': (value: number) => {
-        document.body.style.setProperty(
-          `${'--jp-border-radius'}`,
-          String(value) + 'px'
-        );
+        this.borderRadius = value;
       },
       'accent-color': (value: string) => {
-        defineAndApplyPaletteFrom1hexColor(value, 4, '--jp-accent-color');
+        this.accentColor = value;
       },
       'border-color': (value: string) => {
-        defineAndApplyPaletteFrom1hexColor(value, 4, '--jp-border-color');
+        this.borderColor = value;
       },
       'brand-color': (value: string) => {
-        defineAndApplyPaletteFrom1hexColor(value, 4, '--jp-brand-color');
+        this.brandColor = value;
       },
       'error-color': (value: string) => {
-        defineAndApplyPaletteFrom1hexColor(value, 4, '--jp-error-color');
+        this.errorColor = value;
       },
       'info-color': (value: string) => {
-        defineAndApplyPaletteFrom1hexColor(value, 4, '--jp-info-color');
+        this.infoColor = value;
       },
       'layout-color': (value: string) => {
-        const colorValueRGBAstr = hexToRGBA(value);
-        const colorRGBA64 = rgbaStringToColorRGBA64(colorValueRGBAstr);
-        const colorRGBA64shifted = shiftLuminanceRGBAColor(colorRGBA64);
-        const palette = definePalette(colorRGBA64shifted, 4);
-        applyPalette(palette, '--jp-layout-color');
-
-        const shiftedLuminance = getLuminanceRGBAColor(colorRGBA64shifted);
-        const complementaryL = 1 - shiftedLuminance;
-        const inverseColorHSL = new ColorHSL(
-          getHueRGBAColor(colorRGBA64),
-          getSaturationRGBAColor(colorRGBA64),
-          complementaryL
-        );
-        const inverseColorRGBA64 = hslToRGB(inverseColorHSL, 1);
-        const inversePalette = definePalette(inverseColorRGBA64, 5);
-        applyPalette(inversePalette, '--jp-inverse-layout-color');
-        applyPalette(inversePalette, '--jp-ui-font-color');
+        this.layoutColor = value;
       },
       'success-color': (value: string) => {
-        const colorValueRGBAstr = hexToRGBA(value);
-        const colorRGBA64 = rgbaStringToColorRGBA64(colorValueRGBAstr);
-        const palette = definePalette(colorRGBA64, 4);
-        applyPalette(palette, '--jp-success-color');
+        this._successColor = value;
       },
       'warn-color': (value: string) => {
-        const colorValueRGBAstr = hexToRGBA(value);
-        const colorRGBA64 = rgbaStringToColorRGBA64(colorValueRGBAstr);
-        const palette = definePalette(colorRGBA64, 4);
-        applyPalette(palette, '--jp-warn-color');
+        this._warnColor = value;
       }
     };
   }
@@ -401,12 +344,347 @@ export class ThemeEditorModel extends VDomModel {
   }
 
   public set formData(data: any) {
-    for (const key in this._formData) {
-      const newValue = data[key];
-      console.log('newValue:', newValue);
+    if (this._formData !== data) {
+      this._formData = data;
+      for (const key in this._formData) {
+        const newValue = data[key];
+        this._formDataSetter[key](newValue);
+      }
       this.stateChanged.emit();
-      this._formDataSetter[key](newValue);
     }
-    console.log('data:', data);
+  }
+
+  public get uiFontFamily(): string {
+    return this._uiFontFamily;
+  }
+
+  public set uiFontFamily(fontfamily: string) {
+    if (this._uiFontFamily !== fontfamily) {
+      this._uiFontFamily = fontfamily;
+      this.stateChanged.emit();
+    }
+  }
+
+  public get contentFontFamily(): string {
+    return this._contentFontFamily;
+  }
+
+  public set contentFontFamily(fontfamily: string) {
+    if (this._contentFontFamily !== fontfamily) {
+      this._contentFontFamily = fontfamily;
+      this.stateChanged.emit();
+    }
+  }
+
+  public get codeFontFamily(): string {
+    return this._codeFontFamily;
+  }
+
+  public set codeFontFamily(fontfamily: string) {
+    if (this._codeFontFamily !== fontfamily) {
+      this._codeFontFamily = fontfamily;
+      this.stateChanged.emit();
+    }
+  }
+
+  public get uiFontSize(): number {
+    return this._uiFontSize;
+  }
+
+  public set uiFontSize(fontsize: number) {
+    if (this._uiFontSize !== fontsize) {
+      this._uiFontSize = fontsize;
+      this.stateChanged.emit();
+      const fontsize_list = [];
+      for (let i = 0; i < 4; i++) {
+        fontsize_list[i] =
+          String(Math.pow(this._uiFontScale, i - 1) * fontsize) + 'px';
+      }
+      setCssProperties('--jp-ui-font-size', fontsize_list);
+    }
+  }
+
+  public get contentFontSize(): number {
+    return this._contentFontSize;
+  }
+
+  public set contentFontSize(fontsize: number) {
+    if (this._contentFontSize !== fontsize) {
+      this._contentFontSize = fontsize;
+      this.stateChanged.emit();
+      const fontsize_list = [];
+      for (let i = 0; i < 6; i++) {
+        fontsize_list[i] =
+          String(Math.pow(this._contentFontScale, i - 1) * fontsize) + 'px';
+      }
+      setCssProperties('--jp-content-font-size', fontsize_list);
+    }
+  }
+
+  public get codeFontSize(): number {
+    return this._codeFontSize;
+  }
+
+  public set codeFontSize(font: number) {
+    if (this._codeFontSize !== font) {
+      this._codeFontSize = font;
+      this.stateChanged.emit();
+    }
+    document.body.style.setProperty(
+      `${'--jp-code-font-size'}`,
+      String(this._codeFontSize) + 'px'
+    );
+  }
+
+  public get borderWidth(): number {
+    return this._borderWidth;
+  }
+
+  public set borderWidth(width: number) {
+    if (this._borderWidth !== width) {
+      this._borderWidth = width;
+      this.stateChanged.emit();
+    }
+    document.body.style.setProperty(
+      `${'--jp-border-width'}`,
+      String(this._borderWidth) + 'px'
+    );
+  }
+
+  public get borderRadius(): number {
+    return this._borderRadius;
+  }
+
+  public set borderRadius(radius: number) {
+    if (this._borderRadius !== radius) {
+      this._borderRadius = radius;
+      this.stateChanged.emit();
+    }
+    document.body.style.setProperty(
+      `${'--jp-border-radius'}`,
+      String(this._borderRadius) + 'px'
+    );
+  }
+  public getColor(scope: string) {
+    switch (scope) {
+      case 'accent': {
+        return this._accentColor;
+      }
+      case 'border': {
+        return this._borderColor;
+      }
+      case 'brand': {
+        return this._brandColor;
+      }
+      case 'error': {
+        return this._errorColor;
+      }
+      case 'info': {
+        return this._infoColor;
+      }
+      case 'layout': {
+        return this._layoutColor;
+      }
+      case 'success': {
+        return this._successColor;
+      }
+      case 'warn': {
+        return this._warnColor;
+      }
+    }
+  }
+
+  public setColor(scope: string, value: string) {
+    switch (scope) {
+      case 'accent': {
+        this.accentColor = value;
+        break;
+      }
+      case 'border': {
+        this.borderColor = value;
+        break;
+      }
+      case 'brand': {
+        this.brandColor = value;
+        break;
+      }
+      case 'error': {
+        this.errorColor = value;
+        break;
+      }
+      case 'info': {
+        this.infoColor = value;
+        break;
+      }
+      case 'layout': {
+        this.layoutColor = value;
+        break;
+      }
+      case 'success': {
+        this.successColor = value;
+        break;
+      }
+      case 'warn': {
+        this.warnColor = value;
+        break;
+      }
+    }
+  }
+  public get accentColor(): string {
+    return this._accentColor;
+  }
+  public set accentColor(colorHEXstr: string) {
+    if (this._accentColor !== colorHEXstr) {
+      this._accentColor = colorHEXstr;
+      this.stateChanged.emit();
+      const colorValueRGBAstr = hexToRGBA(colorHEXstr);
+      const colorRGBA64 = rgbaStringToColorRGBA64(colorValueRGBAstr);
+      const palette = definePalette(colorRGBA64, 4);
+      applyPalette(palette, '--jp-accent-color');
+    }
+  }
+
+  public get borderColor(): string {
+    return this._borderColor;
+  }
+
+  public set borderColor(colorHEXstr: string) {
+    if (this._borderColor !== colorHEXstr) {
+      this._borderColor = colorHEXstr;
+      this.stateChanged.emit();
+      const colorValueRGBAstr = hexToRGBA(colorHEXstr);
+      const colorRGBA64 = rgbaStringToColorRGBA64(colorValueRGBAstr);
+      const palette = definePalette(colorRGBA64, 4);
+      applyPalette(palette, '--jp-border-color');
+    }
+  }
+
+  public get brandColor(): string {
+    return this._brandColor;
+  }
+
+  public set brandColor(colorHEXstr: string) {
+    if (this._brandColor !== colorHEXstr) {
+      this._brandColor = colorHEXstr;
+      this.stateChanged.emit();
+      const colorValueRGBAstr = hexToRGBA(colorHEXstr);
+      const colorRGBA64 = rgbaStringToColorRGBA64(colorValueRGBAstr);
+      const palette = definePalette(colorRGBA64, 4);
+      applyPalette(palette, '--jp-brand-color');
+    }
+  }
+
+  public get errorColor(): string {
+    return this._errorColor;
+  }
+
+  public set errorColor(colorHEXstr: string) {
+    if (this._errorColor !== colorHEXstr) {
+      this._errorColor = colorHEXstr;
+      const colorValueRGBAstr = hexToRGBA(colorHEXstr);
+      this.stateChanged.emit();
+      const colorRGBA64 = rgbaStringToColorRGBA64(colorValueRGBAstr);
+      const palette = definePalette(colorRGBA64, 4);
+      applyPalette(palette, '--jp-error-color');
+    }
+  }
+
+  public get warnColor(): string {
+    return this._warnColor;
+  }
+
+  public set warnColor(colorHEXstr: string) {
+    if (this._warnColor !== colorHEXstr) {
+      this._warnColor = colorHEXstr;
+      const colorValueRGBAstr = hexToRGBA(colorHEXstr);
+      this.stateChanged.emit();
+      const colorRGBA64 = rgbaStringToColorRGBA64(colorValueRGBAstr);
+      const palette = definePalette(colorRGBA64, 4);
+      applyPalette(palette, '--jp-warn-color');
+    }
+  }
+
+  public get successColor(): string {
+    return this._successColor;
+  }
+
+  public set successColor(colorHEXstr: string) {
+    if (this._successColor !== colorHEXstr) {
+      this._successColor = colorHEXstr;
+      const colorValueRGBAstr = hexToRGBA(colorHEXstr);
+      this.stateChanged.emit();
+      const colorRGBA64 = rgbaStringToColorRGBA64(colorValueRGBAstr);
+      const palette = definePalette(colorRGBA64, 4);
+      applyPalette(palette, '--jp-success-color');
+    }
+  }
+
+  public get infoColor(): string {
+    return this._successColor;
+  }
+
+  public set infoColor(colorHEXstr: string) {
+    if (this._infoColor !== colorHEXstr) {
+      this._infoColor = colorHEXstr;
+      const colorValueRGBAstr = hexToRGBA(colorHEXstr);
+      this.stateChanged.emit();
+      const colorRGBA64 = rgbaStringToColorRGBA64(colorValueRGBAstr);
+      const palette = definePalette(colorRGBA64, 4);
+      applyPalette(palette, '--jp-info-color');
+    }
+  }
+
+  public get layoutColor(): string {
+    return this._layoutColor;
+  }
+
+  public set layoutColor(colorHEXstr: string) {
+    if (this._layoutColor !== colorHEXstr) {
+      this._layoutColor = colorHEXstr;
+      const colorValueRGBAstr = hexToRGBA(colorHEXstr);
+      this.stateChanged.emit();
+      const colorRGBA64 = rgbaStringToColorRGBA64(colorValueRGBAstr);
+      const colorHSL = rgbToHSL(colorRGBA64);
+      const h = colorHSL.h;
+      const s = colorHSL.s;
+      let l = colorHSL.l;
+
+      if (l > 0.3 && l < 0.4) {
+        l = l - 0.15;
+      }
+      if (l >= 0.4 && l < 0.5) {
+        l = l - 0.25;
+      }
+
+      if (l >= 0.5 && l < 0.6) {
+        l = l + 0.15;
+      } else if (l >= 0.6 && l < 0.7) {
+        l = l + 0.25;
+      }
+
+      const colorHSLshifted = new ColorHSL(h, s, l);
+      let isDark: boolean;
+      if (l < 0.5) {
+        isDark = true;
+      } else {
+        isDark = false;
+      }
+      if (isDark) {
+        console.log('Theme is dark, l is:', l);
+      } else {
+        console.log('Theme is light, l is:', l);
+      }
+
+      const colorRGBA64shifted = hslToRGB(colorHSLshifted);
+      const palette = definePalette(colorRGBA64shifted, 4);
+      applyPalette(palette, '--jp-layout-color');
+
+      const complementaryL = 1 - l;
+      const inverseColorHSL = new ColorHSL(h, s, complementaryL);
+      const inverseColorRGBA64 = hslToRGB(inverseColorHSL, 1);
+      const inversePalette = definePalette(inverseColorRGBA64, 5);
+      applyPalette(inversePalette, '--jp-inverse-layout-color');
+      applyPalette(inversePalette, '--jp-ui-font-color');
+    }
   }
 }
