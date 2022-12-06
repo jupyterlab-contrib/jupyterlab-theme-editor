@@ -3,7 +3,7 @@ import {
   JupyterFrontEndPlugin
 } from '@jupyterlab/application';
 import { IThemeManager, ICommandPalette } from '@jupyterlab/apputils';
-import { paletteIcon } from '@jupyterlab/ui-components';
+import { themeEditorIcon } from './icons';
 import { ThemeEditorModel } from './model';
 import { ThemeEditorView } from './view';
 import { IChangedArgs } from '@jupyterlab/coreutils';
@@ -41,7 +41,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
         if (!view || view.isDisposed) {
           view = new ThemeEditorView(model);
           view.addClass('jp-theme-editor-view-panel');
-          view.title.icon = paletteIcon;
+          view.title.icon = themeEditorIcon;
           view.id = 'theme-editor';
         }
         if (!view.isAttached) {

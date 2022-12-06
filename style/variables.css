@@ -1,0 +1,73 @@
+/*-----------------------------------------------------------------------------
+| Copyright (c) Jupyter Development Team.
+| Distributed under the terms of the Modified BSD License.
+|----------------------------------------------------------------------------*/
+
+/*
+The following CSS variables define the main, public API for styling JupyterLab.
+These variables should be used by all plugins wherever possible. In other
+words, plugins should not define custom colors, sizes, etc unless absolutely
+necessary. This enables users to change the visual theme of JupyterLab
+by changing these variables.
+
+Many variables appear in an ordered sequence (0,1,2,3). These sequences
+are designed to work well together, so for example, `--jp-border-color1` should
+be used with `--jp-layout-color1`. The numbers have the following meanings:
+
+* 0: super-primary, reserved for special emphasis
+* 1: primary, most important under normal situations
+* 2: secondary, next most important under normal situations
+* 3: tertiary, next most important under normal situations
+
+Throughout JupyterLab, we are mostly following principles from Google's
+Material Design when selecting colors. We are not, however, following
+all of MD as it is not optimized for dense, information rich UIs.
+*/
+@font-face {
+    font-family: 'arial';
+    src: url('arial.ttf') format('truetype');
+  }
+  @font-face {
+    font-family: 'helvetica';
+    src: url('helvetica.ttf') format('truetype');
+  }
+  @font-face {
+    font-family: 'sans-serif';
+    src: url('SansSerif.ttf') format('truetype');
+  }
+  @font-face {
+    font-family: 'times';
+    src: url('times.ttf') format('truetype');
+  }
+  @font-face {
+    font-family: 'JetBrains Mono';
+    src: url('JetBrainsMonoNL-Regular.ttf') format('truetype');
+  }
+  @font-face {
+    font-family: 'Great Vibes';
+    src: url('GreatVibes-Regular.ttf') format('truetype');
+  }
+  @font-face {
+    font-family: 'Little Days';
+    src: url('LittleDays.ttf') format('truetype');
+  }
+  @font-face {
+    font-family: 'Space Mono';
+    src: url('SpaceMono-Regular.ttf') format('truetype');
+  }
+  @font-face {
+    font-family: 'Open Sans Regular';
+    src: url('OpenSans-Regular.ttf') format('truetype');
+  }
+  @font-face {
+    font-family: 'Advertising Bold';
+    src: url('AdvertisingScriptBoldTrial.ttf') format('truetype');
+  }
+  @font-face {
+    font-family: 'Aurella';
+    src: url('Aurella.ttf') format('truetype');
+  }
+  :root{
+  --jp-ui-font-family: system-ui,
+  helvetica, arial, sans-serif, times 'JetBrains Mono', 'Great Vibes', 'Open Sans Regular', 'Aurella', ;
+  }

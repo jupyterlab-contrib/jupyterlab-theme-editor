@@ -185,8 +185,6 @@ export class ThemeEditorModel extends VDomModel {
     );
 
     this._schema = {
-      title: 'THEME EDITOR',
-      description: 'You can tune the parameters',
       type: 'object',
       properties: {
         'layout-color': {
@@ -403,9 +401,7 @@ export class ThemeEditorModel extends VDomModel {
   public set formData(data: any) {
     for (const key in this._formData) {
       const newValue = data[key];
-      this.stateChanged.emit();
       this._formDataSetter[key](newValue);
     }
-    console.log('data:', data);
   }
 }

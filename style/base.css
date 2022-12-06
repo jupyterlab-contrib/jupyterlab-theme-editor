@@ -7,8 +7,8 @@
 
 
 
-.rjsf-class {
+.form-class {
   display: flex;
-  background-color: var(--jp-layout-color1);
-  color: var(--jp-ui-font-color1);
+  background-color: var(--jp-layout-color0);
+  color: var(--jp-ui-font-color0);
 }
