@@ -11,4 +11,5 @@
   display: flex;
   background-color: var(--jp-layout-color0);
   color: var(--jp-ui-font-color0);
+  font-size: var(--jp-ui-font-size0);
 }

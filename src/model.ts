@@ -8,6 +8,36 @@ import {
   ColorHSL
 } from '@microsoft/fast-colors';
 
+function stringtoHex(s: string) {
+  if (s === 'white') {
+    return '#000000';
+  }
+  if (s === 'black') {
+    return '#ffffff';
+  }
+  if (s.includes('rgba')) {
+    const s1 = s.split('rgba(')[1];
+    const r = Number(s1.split(',')[0]);
+    const g = Number(s1.split(',')[1]);
+    const b = Number(s1.split(',')[2]);
+    console.log('s1:', s1);
+    console.log('r:', r);
+    console.log('g:', g);
+    console.log('b:', b);
+    const hexstring =
+      '#' +
+      [r, g, b]
+        .map(x => {
+          const hex = x.toString(16);
+          return hex.length === 1 ? '0' + hex : hex;
+        })
+        .join('');
+
+    return hexstring;
+  } else {
+    return s;
+  }
+}
 function hexToRGBA(h: string) {
   let r = '0',
     g = '0',
@@ -41,14 +71,31 @@ function rgbaStringToColorRGBA64(colorValueRGBAstr: number[]) {
 }
 
 function getNumberFromCSSProperties(CSSInfos: any, name: string) {
-  const propertyValueStr = getStringCSSProperties(CSSInfos, name);
+  const propertyValueStr = CSSInfos.getPropertyValue(name);
   const propertyValue = Number(propertyValueStr.split('px')[0]);
   return propertyValue;
 }
 
-function getStringCSSProperties(CSSInfos: any, name: string) {
+function getFontSizeFromCSSProperties(
+  CSSInfos: any,
+  nameRoot: string,
+  step: number
+) {
+  const baseFontSize = getNumberFromCSSProperties(CSSInfos, nameRoot + '1');
+  const s = CSSInfos.getPropertyValue(nameRoot + String(step));
+  if (s.includes('em')) {
+    const s1 = Number(s.split('em')[0]);
+    const font = s1 * baseFontSize;
+    return font;
+  } else {
+    return baseFontSize;
+  }
+}
+
+function getHexColorFromCSSProperties(CSSInfos: any, name: string) {
   const propertyValueStr = CSSInfos.getPropertyValue(name);
-  return propertyValueStr;
+  const hexcolor = stringtoHex(propertyValueStr);
+  return hexcolor;
 }
 
 function setCssColorProperties(name: string, values: ColorRGBA64[], start = 0) {
@@ -127,17 +174,6 @@ function getHueRGBAColor(colorRGBA: ColorRGBA64) {
   return colorHSL.h;
 }
 export class ThemeEditorModel extends VDomModel {
-  /*   private _accentColor: string;
-  private _brandColor: string;
-  private _borderColor: string;
-  private _errorColor: string;
-  private _infoColor: string;
-  private _layoutColor: string;
-  private _successColor: string;
-  private _warnColor: string;
-  private _uiFontFamily: string;
-  private _contentFontFamily: string;
-  private _codeFontFamily: string; */
   private _uiFontScale: number;
   private _contentFontScale: number;
   private _schema: any;
@@ -150,7 +186,10 @@ export class ThemeEditorModel extends VDomModel {
     'sans-serif',
     'JetBrains Mono',
     'Great Vibes',
-    'Little Days'
+    'Little Days',
+    'Little Daisy',
+    'Advertising Bold',
+    'Aurella'
   ];
   private _codeFontList = [
     'menlo',
@@ -162,19 +201,6 @@ export class ThemeEditorModel extends VDomModel {
   constructor() {
     super();
     const CSSInfos = window.getComputedStyle(document.body);
-    /* this._accentColor = getStringCSSProperties(CSSInfos, '--jp-accent-color1');
-    this._borderColor = getStringCSSProperties(CSSInfos, '--jp-border-color1');
-    this._brandColor = getStringCSSProperties(CSSInfos, '--jp-brand-color1');
-    this._errorColor = getStringCSSProperties(CSSInfos, '--jp-error-color1');
-    this._infoColor = getStringCSSProperties(CSSInfos, '--jp-info-color1');
-    this._layoutColor = getStringCSSProperties(CSSInfos, '--jp-layout-color1');
-    this._successColor = getStringCSSProperties(
-      CSSInfos,
-      '--jp-success-color1'
-    );
-    this._warnColor = getStringCSSProperties(CSSInfos, '--jp-warn-color1');
-*/
-
     this._uiFontScale = getNumberFromCSSProperties(
       CSSInfos,
       '--jp-ui-font-scale-factor'
@@ -224,39 +250,31 @@ export class ThemeEditorModel extends VDomModel {
           title: 'UI Font size',
           type: 'integer',
           minimum: 6,
-          maximum: 30,
-          default: getNumberFromCSSProperties(CSSInfos, '--jp-ui-font-size1')
+          maximum: 30
         },
         'content-font-size': {
           title: 'Content font size',
           type: 'integer',
           minimum: 6,
-          maximum: 30,
-          default: getNumberFromCSSProperties(
-            CSSInfos,
-            '--jp-content-font-size1'
-          )
+          maximum: 30
         },
         'code-font-size': {
           title: 'Code font size',
           type: 'integer',
           minimum: 6,
-          maximum: 30,
-          default: getNumberFromCSSProperties(CSSInfos, '--jp-code-font-size1')
+          maximum: 30
         },
         'border-width': {
           title: 'Border width',
           type: 'integer',
           minimum: 1,
-          maximum: 10,
-          default: getNumberFromCSSProperties(CSSInfos, '--jp-border-width')
+          maximum: 10
         },
         'border-radius': {
           title: 'Border radius',
           type: 'integer',
           minimum: 1,
-          maximum: 10,
-          default: getNumberFromCSSProperties(CSSInfos, '--jp-border-radius')
+          maximum: 10
         },
         'ui-font-family': {
           title: 'User Interface Font family',
@@ -280,19 +298,51 @@ export class ThemeEditorModel extends VDomModel {
       'ui-font-family': 'helvetica',
       'content-font-family': 'system-ui',
       'code-font-family': 'consolas',
-      'ui-font-size': 13,
-      'content-font-size': 14,
-      'code-font-size': 14,
-      'border-width': 1,
-      'border-radius': 2,
-      'accent-color': '#ffffff',
-      'border-color': '#ffffff',
-      'brand-color': '#ffffff',
-      'error-color': '#ffffff',
-      'info-color': '#ffffff',
-      'layout-color': '#ffffff',
-      'success-color': '#ffffff',
-      'warn-color': '#ffffff'
+      'ui-font-size': getFontSizeFromCSSProperties(
+        CSSInfos,
+        '--jp-ui-font-size',
+        1
+      ),
+      'content-font-size': getFontSizeFromCSSProperties(
+        CSSInfos,
+        '--jp-content-font-size',
+        1
+      ),
+      'code-font-size': getNumberFromCSSProperties(
+        CSSInfos,
+        '--jp-code-font-size'
+      ),
+      'border-width': getNumberFromCSSProperties(CSSInfos, '--jp-border-width'),
+      'border-radius': getNumberFromCSSProperties(
+        CSSInfos,
+        '--jp-border-radius'
+      ),
+      'layout-color': getHexColorFromCSSProperties(
+        CSSInfos,
+        '--jp-layout-color1'
+      ),
+      'accent-color': getHexColorFromCSSProperties(
+        CSSInfos,
+        '--jp-accent-color1'
+      ),
+      'border-color': getHexColorFromCSSProperties(
+        CSSInfos,
+        '--jp-border-color1'
+      ),
+      'brand-color': getHexColorFromCSSProperties(
+        CSSInfos,
+        '--jp-brand-color1'
+      ),
+      'error-color': getHexColorFromCSSProperties(
+        CSSInfos,
+        '--jp-error-color1'
+      ),
+      'info-color': getHexColorFromCSSProperties(CSSInfos, '--jp-info-color1'),
+      'success-color': getHexColorFromCSSProperties(
+        CSSInfos,
+        '--jp-success-color1'
+      ),
+      'warn-color': getHexColorFromCSSProperties(CSSInfos, '--jp-warn-color1')
     };
 
     this._formDataSetter = {
@@ -326,14 +376,12 @@ export class ThemeEditorModel extends VDomModel {
           `${'--jp-code-font-size'}`,
           String(value) + 'px'
         );
-        this.stateChanged.emit();
       },
       'border-width': (value: number) => {
         document.body.style.setProperty(
           `${'--jp-border-width'}`,
           String(value) + 'px'
         );
-        this.stateChanged.emit();
       },
       'border-radius': (value: number) => {
         document.body.style.setProperty(
@@ -389,7 +437,6 @@ export class ThemeEditorModel extends VDomModel {
       }
     };
   }
-
   public get schema(): any {
     return this._schema;
   }
@@ -402,6 +449,7 @@ export class ThemeEditorModel extends VDomModel {
     for (const key in this._formData) {
       const newValue = data[key];
       this._formDataSetter[key](newValue);
+      this.stateChanged.emit();
     }
   }
 }

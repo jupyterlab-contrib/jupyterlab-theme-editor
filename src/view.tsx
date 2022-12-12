@@ -2,6 +2,7 @@ import { VDomRenderer } from '@jupyterlab/apputils';
 import { ThemeEditorModel } from './model';
 import React from 'react';
 import Form from '@rjsf/core';
+import { SketchPicker } from '@hello-pangea/color-picker';
 
 interface IProps {
   formData: any;
@@ -26,10 +27,9 @@ function FormComponent(props: IProps) {
 function colorPicker(props: any) {
   return (
     <div>
-      <input
-        type="color"
-        value={props.value}
-        onChange={event => props.onChange(event.target.value)}
+      <SketchPicker
+        color={props.value}
+        onChangeComplete={color => props.onChange(props.value)}
       />
     </div>
   );
@@ -59,33 +59,11 @@ export class ThemeEditorView extends VDomRenderer<ThemeEditorModel> {
       'border-radius': {
         'ui:widget': 'range'
       },
-      'border-color': {
-        'ui:widget': colorPicker
-      },
-      'accent-color': {
-        'ui:widget': colorPicker
-      },
-      'brand-color': {
-        'ui:widget': colorPicker
-      },
-      'error-color': {
-        'ui:widget': colorPicker
-      },
-      'info-color': {
-        'ui:widget': colorPicker
-      },
       'layout-color': {
-        'ui:widget': colorPicker
-      },
-      'success-color': {
-        'ui:widget': colorPicker
-      },
-      'warn-color': {
         'ui:widget': colorPicker
       }
     };
   }
-
   render() {
     return (
       <FormComponent
@@ -94,6 +72,7 @@ export class ThemeEditorView extends VDomRenderer<ThemeEditorModel> {
         uiSchema={this.uiSchema}
         setformData={(value: any) => {
           this.model.formData = value;
+          this.update();
         }}
       />
     );
