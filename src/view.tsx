@@ -24,7 +24,19 @@ function FormComponent(props: IProps) {
   );
 }
 
-function colorPicker(props: any) {
+function basicColorPicker(props: any) {
+  return (
+    <div>
+      <input
+        type="color"
+        value={props.value}
+        onChange={event => props.onChange(event.target.value)}
+      />
+    </div>
+  );
+}
+
+function sketchColorPicker(props: any) {
   return (
     <div>
       <SketchPicker
@@ -60,7 +72,28 @@ export class ThemeEditorView extends VDomRenderer<ThemeEditorModel> {
         'ui:widget': 'range'
       },
       'layout-color': {
-        'ui:widget': colorPicker
+        'ui:widget': basicColorPicker
+      },
+      'accent-color': {
+        'ui:widget': sketchColorPicker
+      },
+      'border-color': {
+        'ui:widget': basicColorPicker
+      },
+      'brand-color': {
+        'ui:widget': basicColorPicker
+      },
+      'error-color': {
+        'ui:widget': basicColorPicker
+      },
+      'info-color': {
+        'ui:widget': basicColorPicker
+      },
+      'success-color': {
+        'ui:widget': basicColorPicker
+      },
+      'warn-color': {
+        'ui:widget': basicColorPicker
       }
     };
   }
@@ -72,7 +105,6 @@ export class ThemeEditorView extends VDomRenderer<ThemeEditorModel> {
         uiSchema={this.uiSchema}
         setformData={(value: any) => {
           this.model.formData = value;
-          this.update();
         }}
       />
     );

@@ -20,10 +20,6 @@ function stringtoHex(s: string) {
     const r = Number(s1.split(',')[0]);
     const g = Number(s1.split(',')[1]);
     const b = Number(s1.split(',')[2]);
-    console.log('s1:', s1);
-    console.log('r:', r);
-    console.log('g:', g);
-    console.log('b:', b);
     const hexstring =
       '#' +
       [r, g, b]
@@ -347,13 +343,13 @@ export class ThemeEditorModel extends VDomModel {
 
     this._formDataSetter = {
       'ui-font-family': (value: string) => {
-        document.body.style.setProperty(`${'--jp-ui-font-family'}`, value);
+        document.body.style.setProperty('--jp-ui-font-family', value);
       },
       'content-font-family': (value: string) => {
-        document.body.style.setProperty(`${'--jp-content-font-family'}`, value);
+        document.body.style.setProperty('--jp-content-font-family', value);
       },
       'code-font-family': (value: string) => {
-        document.body.style.setProperty(`${'--jp-code-font-family'}`, value);
+        document.body.style.setProperty('--jp-code-font-family', value);
       },
       'ui-font-size': (value: number) => {
         const fontsize_list = [];
@@ -373,19 +369,19 @@ export class ThemeEditorModel extends VDomModel {
       },
       'code-font-size': (value: number) => {
         document.body.style.setProperty(
-          `${'--jp-code-font-size'}`,
+          '--jp-code-font-size',
           String(value) + 'px'
         );
       },
       'border-width': (value: number) => {
         document.body.style.setProperty(
-          `${'--jp-border-width'}`,
+          '--jp-border-width',
           String(value) + 'px'
         );
       },
       'border-radius': (value: number) => {
         document.body.style.setProperty(
-          `${'--jp-border-radius'}`,
+          '--jp-border-radius',
           String(value) + 'px'
         );
       },
@@ -449,6 +445,7 @@ export class ThemeEditorModel extends VDomModel {
     for (const key in this._formData) {
       const newValue = data[key];
       this._formDataSetter[key](newValue);
+      this._formData[key] = newValue;
       this.stateChanged.emit();
     }
   }
