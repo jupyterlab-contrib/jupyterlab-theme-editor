@@ -3,10 +3,6 @@
 
     https://jupyterlab.readthedocs.io/en/stable/developer/css.html
 */
-
-
-
-
 .form-class {
   display: flex;
   background-color: var(--jp-layout-color0);
