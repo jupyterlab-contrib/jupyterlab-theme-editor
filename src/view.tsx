@@ -41,7 +41,7 @@ function sketchColorPicker(props: any) {
     <div>
       <SketchPicker
         color={props.value}
-        onChangeComplete={color => props.onChange(props.value)}
+        onChange={color => props.onChange(color.hex)}
       />
     </div>
   );
@@ -72,10 +72,10 @@ export class ThemeEditorView extends VDomRenderer<ThemeEditorModel> {
         'ui:widget': 'range'
       },
       'layout-color': {
-        'ui:widget': basicColorPicker
+        'ui:widget': sketchColorPicker
       },
       'accent-color': {
-        'ui:widget': sketchColorPicker
+        'ui:widget': basicColorPicker
       },
       'border-color': {
         'ui:widget': basicColorPicker

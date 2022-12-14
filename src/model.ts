@@ -445,8 +445,9 @@ export class ThemeEditorModel extends VDomModel {
     for (const key in this._formData) {
       const newValue = data[key];
       this._formDataSetter[key](newValue);
-      this._formData[key] = newValue;
-      this.stateChanged.emit();
+      /*this._formData[key] = newValue;*/
     }
+    this._formData = data;
+    this.stateChanged.emit();
   }
 }
