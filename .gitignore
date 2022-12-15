@@ -7,6 +7,8 @@ node_modules/
 .ipynb_checkpoints
 *.tsbuildinfo
 jupyter_theme_editor/labextension
+# Version file is handled by hatchling
+jupyter_theme_editor/_version.py
 
 # Integration tests
 ui-tests/test-results/
@@ -62,6 +64,7 @@ htmlcov/
 .coverage.*
 .cache
 nosetests.xml
+coverage/
 coverage.xml
 *.cover
 .hypothesis/
