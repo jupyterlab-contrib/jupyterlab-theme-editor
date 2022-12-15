@@ -1,6 +1,6 @@
 # jupyter_theme_editor
 
-[![Github Actions Status](https://github.com/github_username/jupyter-them/workflows/Build/badge.svg)](https://github.com/github_username/jupyter-them/actions/workflows/build.yml)[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/github_username/jupyter-them/main?urlpath=lab)
+[![Github Actions Status](https://github.com/jupyterlab-contrib/jupyterlab-theme-editor/workflows/Build/badge.svg)](https://github.com/jupyterlab-contrib/jupyterlab-theme-editor/actions/workflows/build.yml)[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/jupyterlab-contrib/jupyterlab-theme-editor/main?urlpath=lab)
 Extension to create a theme
 
 ## Requirements
