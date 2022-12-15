@@ -1,5 +1,5 @@
 [build-system]
-requires = ["hatchling>=1.4.0", "jupyterlab>=3.1.0,<5.0.0", "hatch-nodejs-version"]
+requires = ["hatchling>=1.4.0", "jupyterlab>=3.4.7,<4.0.0", "hatch-nodejs-version"]
 build-backend = "hatchling.build"
 
 [project]
@@ -23,6 +23,7 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
 ]
 dependencies = [
+    "jupyter_server>=1.21,<3"
 ]
 dynamic = ["version", "description", "authors", "urls", "keywords"]
 
@@ -32,7 +33,7 @@ test = [
     "pytest",
     "pytest-asyncio",
     "pytest-cov",
-    "pytest-tornasync"
+    "pytest-jupyter[server]>=0.6.0"
 ]
 
 [tool.hatch.version]
@@ -48,6 +49,8 @@ exclude = [".github", "binder"]
 [tool.hatch.build.targets.wheel.shared-data]
 "jupyter_theme_editor/labextension" = "share/jupyter/labextensions/jupyter-theme-editor"
 "install.json" = "share/jupyter/labextensions/jupyter-theme-editor/install.json"
+"jupyter-config/server-config" = "etc/jupyter/jupyter_server_config.d"
+"jupyter-config/nb-config" = "etc/jupyter/jupyter_notebook_config.d"
 
 [tool.hatch.build.hooks.version]
 path = "jupyter_theme_editor/_version.py"
@@ -57,7 +60,7 @@ dependencies = ["hatch-jupyter-builder>=0.5"]
 build-function = "hatch_jupyter_builder.npm_builder"
 ensured-targets = [
     "jupyter_theme_editor/labextension/static/style.js",
-    "jupyter_theme_editor//labextension/package.json",
+    "jupyter_theme_editor/labextension/package.json",
 ]
 skip-if-exists = ["jupyter_theme_editor/labextension/static/style.js"]
 

@@ -75,19 +75,20 @@
     "eslint-config-prettier": "^6.15.0",
     "eslint-plugin-prettier": "^3.1.4",
     "jest": "^26.0.0",
+    "mkdirp": "^1.0.3",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.1.1",
     "rimraf": "^3.0.2",
     "stylelint": "^14.3.0",
-    "stylelint-config-prettier": "^9.0.3",
+    "stylelint-config-prettier": "^9.0.4",
     "stylelint-config-recommended": "^6.0.0",
     "stylelint-config-standard": "~24.0.0",
     "stylelint-prettier": "^2.0.0",
-    "ts-jest": "^26.0.0",
-    "typescript": "~4.1.3"
+    "typescript": "~4.1.3",
+    "ts-jest": "^26.0.0"
   },
-  "resolutions" : {
-    "@rjsf/core": "^4.2.0"
+    "resolutions":{
+    "@rjsf/core":"^4.2.0"
   },
   "sideEffects": [
     "style/*.css",
@@ -98,6 +99,16 @@
     "access": "public"
   },
   "jupyterlab": {
+    "discovery": {
+        "server": {
+          "managers": [
+            "pip"
+          ],
+          "base": {
+            "name": "jupyter_theme_editor"
+          }
+        }
+    },
     "extension": true,
     "outputDir": "jupyter_theme_editor/labextension"
   }

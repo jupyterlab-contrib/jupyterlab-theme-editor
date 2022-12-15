@@ -3,6 +3,10 @@
 [![Github Actions Status](https://github.com/jupyterlab-contrib/jupyterlab-theme-editor/workflows/Build/badge.svg)](https://github.com/jupyterlab-contrib/jupyterlab-theme-editor/actions/workflows/build.yml)[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/jupyterlab-contrib/jupyterlab-theme-editor/main?urlpath=lab)
 Extension to create a theme
 
+This extension is composed of a Python package named `jupyter_theme_editor`
+for the server extension and a NPM package named `jupyter-theme-editor`
+for the frontend extension.
+
 ## Requirements
 
 - JupyterLab >= 3.0
@@ -23,6 +27,22 @@ To remove the extension, execute:
 pip uninstall jupyter_theme_editor
 ```
 
+## Troubleshoot
+
+If you are seeing the frontend extension, but it is not working, check
+that the server extension is enabled:
+
+```bash
+jupyter server extension list
+```
+
+If the server extension is installed and enabled, but you are not seeing
+the frontend extension, check the frontend extension is installed:
+
+```bash
+jupyter labextension list
+```
+
 ## Contributing
 
 ### Development install
@@ -40,6 +60,8 @@ The `jlpm` command is JupyterLab's pinned version of
 pip install -e .
 # Link your development version of the extension with JupyterLab
 jupyter labextension develop . --overwrite
+# Server extension must be manually installed in develop mode
+jupyter server extension enable jupyter_theme_editor
 # Rebuild extension Typescript source after making changes
 jlpm build
 ```
@@ -64,6 +86,8 @@ jupyter lab build --minimize=False
 ### Development uninstall
 
 ```bash
+# Server extension must be manually disabled in develop mode
+jupyter server extension disable jupyter_theme_editor
 pip uninstall jupyter_theme_editor
 ```
 
@@ -72,6 +96,22 @@ command. To find its location, you can run `jupyter labextension list` to figure
 folder is located. Then you can remove the symlink named `jupyter-theme-editor` within that folder.
 
 ### Testing the extension
+
+#### Server tests
+
+This extension is using [Pytest](https://docs.pytest.org/) for Python code testing.
+
+Install test dependencies (needed only once):
+
+```sh
+pip install -e ".[test]"
+```
+
+To execute them, run:
+
+```sh
+pytest -vv -r ap --cov jupyter_theme_editor
+```
 
 #### Frontend tests
 
