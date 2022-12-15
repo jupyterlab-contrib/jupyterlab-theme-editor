@@ -1,8 +1,8 @@
 import { VDomRenderer } from '@jupyterlab/apputils';
 import { ThemeEditorModel } from './model';
-import React from 'react';
+import React, { useState } from 'react';
 import Form from '@rjsf/core';
-import { SketchPicker } from '@hello-pangea/color-picker';
+import { ChromePicker } from '@hello-pangea/color-picker';
 
 interface IProps {
   formData: any;
@@ -24,26 +24,25 @@ function FormComponent(props: IProps) {
   );
 }
 
-function basicColorPicker(props: any) {
+function ColorPicker(props: any) {
+  const [open, setOpen] = useState(false);
   return (
-    <div>
-      <input
-        type="color"
-        value={props.value}
-        onChange={event => props.onChange(event.target.value)}
-      />
-    </div>
-  );
-}
-
-function sketchColorPicker(props: any) {
-  return (
-    <div>
-      <SketchPicker
-        color={props.value}
-        onChange={color => props.onChange(color.hex)}
-      />
-    </div>
+    <>
+      <button
+        className="jp-ThemeEditor-ButtonColor"
+        style={{ backgroundColor: props.value }}
+        onClick={() => {
+          setOpen(!open);
+        }}
+      ></button>
+      {open && (
+        <ChromePicker
+          className="jp-ThemeEditor-ColorPicker"
+          color={props.value}
+          onChange={color => props.onChange(color.hex)}
+        />
+      )}
+    </>
   );
 }
 
@@ -51,6 +50,7 @@ export class ThemeEditorView extends VDomRenderer<ThemeEditorModel> {
   public uiSchema: any;
   constructor(model: ThemeEditorModel) {
     super(model);
+    this.addClass('jp-ThemeEditor-Panel');
     this.uiSchema = {
       classNames: 'form-class',
       'ui:submitButtonOptions': {
@@ -72,28 +72,28 @@ export class ThemeEditorView extends VDomRenderer<ThemeEditorModel> {
         'ui:widget': 'range'
       },
       'layout-color': {
-        'ui:widget': sketchColorPicker
+        'ui:widget': ColorPicker
       },
       'accent-color': {
-        'ui:widget': basicColorPicker
+        'ui:widget': ColorPicker
       },
       'border-color': {
-        'ui:widget': basicColorPicker
+        'ui:widget': ColorPicker
       },
       'brand-color': {
-        'ui:widget': basicColorPicker
+        'ui:widget': ColorPicker
       },
       'error-color': {
-        'ui:widget': basicColorPicker
+        'ui:widget': ColorPicker
       },
       'info-color': {
-        'ui:widget': basicColorPicker
+        'ui:widget': ColorPicker
       },
       'success-color': {
-        'ui:widget': basicColorPicker
+        'ui:widget': ColorPicker
       },
       'warn-color': {
-        'ui:widget': basicColorPicker
+        'ui:widget': ColorPicker
       }
     };
   }

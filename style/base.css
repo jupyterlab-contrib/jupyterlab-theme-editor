@@ -3,6 +3,22 @@
 
     https://jupyterlab.readthedocs.io/en/stable/developer/css.html
 */
+
+.jp-ThemeEditor-Panel {
+  overflow-y: auto;
+}
+
+.jp-ThemeEditor-ButtonColor {
+  height: var(--jp-ui-font-size0);
+  width: 25px;
+}
+
+.jp-ThemeEditor-ColorPicker {
+  position: relative;
+  left: 0;
+  top: 0;
+}
+
 .form-class {
   display: flex;
   background-color: var(--jp-layout-color0);
