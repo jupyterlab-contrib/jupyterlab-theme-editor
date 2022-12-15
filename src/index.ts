@@ -7,7 +7,7 @@ import { themeEditorIcon } from './icons';
 import { ThemeEditorModel } from './model';
 import { ThemeEditorView } from './view';
 import { IChangedArgs } from '@jupyterlab/coreutils';
-
+import { requestAPI } from './handler';
 /**
  * Initialization data for the jupyter-theme-editor extension.
  */
@@ -29,6 +29,15 @@ const plugin: JupyterFrontEndPlugin<void> = {
       app.shell.add(view, 'left');
     };
     themeManager.themeChanged.connect(onThemeChanged);
+    requestAPI<any>('get_example')
+      .then(data => {
+        console.log(data);
+      })
+      .catch(reason => {
+        console.error(
+          `The jupyter_theme_editor server extension appears to be missing.\n${reason}`
+        );
+      });
   }
 };
 
