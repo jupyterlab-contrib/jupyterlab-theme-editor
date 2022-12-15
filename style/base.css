@@ -4,16 +4,16 @@
     https://jupyterlab.readthedocs.io/en/stable/developer/css.html
 */
 
-.jp-ThemeEditor-Panel {
+.jp-theme-editor-panel {
   overflow-y: auto;
 }
 
-.jp-ThemeEditor-ButtonColor {
+.jp-theme-editor-button-color {
   height: var(--jp-ui-font-size0);
   width: 25px;
 }
 
-.jp-ThemeEditor-ColorPicker {
+.jp-theme-editor-color-picker {
   position: relative;
   left: 0;
   top: 0;

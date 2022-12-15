@@ -29,7 +29,7 @@ function ColorPicker(props: any) {
   return (
     <>
       <button
-        className="jp-ThemeEditor-ButtonColor"
+        className="jp-theme-editor-button-color"
         style={{ backgroundColor: props.value }}
         onClick={() => {
           setOpen(!open);
@@ -37,7 +37,7 @@ function ColorPicker(props: any) {
       ></button>
       {open && (
         <ChromePicker
-          className="jp-ThemeEditor-ColorPicker"
+          className="jp-theme-editor-color-picker"
           color={props.value}
           onChange={color => props.onChange(color.hex)}
         />
@@ -50,7 +50,7 @@ export class ThemeEditorView extends VDomRenderer<ThemeEditorModel> {
   public uiSchema: any;
   constructor(model: ThemeEditorModel) {
     super(model);
-    this.addClass('jp-ThemeEditor-Panel');
+    this.addClass('jp-theme-editor-panel');
     this.uiSchema = {
       classNames: 'form-class',
       'ui:submitButtonOptions': {
