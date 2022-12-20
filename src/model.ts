@@ -176,24 +176,23 @@ export class ThemeEditorModel extends VDomModel {
   private _formData: any;
   private _formDataSetter: any;
   private _fontList = [
-    'system-ui',
-    'helvetica',
-    'arial',
-    'sans-serif',
+    'Arial',
+    'Dancing Script',
+    'Helvetica',
     'JetBrains Mono',
-    'Great Vibes',
-    'Little Days',
-    'Little Daisy',
-    'Advertising Bold',
-    'Aurella'
+    'Lobster',
+    'Oxygen',
+    'Pacifico',
+    'Prompt',
+    'Righteous',
+    'Single Day',
+    'system-ui',
+    'Satisfy',
+    'Times New Roman',
+    'Ultra',
+    'Urbanist'
   ];
-  private _codeFontList = [
-    'menlo',
-    'consolas',
-    'DejaVu Sans Mono',
-    'monospace',
-    'Space Mono'
-  ];
+  private _codeFontList = ['DejaVu Sans Mono', 'Space Mono'];
   constructor() {
     super();
     const CSSInfos = window.getComputedStyle(document.body);
@@ -291,9 +290,9 @@ export class ThemeEditorModel extends VDomModel {
     };
 
     this._formData = {
-      'ui-font-family': 'helvetica',
+      'ui-font-family': 'system-ui',
       'content-font-family': 'system-ui',
-      'code-font-family': 'consolas',
+      'code-font-family': 'Menlo',
       'ui-font-size': getFontSizeFromCSSProperties(
         CSSInfos,
         '--jp-ui-font-size',
@@ -445,7 +444,6 @@ export class ThemeEditorModel extends VDomModel {
     for (const key in this._formData) {
       const newValue = data[key];
       this._formDataSetter[key](newValue);
-      /*this._formData[key] = newValue;*/
     }
     this._formData = data;
     this.stateChanged.emit();

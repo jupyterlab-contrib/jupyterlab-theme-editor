@@ -8,14 +8,33 @@ import { ThemeEditorModel } from './model';
 import { ThemeEditorView } from './view';
 import { IChangedArgs } from '@jupyterlab/coreutils';
 import { requestAPI } from './handler';
+import { ISettingRegistry } from '@jupyterlab/settingregistry';
 /**
  * Initialization data for the jupyter-theme-editor extension.
  */
 const plugin: JupyterFrontEndPlugin<void> = {
   id: 'jupyter-theme-editor:plugin',
   autoStart: true,
-  requires: [IThemeManager],
-  activate: (app: JupyterFrontEnd, themeManager: IThemeManager) => {
+  requires: [IThemeManager, ISettingRegistry],
+  activate: (
+    app: JupyterFrontEnd,
+    themeManager: IThemeManager,
+    settings: ISettingRegistry
+  ) => {
+    const { commands } = app;
+    const command = 'jlab-examples:main-menu';
+    commands.addCommand(command, {
+      label: 'Execute jlab-examples:main-menu Command',
+      caption: 'Execute jlab-examples:main-menu Command',
+      execute: (args: any) => {
+        console.log(
+          `jlab-examples:main-menu has been called ${args['origin']}.`
+        );
+        window.alert(
+          `jlab-examples:main-menu has been called ${args['origin']}.`
+        );
+      }
+    });
     const onThemeChanged = (
       themeManager: IThemeManager,
       changes: IChangedArgs<string, string | null, string>
