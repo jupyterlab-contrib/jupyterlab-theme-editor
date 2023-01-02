@@ -192,7 +192,7 @@ export class ThemeEditorModel extends VDomModel {
     'Ultra',
     'Urbanist'
   ];
-  private _codeFontList = ['DejaVu Sans Mono', 'Space Mono'];
+  private _codeFontList = ['monospace', 'Space Mono', 'DejaVuSans Mono'];
   constructor() {
     super();
     const CSSInfos = window.getComputedStyle(document.body);
@@ -242,7 +242,7 @@ export class ThemeEditorModel extends VDomModel {
           type: 'string'
         },
         'ui-font-size': {
-          title: 'UI Font size',
+          title: 'UI font size',
           type: 'integer',
           minimum: 6,
           maximum: 30
@@ -292,7 +292,7 @@ export class ThemeEditorModel extends VDomModel {
     this._formData = {
       'ui-font-family': 'system-ui',
       'content-font-family': 'system-ui',
-      'code-font-family': 'Menlo',
+      'code-font-family': 'monospace',
       'ui-font-size': getFontSizeFromCSSProperties(
         CSSInfos,
         '--jp-ui-font-size',
