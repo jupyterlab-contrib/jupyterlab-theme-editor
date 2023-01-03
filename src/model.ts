@@ -5,10 +5,12 @@ import {
   ColorRGBA64,
   hslToRGB,
   rgbToHSL,
-  ColorHSL
+  ColorHSL,
+  parseColorHexRGB
 } from '@microsoft/fast-colors';
 
 function stringtoHex(s: string) {
+  /* Convert other color formats present in variable.css to hexadecimal colors */
   if (s === 'white') {
     return '#000000';
   }
@@ -34,51 +36,23 @@ function stringtoHex(s: string) {
     return s;
   }
 }
-function hexToRGBA(h: string) {
-  let r = '0',
-    g = '0',
-    b = '0';
-
-  // 4 digits
-  if (h.length === 4) {
-    r = '0x' + h[1] + h[1];
-    g = '0x' + h[2] + h[2];
-    b = '0x' + h[3] + h[3];
-
-    // 6 digits
-  } else if (h.length === 7) {
-    r = '0x' + h[1] + h[2];
-    g = '0x' + h[3] + h[4];
-    b = '0x' + h[5] + h[6];
-  }
-  const a = '1';
-  const rgba = [Number(r) / 256, Number(g) / 256, Number(b) / 256, Number(a)];
-  return rgba;
-}
-
-function rgbaStringToColorRGBA64(colorValueRGBAstr: number[]) {
-  const colorRGBA64 = new ColorRGBA64(
-    colorValueRGBAstr[0],
-    colorValueRGBAstr[1],
-    colorValueRGBAstr[2],
-    colorValueRGBAstr[3]
-  );
-  return colorRGBA64;
-}
 
 function getNumberFromCSSProperties(CSSInfos: any, name: string) {
+  /* Get the numerical value of a given ccs variable*/
   const propertyValueStr = CSSInfos.getPropertyValue(name);
   const propertyValue = Number(propertyValueStr.split('px')[0]);
   return propertyValue;
 }
 
 function getFontSizeFromCSSProperties(
+  /* Get the font size value of a given indexed ccs variable*/
+  /* If it is not in px but derived from the baseFontSize with a scaling, conversion is made */
   CSSInfos: any,
   nameRoot: string,
-  step: number
+  index: number
 ) {
   const baseFontSize = getNumberFromCSSProperties(CSSInfos, nameRoot + '1');
-  const s = CSSInfos.getPropertyValue(nameRoot + String(step));
+  const s = CSSInfos.getPropertyValue(nameRoot + String(index));
   if (s.includes('em')) {
     const s1 = Number(s.split('em')[0]);
     const font = s1 * baseFontSize;
@@ -88,29 +62,36 @@ function getFontSizeFromCSSProperties(
   }
 }
 
-function getHexColorFromCSSProperties(CSSInfos: any, name: string) {
+function defineHexColorFromCSSProperties(CSSInfos: any, name: string) {
+  /* Define the hex color string from a css properties that is not defined this way in the css files */
+  /* For instance colors are defined with string 'white' or 'rgba(0, 0, 0, 0.25)'*/
   const propertyValueStr = CSSInfos.getPropertyValue(name);
   const hexcolor = stringtoHex(propertyValueStr);
   return hexcolor;
 }
 
-function setCssColorProperties(name: string, values: ColorRGBA64[], start = 0) {
-  setCssProperties(
+function setCSSColorProperties(name: string, values: ColorRGBA64[], start = 0) {
+  /* Set the css color properties of a group of indexed color variables with name as prefix
+  /* Conversion of the color is made from colorRGBA64 to hex strings.  */
+  setCSSProperties(
     name,
     values.map(v => v.toStringHexRGB()),
     start
   );
 }
 
-function setCssProperties(name: string, values: string[], start = 0) {
+function setCSSProperties(name: string, values: string[], start = 0) {
+  /* Set the css properties of a group of indexed variables with name as prefix  */
   let counter = start;
   for (const v of values) {
-    document.body.style.setProperty(name + String(counter), v);
+    const variableName = name + String(counter);
+    document.body.style.setProperty(variableName, v);
     counter++;
   }
 }
 
-function definePalette(color: ColorRGBA64, steps: number) {
+function definePaletteFromColorRGBA64(color: ColorRGBA64, steps: number) {
+  /* define a palette from a single ColorRGBA64 color*/
   const palette: ColorPalette = new ColorPalette({
     baseColor: color,
     steps: steps,
@@ -118,22 +99,27 @@ function definePalette(color: ColorRGBA64, steps: number) {
   });
   return palette;
 }
-function applyPalette(palette: ColorPalette, cssVariable: string) {
-  setCssColorProperties(cssVariable, palette.palette);
+function applyPaletteToCSSVariable(palette: ColorPalette, cssVariable: string) {
+  /*apply a palette to a given set of css variables*/
+  setCSSColorProperties(cssVariable, palette.palette);
 }
 
-function defineAndApplyPaletteFrom1hexColor(
+function setPaletteFromHexColor(
+  /* From a hex string converted to a ColorRGBA64 color, a palette with a given steps number is defined*/
+  /* The colors of this palette are used to overload the colors of a group of indexed css colors*/
   hexcolor: string,
   steps: number,
   cssVariable: string
 ) {
-  const colorValueRGBAstr = hexToRGBA(hexcolor);
-  const colorRGBA64 = rgbaStringToColorRGBA64(colorValueRGBAstr);
-  const palette = definePalette(colorRGBA64, steps);
-  applyPalette(palette, cssVariable);
+  const colorRGBA64 = parseColorHexRGB(
+    hexcolor.replace(/\s/g, '').toUpperCase()
+  );
+  const palette = definePaletteFromColorRGBA64(colorRGBA64!, steps);
+  applyPaletteToCSSVariable(palette, cssVariable);
 }
 
 function shiftLuminanceRGBAColor(colorRGBA: ColorRGBA64) {
+  /* Apply a shift defined by interval, to the luminance of a colorRGBA64 color*/
   let l = getLuminanceRGBAColor(colorRGBA);
   const h = getHueRGBAColor(colorRGBA);
   const s = getSaturationRGBAColor(colorRGBA);
@@ -169,15 +155,65 @@ function getHueRGBAColor(colorRGBA: ColorRGBA64) {
   const colorHSL = rgbToHSL(colorRGBA);
   return colorHSL.h;
 }
-export class ThemeEditorModel extends VDomModel {
-  private _uiFontScale: number;
-  private _contentFontScale: number;
-  private _schema: any;
-  private _formData: any;
-  private _formDataSetter: any;
-  private _fontList = [
+
+function initializeFormData() {
+  const CSSInfos = window.getComputedStyle(document.body);
+  const formData = {
+    'ui-font-family': 'system-ui',
+    'content-font-family': 'system-ui',
+    'code-font-family': 'monospace',
+    'ui-font-size': getFontSizeFromCSSProperties(
+      CSSInfos,
+      '--jp-ui-font-size',
+      1
+    ),
+    'content-font-size': getFontSizeFromCSSProperties(
+      CSSInfos,
+      '--jp-content-font-size',
+      1
+    ),
+    'code-font-size': getNumberFromCSSProperties(
+      CSSInfos,
+      '--jp-code-font-size'
+    ),
+    'border-width': getNumberFromCSSProperties(CSSInfos, '--jp-border-width'),
+    'border-radius': getNumberFromCSSProperties(CSSInfos, '--jp-border-radius'),
+    'layout-color': defineHexColorFromCSSProperties(
+      CSSInfos,
+      '--jp-layout-color1'
+    ),
+    'accent-color': defineHexColorFromCSSProperties(
+      CSSInfos,
+      '--jp-accent-color1'
+    ),
+    'border-color': defineHexColorFromCSSProperties(
+      CSSInfos,
+      '--jp-border-color1'
+    ),
+    'brand-color': defineHexColorFromCSSProperties(
+      CSSInfos,
+      '--jp-brand-color1'
+    ),
+    'error-color': defineHexColorFromCSSProperties(
+      CSSInfos,
+      '--jp-error-color1'
+    ),
+    'info-color': defineHexColorFromCSSProperties(CSSInfos, '--jp-info-color1'),
+    'success-color': defineHexColorFromCSSProperties(
+      CSSInfos,
+      '--jp-success-color1'
+    ),
+    'warn-color': defineHexColorFromCSSProperties(CSSInfos, '--jp-warn-color1')
+  };
+
+  return formData;
+}
+
+function initializeSchema() {
+  const fontList = [
     'Arial',
     'Dancing Script',
+    'Dosis',
     'Helvetica',
     'JetBrains Mono',
     'Lobster',
@@ -192,7 +228,99 @@ export class ThemeEditorModel extends VDomModel {
     'Ultra',
     'Urbanist'
   ];
-  private _codeFontList = ['monospace', 'Space Mono', 'DejaVuSans Mono'];
+  const codeFontList = ['monospace', 'Space Mono', 'DejaVuSans Mono'];
+  const Schema = {
+    type: 'object',
+    properties: {
+      'layout-color': {
+        title: 'Layout color',
+        type: 'string'
+      },
+      'accent-color': {
+        title: 'Accent color',
+        type: 'string'
+      },
+      'border-color': {
+        title: 'Border color',
+        type: 'string'
+      },
+      'brand-color': {
+        title: 'Brand color',
+        type: 'string',
+        default: ''
+      },
+      'error-color': {
+        title: 'Error color',
+        type: 'string'
+      },
+      'info-color': {
+        title: 'Info color',
+        type: 'string'
+      },
+      'success-color': {
+        title: 'Success color',
+        type: 'string'
+      },
+      'warn-color': {
+        title: 'Warn color',
+        type: 'string'
+      },
+      'ui-font-size': {
+        title: 'UI font size',
+        type: 'integer',
+        minimum: 6,
+        maximum: 30
+      },
+      'content-font-size': {
+        title: 'Content font size',
+        type: 'integer',
+        minimum: 6,
+        maximum: 30
+      },
+      'code-font-size': {
+        title: 'Code font size',
+        type: 'integer',
+        minimum: 6,
+        maximum: 30
+      },
+      'border-width': {
+        title: 'Border width',
+        type: 'integer',
+        minimum: 1,
+        maximum: 10
+      },
+      'border-radius': {
+        title: 'Border radius',
+        type: 'integer',
+        minimum: 1,
+        maximum: 10
+      },
+      'ui-font-family': {
+        title: 'User Interface Font family',
+        type: 'string',
+        enum: fontList
+      },
+      'content-font-family': {
+        title: 'Content Font family',
+        type: 'string',
+        enum: fontList
+      },
+      'code-font-family': {
+        title: 'Code Font family',
+        type: 'string',
+        enum: codeFontList
+      }
+    }
+  };
+  return Schema;
+}
+export class ThemeEditorModel extends VDomModel {
+  private _uiFontScale: number;
+  private _contentFontScale: number;
+  private _schema: any;
+  private _formData: any;
+  private _formDataSetter: any;
+
   constructor() {
     super();
     const CSSInfos = window.getComputedStyle(document.body);
@@ -205,141 +333,8 @@ export class ThemeEditorModel extends VDomModel {
       '--jp-content-font-scale-factor'
     );
 
-    this._schema = {
-      type: 'object',
-      properties: {
-        'layout-color': {
-          title: 'Layout color',
-          type: 'string'
-        },
-        'accent-color': {
-          title: 'Accent color',
-          type: 'string'
-        },
-        'border-color': {
-          title: 'Border color',
-          type: 'string'
-        },
-        'brand-color': {
-          title: 'Brand color',
-          type: 'string',
-          default: ''
-        },
-        'error-color': {
-          title: 'Error color',
-          type: 'string'
-        },
-        'info-color': {
-          title: 'Info color',
-          type: 'string'
-        },
-        'success-color': {
-          title: 'Success color',
-          type: 'string'
-        },
-        'warn-color': {
-          title: 'Warn color',
-          type: 'string'
-        },
-        'ui-font-size': {
-          title: 'UI font size',
-          type: 'integer',
-          minimum: 6,
-          maximum: 30
-        },
-        'content-font-size': {
-          title: 'Content font size',
-          type: 'integer',
-          minimum: 6,
-          maximum: 30
-        },
-        'code-font-size': {
-          title: 'Code font size',
-          type: 'integer',
-          minimum: 6,
-          maximum: 30
-        },
-        'border-width': {
-          title: 'Border width',
-          type: 'integer',
-          minimum: 1,
-          maximum: 10
-        },
-        'border-radius': {
-          title: 'Border radius',
-          type: 'integer',
-          minimum: 1,
-          maximum: 10
-        },
-        'ui-font-family': {
-          title: 'User Interface Font family',
-          type: 'string',
-          enum: this._fontList
-        },
-        'content-font-family': {
-          title: 'Content Font family',
-          type: 'string',
-          enum: this._fontList
-        },
-        'code-font-family': {
-          title: 'Code Font family',
-          type: 'string',
-          enum: this._codeFontList
-        }
-      }
-    };
-
-    this._formData = {
-      'ui-font-family': 'system-ui',
-      'content-font-family': 'system-ui',
-      'code-font-family': 'monospace',
-      'ui-font-size': getFontSizeFromCSSProperties(
-        CSSInfos,
-        '--jp-ui-font-size',
-        1
-      ),
-      'content-font-size': getFontSizeFromCSSProperties(
-        CSSInfos,
-        '--jp-content-font-size',
-        1
-      ),
-      'code-font-size': getNumberFromCSSProperties(
-        CSSInfos,
-        '--jp-code-font-size'
-      ),
-      'border-width': getNumberFromCSSProperties(CSSInfos, '--jp-border-width'),
-      'border-radius': getNumberFromCSSProperties(
-        CSSInfos,
-        '--jp-border-radius'
-      ),
-      'layout-color': getHexColorFromCSSProperties(
-        CSSInfos,
-        '--jp-layout-color1'
-      ),
-      'accent-color': getHexColorFromCSSProperties(
-        CSSInfos,
-        '--jp-accent-color1'
-      ),
-      'border-color': getHexColorFromCSSProperties(
-        CSSInfos,
-        '--jp-border-color1'
-      ),
-      'brand-color': getHexColorFromCSSProperties(
-        CSSInfos,
-        '--jp-brand-color1'
-      ),
-      'error-color': getHexColorFromCSSProperties(
-        CSSInfos,
-        '--jp-error-color1'
-      ),
-      'info-color': getHexColorFromCSSProperties(CSSInfos, '--jp-info-color1'),
-      'success-color': getHexColorFromCSSProperties(
-        CSSInfos,
-        '--jp-success-color1'
-      ),
-      'warn-color': getHexColorFromCSSProperties(CSSInfos, '--jp-warn-color1')
-    };
-
+    this._schema = initializeSchema();
+    this._formData = initializeFormData();
     this._formDataSetter = {
       'ui-font-family': (value: string) => {
         document.body.style.setProperty('--jp-ui-font-family', value);
@@ -356,7 +351,7 @@ export class ThemeEditorModel extends VDomModel {
           fontsize_list[i] =
             String(Math.pow(this._uiFontScale, i - 1) * value) + 'px';
         }
-        setCssProperties('--jp-ui-font-size', fontsize_list);
+        setCSSProperties('--jp-ui-font-size', fontsize_list);
       },
       'content-font-size': (value: number) => {
         const fontsize_list = [];
@@ -364,7 +359,7 @@ export class ThemeEditorModel extends VDomModel {
           fontsize_list[i] =
             String(Math.pow(this._contentFontScale, i - 1) * value) + 'px';
         }
-        setCssProperties('--jp-content-font-size', fontsize_list);
+        setCSSProperties('--jp-content-font-size', fontsize_list);
       },
       'code-font-size': (value: number) => {
         document.body.style.setProperty(
@@ -385,50 +380,49 @@ export class ThemeEditorModel extends VDomModel {
         );
       },
       'accent-color': (value: string) => {
-        defineAndApplyPaletteFrom1hexColor(value, 4, '--jp-accent-color');
+        setPaletteFromHexColor(value, 4, '--jp-accent-color');
       },
       'border-color': (value: string) => {
-        defineAndApplyPaletteFrom1hexColor(value, 4, '--jp-border-color');
+        setPaletteFromHexColor(value, 4, '--jp-border-color');
       },
       'brand-color': (value: string) => {
-        defineAndApplyPaletteFrom1hexColor(value, 4, '--jp-brand-color');
+        setPaletteFromHexColor(value, 4, '--jp-brand-color');
       },
       'error-color': (value: string) => {
-        defineAndApplyPaletteFrom1hexColor(value, 4, '--jp-error-color');
+        setPaletteFromHexColor(value, 4, '--jp-error-color');
       },
       'info-color': (value: string) => {
-        defineAndApplyPaletteFrom1hexColor(value, 4, '--jp-info-color');
+        setPaletteFromHexColor(value, 4, '--jp-info-color');
       },
       'layout-color': (value: string) => {
-        const colorValueRGBAstr = hexToRGBA(value);
-        const colorRGBA64 = rgbaStringToColorRGBA64(colorValueRGBAstr);
-        const colorRGBA64shifted = shiftLuminanceRGBAColor(colorRGBA64);
-        const palette = definePalette(colorRGBA64shifted, 4);
-        applyPalette(palette, '--jp-layout-color');
+        const colorRGBA64 = parseColorHexRGB(
+          value.replace(/\s/g, '').toUpperCase()
+        );
+
+        const colorRGBA64shifted = shiftLuminanceRGBAColor(colorRGBA64!);
+        const palette = definePaletteFromColorRGBA64(colorRGBA64shifted, 4);
+        applyPaletteToCSSVariable(palette, '--jp-layout-color');
 
         const shiftedLuminance = getLuminanceRGBAColor(colorRGBA64shifted);
         const complementaryL = 1 - shiftedLuminance;
         const inverseColorHSL = new ColorHSL(
-          getHueRGBAColor(colorRGBA64),
-          getSaturationRGBAColor(colorRGBA64),
+          getHueRGBAColor(colorRGBA64!),
+          getSaturationRGBAColor(colorRGBA64!),
           complementaryL
         );
         const inverseColorRGBA64 = hslToRGB(inverseColorHSL, 1);
-        const inversePalette = definePalette(inverseColorRGBA64, 5);
-        applyPalette(inversePalette, '--jp-inverse-layout-color');
-        applyPalette(inversePalette, '--jp-ui-font-color');
+        const inversePalette = definePaletteFromColorRGBA64(
+          inverseColorRGBA64,
+          5
+        );
+        applyPaletteToCSSVariable(inversePalette, '--jp-inverse-layout-color');
+        applyPaletteToCSSVariable(inversePalette, '--jp-ui-font-color');
       },
       'success-color': (value: string) => {
-        const colorValueRGBAstr = hexToRGBA(value);
-        const colorRGBA64 = rgbaStringToColorRGBA64(colorValueRGBAstr);
-        const palette = definePalette(colorRGBA64, 4);
-        applyPalette(palette, '--jp-success-color');
+        setPaletteFromHexColor(value, 4, '--jp-success-color');
       },
       'warn-color': (value: string) => {
-        const colorValueRGBAstr = hexToRGBA(value);
-        const colorRGBA64 = rgbaStringToColorRGBA64(colorValueRGBAstr);
-        const palette = definePalette(colorRGBA64, 4);
-        applyPalette(palette, '--jp-warn-color');
+        setPaletteFromHexColor(value, 4, '--jp-warn-color');
       }
     };
   }

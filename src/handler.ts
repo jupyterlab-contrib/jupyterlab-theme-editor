@@ -29,7 +29,7 @@ export async function requestAPI<T>(
   }
 
   let data: any = await response.text();
-  console.log('Data send from the server is:', data);
+  /*console.log('Data send from the server is:', data);*/
 
   if (data.length > 0) {
     try {
