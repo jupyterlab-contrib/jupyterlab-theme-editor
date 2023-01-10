@@ -2,7 +2,7 @@ import json
 from jupyter_server.base.handlers import APIHandler
 from jupyter_server.utils import url_path_join
 import tornado
-
+from jinja2 import Template
 
 
 class RouteHandler(APIHandler):
@@ -14,20 +14,22 @@ class RouteHandler(APIHandler):
     def post(self):
         # input_data is a dictionary with a key "name"
         input_data = self.get_json_body()
-
-        data = {"Post request": "Done!"}
-        self.finish(json.dumps(data))
         new_input_data = {}
         for key, value in input_data.items():
             value = str(input_data[key])
             new_value = value.replace(' ', '')
-            new_key = key.replace('-','_')
+            new_key = key.replace('--jp-', '').replace('-', '_')
             new_input_data[new_key] = new_value
 
 
-        input_data_dumped = json.dumps(new_input_data, indent=2);
-        with open("style/formData.json", "w") as outfile:
-            outfile.write(input_data_dumped)
+        with open('style/template.css', 'r') as file:
+            template = file.read()
+            self.log.info('template is:', template)
+
+        j2_template = Template(template)
+        text_file = open("style/variables.css", "w")
+        n = text_file.write(j2_template.render(new_input_data))
+        text_file.close()
 
 
 def setup_handlers(web_app):
@@ -35,6 +37,6 @@ def setup_handlers(web_app):
 
     base_url = web_app.settings["base_url"]
     route_pattern = url_path_join(
-        base_url, 'jupyter-theme-editor', "send_formData")
+        base_url, 'jupyter-theme-editor', "send_cssProperties")
     handlers = [(route_pattern, RouteHandler)]
     web_app.add_handlers(host_pattern, handlers)

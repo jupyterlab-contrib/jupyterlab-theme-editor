@@ -5,13 +5,13 @@ import Form from '@rjsf/core';
 import { ChromePicker } from '@hello-pangea/color-picker';
 import { requestAPI } from './handler';
 
-function sendPostRequest(formData: any) {
-  requestAPI('send_formData', {
-    body: JSON.stringify(formData),
+function sendPostRequest(cssProperties: any) {
+  requestAPI('send_cssProperties', {
+    body: JSON.stringify(cssProperties),
     method: 'POST'
   })
     .then(data => {
-      console.log('formData sent to the server:', data);
+      console.log('cssProperties sent to the server:', data);
     })
     .catch(reason => {
       console.error(
@@ -24,6 +24,7 @@ interface IProps {
   formData: any;
   schema: any;
   uiSchema: any;
+  cssProperties: any;
   onSubmit: () => void;
   setformData: (value: any) => void;
 }
@@ -34,7 +35,7 @@ function FormComponent(props: IProps) {
       schema={props.schema}
       formData={props.formData}
       uiSchema={props.uiSchema}
-      onSubmit={(formData, event) => sendPostRequest(props.formData)}
+      onSubmit={(formData, event) => sendPostRequest(props.cssProperties)}
       onChange={event => {
         props.setformData(event.formData);
       }}
@@ -122,6 +123,7 @@ export class ThemeEditorView extends VDomRenderer<ThemeEditorModel> {
       <FormComponent
         schema={this.model.schema}
         formData={this.model.formData}
+        cssProperties={this.model.cssProperties}
         uiSchema={this.uiSchema}
         onSubmit={() => {
           console.log('Form is submitted');
