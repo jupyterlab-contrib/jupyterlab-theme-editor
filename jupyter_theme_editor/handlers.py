@@ -2,7 +2,8 @@ import json
 from jupyter_server.base.handlers import APIHandler
 from jupyter_server.utils import url_path_join
 import tornado
-from jinja2 import Template
+from jinja2 import Environment, PackageLoader
+from pathlib import Path
 
 
 class RouteHandler(APIHandler):
@@ -17,16 +18,14 @@ class RouteHandler(APIHandler):
         new_input_data = {}
         for key, value in input_data.items():
             value = str(input_data[key])
-           new_value = value.strip()
+            new_value = value.strip()
             new_key = key.replace('--jp-', '').replace('-', '_')
             new_input_data[new_key] = new_value
 
 
-      template = Path('style/template.css').read_text()
-            self.log.info('template is:', template)
-
-        j2_template = Template(template)
-Path("styles/variables.css").write_text(j2_template.render(new_input_data))
+        env = Environment(loader=PackageLoader("jupyter_theme_editor", "templates"))
+        j2_template = env.get_template("template.css")
+        Path("style/variables.css").write_text(j2_template.render(new_input_data))
 
 
 def setup_handlers(web_app):
