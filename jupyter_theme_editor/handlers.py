@@ -17,7 +17,7 @@ class RouteHandler(APIHandler):
         new_input_data = {}
         for key, value in input_data.items():
             value = str(input_data[key])
-            new_value = value.replace(' ', '')
+           new_value = value.strip()
             new_key = key.replace('--jp-', '').replace('-', '_')
             new_input_data[new_key] = new_value
 
