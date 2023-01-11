@@ -22,8 +22,7 @@ class RouteHandler(APIHandler):
             new_input_data[new_key] = new_value
 
 
-        with open('style/template.css', 'r') as file:
-            template = file.read()
+      template = Path('style/template.css').read_text()
             self.log.info('template is:', template)
 
         j2_template = Template(template)
