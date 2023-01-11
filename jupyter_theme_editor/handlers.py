@@ -26,9 +26,7 @@ class RouteHandler(APIHandler):
             self.log.info('template is:', template)
 
         j2_template = Template(template)
-        text_file = open("style/variables.css", "w")
-        n = text_file.write(j2_template.render(new_input_data))
-        text_file.close()
+Path("styles/variables.css").write_text(j2_template.render(new_input_data))
 
 
 def setup_handlers(web_app):
