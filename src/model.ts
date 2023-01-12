@@ -350,9 +350,8 @@ export class ThemeEditorModel extends VDomModel {
         );
       },
       'layout-color': (value: string) => {
-        const hexValue = stringtoHex(value);
         const colorRGBA64 = parseColorHexRGB(
-          hexValue.replace(/\s/g, '').toUpperCase()
+          value.replace(/\s/g, '').toUpperCase()
         );
         const colorRGBA64shifted = shiftLuminanceRGBAColor(colorRGBA64!);
         const palette = definePaletteFromColorRGBA64(colorRGBA64shifted, 5);

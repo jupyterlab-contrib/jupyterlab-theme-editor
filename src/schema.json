@@ -1,117 +1,117 @@
 {
-  "type": "object",
-  "properties": {
-    "layout-color": {
-      "title": "Layout color",
-      "type": "string"
-    },
-    "accent-color": {
-      "title": "Accent color",
-      "type": "string"
-    },
-    "border-color": {
-      "title": "Border color",
-      "type": "string"
-    },
-    "brand-color": {
-      "title": "Brand color",
-      "type": "string",
-      "default": ""
-    },
-    "error-color": {
-      "title": "Error color",
-      "type": "string"
-    },
-    "info-color": {
-      "title": "Info color",
-      "type": "string"
-    },
-    "success-color": {
-      "title": "Success color",
-      "type": "string"
-    },
-    "warn-color": {
-      "title": "Warn color",
-      "type": "string"
-    },
-    "ui-font-size": {
-      "title": "UI font size",
-      "type": "integer",
-      "minimum": 6,
-      "maximum": 30
-    },
-    "content-font-size": {
-      "title": "Content font size",
-      "type": "integer",
-      "minimum": 6,
-      "maximum": 30
-    },
-    "code-font-size": {
-      "title": "Code font size",
-      "type": "integer",
-      "minimum": 6,
-      "maximum": 30
-    },
-    "border-width": {
-      "title": "Border width",
-      "type": "integer",
-      "minimum": 1,
-      "maximum": 10
-    },
-    "border-radius": {
-      "title": "Border radius",
-      "type": "integer",
-      "minimum": 1,
-      "maximum": 10
-    },
-    "ui-font-family": {
-      "title": "User Interface Font family",
-      "type": "string",
-      "enum": [
-        "Arial",
-        "Dancing Script",
-        "Dosis",
-        "Helvetica",
-        "JetBrains Mono",
-        "Lobster",
-        "Oxygen",
-        "Pacifico",
-        "Prompt",
-        "Righteous",
-        "Single Day",
-        "system-ui",
-        "Satisfy",
-        "Times New Roman",
-        "Ultra",
-        "Urbanist"
-      ]
-    },
-    "content-font-family": {
-      "title": "Content Font family",
-      "type": "string",
-      "enum": [
-        "Arial",
-        "Dancing Script",
-        "Dosis",
-        "Helvetica",
-        "JetBrains Mono",
-        "Lobster",
-        "Oxygen",
-        "Pacifico",
-        "Prompt",
-        "Righteous",
-        "Single Day",
-        "system-ui",
-        "Satisfy",
-        "Times New Roman",
-        "Ultra",
-        "Urbanist"
-      ]
-    },
-    "code-font-family": {
-      "title": "Code Font family",
-      "type": "string",
-      "enum": ["monospace", "Space Mono", "DejaVuSans Mono"]
+    "type": "object",
+    "properties": {
+      "layout-color": {
+        "title": "Layout color",
+        "type": "string"
+      },
+      "accent-color": {
+        "title": "Accent color",
+        "type": "string"
+      },
+      "border-color": {
+        "title": "Border color",
+        "type": "string"
+      },
+      "brand-color": {
+        "title": "Brand color",
+        "type": "string",
+        "default": ""
+      },
+      "error-color": {
+        "title": "Error color",
+        "type": "string"
+      },
+      "info-color": {
+        "title": "Info color",
+        "type": "string"
+      },
+      "success-color": {
+        "title": "Success color",
+        "type": "string"
+      },
+      "warn-color": {
+        "title": "Warn color",
+        "type": "string"
+      },
+      "ui-font-size": {
+        "title": "UI font size",
+        "type": "integer",
+        "minimum": 6,
+        "maximum": 30
+      },
+      "content-font-size": {
+        "title": "Content font size",
+        "type": "integer",
+        "minimum": 6,
+        "maximum": 30
+      },
+      "code-font-size": {
+        "title": "Code font size",
+        "type": "integer",
+        "minimum": 6,
+        "maximum": 30
+      },
+      "border-width": {
+        "title": "Border width",
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 10
+      },
+      "border-radius": {
+        "title": "Border radius",
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 10
+      },
+      "ui-font-family": {
+        "title": "User Interface Font family",
+        "type": "string",
+        "enum": [
+          "Arial",
+          "Dancing Script",
+          "Dosis",
+          "Helvetica",
+          "JetBrains Mono",
+          "Lobster",
+          "Oxygen",
+          "Pacifico",
+          "Prompt",
+          "Righteous",
+          "Single Day",
+          "system-ui",
+          "Satisfy",
+          "Times New Roman",
+          "Ultra",
+          "Urbanist"
+        ]
+      },
+      "content-font-family": {
+        "title": "Content Font family",
+        "type": "string",
+        "enum": [
+          "Arial",
+          "Dancing Script",
+          "Dosis",
+          "Helvetica",
+          "JetBrains Mono",
+          "Lobster",
+          "Oxygen",
+          "Pacifico",
+          "Prompt",
+          "Righteous",
+          "Single Day",
+          "system-ui",
+          "Satisfy",
+          "Times New Roman",
+          "Ultra",
+          "Urbanist"
+        ]
+      },
+      "code-font-family": {
+        "title": "Code Font family",
+        "type": "string",
+        "enum": ["monospace", "Space Mono", "DejaVuSans Mono"]
+      }
     }
   }
-}
