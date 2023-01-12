@@ -8,6 +8,8 @@ import { ThemeEditorModel } from './model';
 import { ThemeEditorView } from './view';
 import { IChangedArgs } from '@jupyterlab/coreutils';
 import { requestAPI } from './handler';
+import { ISettingRegistry } from '@jupyterlab/settingregistry';
+
 /**
  * Initialization data for the jupyter-theme-editor extension.
  */
@@ -15,7 +17,28 @@ const plugin: JupyterFrontEndPlugin<void> = {
   id: 'jupyter-theme-editor:plugin',
   autoStart: true,
   requires: [IThemeManager],
-  activate: async (app: JupyterFrontEnd, themeManager: IThemeManager) => {
+  optional: [ISettingRegistry],
+  activate: (
+    app: JupyterFrontEnd,
+    themeManager: IThemeManager,
+    settingRegistry: ISettingRegistry
+  ) => {
+    if (settingRegistry) {
+      settingRegistry
+        .load(plugin.id)
+        .then(settings => {
+          console.log(
+            'jupyter-theme-editor settings loaded:',
+            settings.composite
+          );
+        })
+        .catch(reason => {
+          console.error(
+            'Failed to load settings for jupyter-theme-editor.',
+            reason
+          );
+        });
+    }
     const onThemeChanged = (
       themeManager: IThemeManager,
       changes: IChangedArgs<string, string | null, string>

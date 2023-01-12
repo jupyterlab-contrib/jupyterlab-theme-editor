@@ -1,0 +1,15 @@
+{
+  "jupyter.lab.shortcuts": [],
+  "title": "jupyter-theme-editor",
+  "description": "jupyter-theme-editor settings.",
+  "type": "object",
+  "properties": {
+    "a": {
+        "type": "number"
+    },
+    "b": {
+        "type": "number"
+    }
+  },
+  "additionalProperties": false
+}
