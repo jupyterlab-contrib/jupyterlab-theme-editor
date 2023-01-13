@@ -11,7 +11,14 @@ function sendPostRequest(cssProperties: any) {
     method: 'POST'
   })
     .then(data => {
-      console.log('cssProperties sent to the server:', data);
+      const blob = new Blob([data as string], { type: 'text/css' });
+      const url = URL.createObjectURL(blob);
+      const element = document.createElement('a');
+      element.href = url;
+      element.download = 'variables.css';
+      document.body.appendChild(element);
+      element.click();
+      document.body.removeChild(element);
     })
     .catch(reason => {
       console.error(

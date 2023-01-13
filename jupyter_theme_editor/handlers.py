@@ -3,8 +3,6 @@ from jupyter_server.base.handlers import APIHandler
 from jupyter_server.utils import url_path_join
 import tornado
 from jinja2 import Environment, PackageLoader
-from pathlib import Path
-
 
 class RouteHandler(APIHandler):
     # The following decorator should be present on all verb methods (head, get, post,
@@ -22,10 +20,16 @@ class RouteHandler(APIHandler):
             new_key = key.replace('--jp-', '').replace('-', '_')
             new_input_data[new_key] = new_value
 
-
-        env = Environment(loader=PackageLoader("jupyter_theme_editor", "templates"))
+        env = Environment(loader=PackageLoader(
+            "jupyter_theme_editor", "templates"))
         j2_template = env.get_template("template.css")
-        Path("style/variables.css").write_text(j2_template.render(new_input_data))
+        output_data = j2_template.render(new_input_data)
+        self.set_header("content-type", "text/css")
+        self.set_header("cache-control", "no-cache")
+        self.set_header("content-disposition",
+                        "attachment; filename=variables.css")
+        self.set_header("content-length", len(output_data.encode()))
+        self.finish(output_data)
 
 
 def setup_handlers(web_app):
