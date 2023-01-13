@@ -12,17 +12,18 @@ import Schema from './schema.json';
 
 function stringtoHex(s: string) {
   /* Convert other color formats present in variable.css to hexadecimal colors */
-  if (s === 'white') {
-    return '#000000';
-  }
-  if (s === 'black') {
+  const s1 = s.replace(/\s/g, '');
+  if (s1 === 'white') {
     return '#ffffff';
   }
+  if (s1 === 'black') {
+    return '#000000';
+  }
   if (s.includes('rgba')) {
-    const s1 = s.split('rgba(')[1];
-    const r = Number(s1.split(',')[0]);
-    const g = Number(s1.split(',')[1]);
-    const b = Number(s1.split(',')[2]);
+    const s2 = s1.split('rgba(')[1];
+    const r = Number(s2.split(',')[0]);
+    const g = Number(s2.split(',')[1]);
+    const b = Number(s2.split(',')[2]);
     const hexstring =
       '#' +
       [r, g, b]
@@ -349,8 +350,9 @@ export class ThemeEditorModel extends VDomModel {
         );
       },
       'layout-color': (value: string) => {
+        const hexValue = stringtoHex(value);
         const colorRGBA64 = parseColorHexRGB(
-          value.replace(/\s/g, '').toUpperCase()
+          hexValue.replace(/\s/g, '').toUpperCase()
         );
         const colorRGBA64shifted = shiftLuminanceRGBAColor(colorRGBA64!);
         const palette = definePaletteFromColorRGBA64(colorRGBA64shifted, 5);
