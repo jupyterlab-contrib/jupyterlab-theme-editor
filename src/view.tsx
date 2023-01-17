@@ -3,35 +3,12 @@ import { ThemeEditorModel } from './model';
 import React, { useState } from 'react';
 import Form from '@rjsf/core';
 import { ChromePicker } from '@hello-pangea/color-picker';
-import { requestAPI } from './handler';
-
-function sendPostRequest(cssProperties: any) {
-  requestAPI('send_cssProperties', {
-    body: JSON.stringify(cssProperties),
-    method: 'POST'
-  })
-    .then(data => {
-      const blob = new Blob([data as string], { type: 'text/css' });
-      const url = URL.createObjectURL(blob);
-      const element = document.createElement('a');
-      element.href = url;
-      element.download = 'variables.css';
-      document.body.appendChild(element);
-      element.click();
-      document.body.removeChild(element);
-    })
-    .catch(reason => {
-      console.error(
-        `The jupyter_theme_editor server extension appears to be missing.\n${reason}`
-      );
-    });
-}
+import { ITranslator, nullTranslator } from '@jupyterlab/translation';
 
 interface IProps {
   formData: any;
   schema: any;
   uiSchema: any;
-  onSubmit: () => void;
   setformData: (value: any) => void;
 }
 
@@ -41,7 +18,6 @@ function FormComponent(props: IProps) {
       schema={props.schema}
       formData={props.formData}
       uiSchema={props.uiSchema}
-      onSubmit={props.onSubmit}
       onChange={event => {
         props.setformData(event.formData);
       }}
@@ -74,14 +50,17 @@ function ColorPicker(props: any) {
 
 export class ThemeEditorView extends VDomRenderer<ThemeEditorModel> {
   public uiSchema: any;
+  public translator: ITranslator;
 
-  constructor(model: ThemeEditorModel) {
+  constructor(model: ThemeEditorModel, translator: ITranslator) {
     super(model);
+    this.translator = translator;
     this.addClass('jp-theme-editor-panel');
+
     this.uiSchema = {
       classNames: 'form-class',
       'ui:submitButtonOptions': {
-        norender: false
+        norender: true
       },
       'ui-font-size': {
         'ui:widget': 'range'
@@ -125,16 +104,34 @@ export class ThemeEditorView extends VDomRenderer<ThemeEditorModel> {
     };
   }
   render() {
+    const trans = (this.translator ?? nullTranslator).load(
+      'jupyter_theme_editor'
+    );
     return (
-      <FormComponent
-        schema={this.model.schema}
-        formData={this.model.formData}
-        uiSchema={this.uiSchema}
-        onSubmit={() => sendPostRequest(this.model.cssProperties)}
-        setformData={(value: any) => {
-          this.model.formData = value;
-        }}
-      />
+      <>
+        <div className="jp-Toolbar">
+          <button
+            onClick={() => {console.log('Export button has been pressed')}}
+            title={trans.__('Export the styles as a stylesheet.')}
+          >
+            {trans.__('Export')}
+          </button>
+          <button
+            onClick={() => {console.log('Save button has been pressed')}}
+            title={trans.__('Save the styles in the settings.')}
+          >
+            {trans.__('Save')}
+          </button>
+        </div>
+        <FormComponent
+          schema={this.model.schema}
+          formData={this.model.formData}
+          uiSchema={this.uiSchema}
+          setformData={(value: any) => {
+            this.model.formData = value;
+          }}
+        />
+      </>
     );
   }
 }
