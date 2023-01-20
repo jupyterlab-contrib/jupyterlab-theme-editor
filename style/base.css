@@ -45,12 +45,3 @@
   font-size: var(--jp-ui-font-size0);
 }
 
-:root {
-  --jp-ui-font-family: 'Arial', 'Dancing Script', 'Dosis', 'Helvetica',
-    'Lobster', 'JetBrains Mono', 'Pacifico', 'Prompt', 'Righteous', 'Sans Serif',
-    'Satisfy', 'Single Day', 'system-ui', 'Times New Roman', 'Urbanist';
-  --jp-content-font-family: 'Arial', 'Dancing Script', 'Helvetica', 'Dosis',
-    'Lobster', 'JetBrains Mono', 'Pacifico', 'Prompt', 'Righteous', 'Sans Serif',
-    'Satisfy', 'Single Day', 'system-ui', 'Times New Roman', 'Urbanist';
-  --jp-code-font-family: 'DejaVu Sans Mono', 'Space Mono';
-}
