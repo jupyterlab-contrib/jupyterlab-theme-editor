@@ -5,6 +5,30 @@ import Form from '@rjsf/core';
 import { ChromePicker } from '@hello-pangea/color-picker';
 import { ITranslator, nullTranslator } from '@jupyterlab/translation';
 
+import { requestAPI } from './handler';
+
+function sendPostRequest(cssProperties: any) {
+  requestAPI('send_cssProperties', {
+    body: JSON.stringify(cssProperties),
+    method: 'POST'
+  })
+    .then(data => {
+      const blob = new Blob([data as string], { type: 'text/css' });
+      const url = URL.createObjectURL(blob);
+      const element = document.createElement('a');
+      element.href = url;
+      element.download = 'variables.css';
+      document.body.appendChild(element);
+      element.click();
+      document.body.removeChild(element);
+    })
+    .catch(reason => {
+      console.error(
+        `The jupyter_theme_editor server extension appears to be missing.\n${reason}`
+      );
+    });
+}
+
 interface IProps {
   formData: any;
   schema: any;
@@ -111,16 +135,12 @@ export class ThemeEditorView extends VDomRenderer<ThemeEditorModel> {
       <>
         <div className="jp-Toolbar">
           <button
-            onClick={() => {console.log('Export button has been pressed')}}
+            onClick={() => {
+              sendPostRequest(this.model.cssProperties);
+            }}
             title={trans.__('Export the styles as a stylesheet.')}
           >
             {trans.__('Export')}
-          </button>
-          <button
-            onClick={() => {console.log('Save button has been pressed')}}
-            title={trans.__('Save the styles in the settings.')}
-          >
-            {trans.__('Save')}
           </button>
         </div>
         <FormComponent

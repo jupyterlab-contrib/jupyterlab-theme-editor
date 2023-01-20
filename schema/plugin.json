@@ -1,152 +1,132 @@
 {
   "title": "Theme editor",
   "description": "Settings of Theme Editor.",
+  "type": "object",
   "properties": {
-    "layout-color": {
-      "type": "string",
-      "title": "Layout color",
-      "description": "Layout color defined with the css variable --jp-layout-color1",
-      "default": "#111111"
+    "useSettings": {
+      "type": "boolean",
+      "title": "Use the settings style",
+      "description": "If useSettings is true the settings styles are used. If it is false, the ones from the theme editor are selected.",
+      "default": true
     },
-
-    "accent-color": {
-      "type": "string",
-      "title": "Accent color",
-      "description": "Accent color defined with the css variable --jp-accent-color1",
-      "default": "#388e3c"
-    },
-    "border-color": {
-      "type": "string",
-      "title": "Border color",
-      "description": "color defined with the css variable --jp-border-color1",
-      "default": "#bdbdbd"
-    },
-    "brand-color": {
-      "type": "string",
-      "title": "Brand color",
-      "description": "Brand color defined with the css variable --jp-brand-color1",
-      "default": "#1976d2"
-    },
-    "error-color": {
-      "type": "string",
-      "title": "Error color",
-      "description": "Error color defined with the css variable --jp-error-color1",
-      "default": "#d32f2f"
-    },
-    "info-color": {
-      "type": "string",
-      "title": "Info color",
-      "description": "Info color defined with the css variable --jp-info-color1",
-      "default": "#0097a7"
-    },
-    "success-color": {
-      "type": "string",
-      "title": "Success color",
-      "description": "Success color defined with the css variable --jp-success-color1",
-      "default": "#388e3c"
-    },
-    "warn-color": {
-      "type": "string",
-      "title": "Warn color",
-      "description": "Warn color defined with the css variable --jp-warn-color1",
-      "default": "#f57c00"
-    },
-    "ui-font-size": {
-      "type": "integer",
-      "title": "UI font size",
-      "description": "Font size for the user interface elements.",
-      "default": 13,
-      "minimum": 6,
-      "maximum": 30
-    },
-    "content-font-size": {
-      "type": "integer",
-      "title": "Content font size",
-      "description": "Font size for the content elements.",
-      "default": 13,
-      "minimum": 6,
-      "maximum": 30
-    },
-    "code-font-size": {
-      "type": "integer",
-      "title": "Code font size",
-      "description": "Font size for the code text parts.",
-      "default": 14,
-      "minimum": 6,
-      "maximum": 30
-    },
-    "border-width": {
-      "type": "integer",
-      "title": "Border width",
-      "description": "Border width of the elements of the interface.",
-      "default": 1,
-      "minimum": 1,
-      "maximum": 10
-    },
-    "border-radius": {
-      "type": "integer",
-      "title": "Border radius",
-      "description": "Border radius of the elements of the interface.",
-      "default": 2,
-      "minimum": 1,
-      "maximum": 10
-    },
-    "ui-font-family": {
-      "type": "string",
-      "title": "User Interface Font family",
-      "description": "List of the fonts available for the ui elements.",
-      "enum": [
-        "Arial",
-        "Dancing Script",
-        "Dosis",
-        "Helvetica",
-        "JetBrains Mono",
-        "Lobster",
-        "Oxygen",
-        "Pacifico",
-        "Prompt",
-        "Righteous",
-        "Single Day",
-        "system-ui",
-        "Satisfy",
-        "Times New Roman",
-        "Ultra",
-        "Urbanist"
-      ],
-      "default": "system-ui"
-    },
-    "content-font-family": {
-      "type": "string",
-      "title": "Content Font family",
-      "description": "List of the fonts available for the content elements.",
-      "enum": [
-        "Arial",
-        "Dancing Script",
-        "Dosis",
-        "Helvetica",
-        "JetBrains Mono",
-        "Lobster",
-        "Oxygen",
-        "Pacifico",
-        "Prompt",
-        "Righteous",
-        "Single Day",
-        "system-ui",
-        "Satisfy",
-        "Times New Roman",
-        "Ultra",
-        "Urbanist"
-      ],
-      "default": "system-ui"
-    },
-    "code-font-family": {
-      "type": "string",
-      "title": "Code Font family",
-      "description": "List of the fonts available for the code text parts.",
-      "enum": ["monospace", "Space Mono", "DejaVuSans Mono"],
-      "default": "monospace"
+    "customStyles": {
+      "title": "Tunable CSS properties",
+      "description": "CSS properties that can be tuned by the user.",
+      "type": "object",
+      "properties": {
+        "layout-color": {
+          "title": "Layout color",
+          "type": "string"
+        },
+        "accent-color": {
+          "title": "Accent color",
+          "type": "string"
+        },
+        "border-color": {
+          "title": "Border color",
+          "type": "string"
+        },
+        "brand-color": {
+          "title": "Brand color",
+          "type": "string",
+          "default": ""
+        },
+        "error-color": {
+          "title": "Error color",
+          "type": "string"
+        },
+        "info-color": {
+          "title": "Info color",
+          "type": "string"
+        },
+        "success-color": {
+          "title": "Success color",
+          "type": "string"
+        },
+        "warn-color": {
+          "title": "Warn color",
+          "type": "string"
+        },
+        "ui-font-size": {
+          "title": "User Interface Font family",
+          "type": "integer",
+          "minimum": 6,
+          "maximum": 30
+        },
+        "content-font-size": {
+          "title": "Content font size",
+          "type": "integer",
+          "minimum": 6,
+          "maximum": 30
+        },
+        "code-font-size": {
+          "title": "Code font size",
+          "type": "integer",
+          "minimum": 6,
+          "maximum": 30
+        },
+        "border-width": {
+          "title": "Border width",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10
+        },
+        "border-radius": {
+          "title": "Border radius",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10
+        },
+        "ui-font-family": {
+          "title": "User Interface Font family",
+          "type": "string",
+          "enum": [
+            "Arial",
+            "Dancing Script",
+            "Dosis",
+            "Helvetica",
+            "JetBrains Mono",
+            "Lobster",
+            "Oxygen",
+            "Pacifico",
+            "Prompt",
+            "Righteous",
+            "Single Day",
+            "system-ui",
+            "Satisfy",
+            "Times New Roman",
+            "Ultra",
+            "Urbanist"
+          ]
+        },
+        "content-font-family": {
+          "title": "Content Font family",
+          "type": "string",
+          "enum": [
+            "Arial",
+            "Dancing Script",
+            "Dosis",
+            "Helvetica",
+            "JetBrains Mono",
+            "Lobster",
+            "Oxygen",
+            "Pacifico",
+            "Prompt",
+            "Righteous",
+            "Single Day",
+            "system-ui",
+            "Satisfy",
+            "Times New Roman",
+            "Ultra",
+            "Urbanist"
+          ]
+        },
+        "code-font-family": {
+          "title": "Code Font family",
+          "type": "string",
+          "enum": ["monospace", "Space Mono", "DejaVuSans Mono"]
+        }
+      }
     }
-  },
-  "additionalProperties": false,
-  "type": "object"
+  }
 }

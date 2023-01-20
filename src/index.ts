@@ -6,9 +6,9 @@ import { IThemeManager } from '@jupyterlab/apputils';
 import { themeEditorIcon } from './icons';
 import { ThemeEditorModel } from './model';
 import { ThemeEditorView } from './view';
-import { IChangedArgs } from '@jupyterlab/coreutils';
 import { requestAPI } from './handler';
 import { ISettingRegistry } from '@jupyterlab/settingregistry';
+import { ITranslator } from '@jupyterlab/translation';
 
 const PLUGIN_ID = 'jupyter-theme-editor:plugin';
 
@@ -19,69 +19,65 @@ const plugin: JupyterFrontEndPlugin<void> = {
   id: PLUGIN_ID,
   autoStart: true,
   requires: [IThemeManager],
-  optional: [ISettingRegistry],
+  optional: [ISettingRegistry, ITranslator],
   activate: (
     app: JupyterFrontEnd,
     themeManager: IThemeManager,
-    settings: ISettingRegistry
+    settingRegistry: ISettingRegistry,
+    translator: ITranslator
   ) => {
-    const onThemeChanged = (
-      themeManager: IThemeManager,
-      changes: IChangedArgs<string, string | null, string>
-    ) => {
+    const onThemeChanged = (themeManager: IThemeManager) => {
       themeManager.themeChanged.disconnect(onThemeChanged);
       const model = new ThemeEditorModel();
-      const view = new ThemeEditorView(model);
+      const view = new ThemeEditorView(model, translator);
       view.addClass('jp-theme-editor-view-panel');
       view.id = 'theme-editor';
       view.title.icon = themeEditorIcon;
+      model.schema = {};
       app.shell.add(view, 'left');
       console.log('JupyterLab extension jupyter-theme-editor is activated!');
 
-      /**
-       * Load the settings for this extension
-       *
-       * @param setting Extension settings
-       */
-
-      function loadSetting(setting: ISettingRegistry.ISettings): void {
-        // Read the settings and convert to the correct type
-        const settingsValues: any = {};
-        for (const key of Object.keys(model.formData)) {
-          if (key.includes('color') || key.includes('font-family')) {
-            settingsValues[key] = setting.get(key).composite as string;
-          } else {
-            settingsValues[key] = setting.get(key).composite as number;
-          }
-        }
-        return settingsValues;
-      }
-
-      // Wait for the application to be restored and
-      // for the settings for this plugin to be loaded
-
-      const onModelChanged = () => {
-        console.log('Model is changed ! We are using the theme parameters');
-        Promise.all([app.restored, settings.load(PLUGIN_ID)]).then(
-          ([, setting]) => {
-            // Read the settings
-            let settingsValues: any = {};
-            settingsValues = loadSetting(setting);
-            // Listen for your plugin setting changes using Signal
-            setting.changed.connect(loadSetting);
+      Promise.all([app.restored, settingRegistry.load(PLUGIN_ID)]).then(
+        ([, setting]) => {
+          model.schema = setting.schema.properties?.customStyles;
+          model.stateChanged.emit();
+          let useSettings = false;
+          let customStyles: any = {};
+          const onModelChanged = () => {
             for (const key of Object.keys(model.formData)) {
-              if (settingsValues[key] !== model.formData[key]) {
-                console.log(`For key ${key}, set new value`);
-                setting.set(key, model.formData[key]);
+              if (typeof model.formData[key] === 'string') {
+                model.formData[key] = model.formData[key].trim();
+              }
+            }
+            // Expanding will result in a copy
+            customStyles = { ...model.formData };
+            setting.set('customStyles', customStyles);
+          };
+
+          loadSetting();
+          setting.changed.connect(loadSetting);
+
+          function loadSetting() {
+            // Read the settings and convert to the correct type
+            const candidate = setting.get('useSettings').composite as boolean;
+            customStyles = setting.get('customStyles').composite as any;
+            if (candidate !== useSettings) {
+              useSettings = candidate;
+
+              // ... apply needed change
+              if (useSettings === false) {
+                model.stateChanged.connect(onModelChanged);
+              } else {
+                model.stateChanged.disconnect(onModelChanged);
+                model.formData = { ...customStyles };
+                model.stateChanged.emit();
+                model.stateChanged.connect(onModelChanged);
               }
             }
           }
-        );
-      };
-
-      model.stateChanged.connect(onModelChanged);
+        }
+      );
     };
-
     themeManager.themeChanged.connect(onThemeChanged);
     requestAPI<any>('get_example')
       .then(data => {

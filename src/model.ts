@@ -8,7 +8,6 @@ import {
   ColorHSL,
   parseColorHexRGB
 } from '@microsoft/fast-colors';
-import Schema from './schema.json';
 
 function stringtoHex(s: string) {
   /* Convert other color formats present in variable.css to hexadecimal colors */
@@ -51,7 +50,6 @@ function defineColorProperties(
     const key = rootName + String(i);
     list.push((cssProperties[key] = value));
   }
-  return list;
 }
 
 function defineFontProperties(
@@ -66,7 +64,6 @@ function defineFontProperties(
     const key = rootName + String(i);
     list.push((cssProperties[key] = value));
   }
-  return list;
 }
 
 function getNumberFromCSSProperties(CSSInfos: any, name: string) {
@@ -218,7 +215,7 @@ function initializeFormData() {
 export class ThemeEditorModel extends VDomModel {
   private _uiFontScale: number;
   private _contentFontScale: number;
-  private _schema: any;
+  public schema: any;
   private _formData: any;
   private _formDataSetter: any;
   private _cssProperties: { [key: string]: string | null };
@@ -235,18 +232,17 @@ export class ThemeEditorModel extends VDomModel {
       '--jp-content-font-scale-factor'
     );
 
-    this._schema = Schema;
     this._formData = initializeFormData();
     this._cssProperties = {};
     this._formDataSetter = {
       'ui-font-family': (value: string) => {
-        return (this._cssProperties['--jp-ui-font-family'] = value);
+        this._cssProperties['--jp-ui-font-family'] = value;
       },
       'content-font-family': (value: string) => {
-        return (this._cssProperties['--jp-content-font-family'] = value);
+        this._cssProperties['--jp-content-font-family'] = value;
       },
       'code-font-family': (value: string) => {
-        return (this._cssProperties['--jp-code-font-family'] = value);
+        this._cssProperties['--jp-code-font-family'] = value;
       },
       'ui-font-size': (value: number) => {
         const fontsizeList = [];
@@ -258,7 +254,7 @@ export class ThemeEditorModel extends VDomModel {
           ).toFixed(3);
           fontsizeList[i] = String(rounded_value) + 'px';
         }
-        return defineFontProperties(
+        defineFontProperties(
           rootName,
           fontsizeList,
           this._cssProperties,
@@ -275,7 +271,7 @@ export class ThemeEditorModel extends VDomModel {
           ).toFixed(3);
           fontsizeList[i] = String(rounded_value) + 'px';
         }
-        return defineFontProperties(
+        defineFontProperties(
           rootName,
           fontsizeList,
           this._cssProperties,
@@ -283,71 +279,43 @@ export class ThemeEditorModel extends VDomModel {
         );
       },
       'code-font-size': (value: number) => {
-        return (this._cssProperties['--jp-code-font-size'] =
-          String(value) + 'px');
+        this._cssProperties['--jp-code-font-size'] = String(value) + 'px';
       },
       'border-width': (value: number) => {
-        return (this._cssProperties['--jp-border-width'] =
-          String(value) + 'px');
+        this._cssProperties['--jp-border-width'] = String(value) + 'px';
       },
       'border-radius': (value: number) => {
-        return (this._cssProperties['--jp-border-radius'] =
-          String(value) + 'px');
+        this._cssProperties['--jp-border-radius'] = String(value) + 'px';
       },
       'accent-color': (value: string) => {
         const rootName = '--jp-accent-color';
         const steps = 4;
         const palette = definePaletteFromHexColor(value, steps, rootName);
-        return defineColorProperties(
-          rootName,
-          palette,
-          this._cssProperties,
-          steps
-        );
+        defineColorProperties(rootName, palette, this._cssProperties, steps);
       },
       'border-color': (value: string) => {
         const rootName = '--jp-border-color';
         const steps = 4;
         const palette = definePaletteFromHexColor(value, steps, rootName);
-        return defineColorProperties(
-          rootName,
-          palette,
-          this._cssProperties,
-          steps
-        );
+        defineColorProperties(rootName, palette, this._cssProperties, steps);
       },
       'brand-color': (value: string) => {
         const rootName = '--jp-brand-color';
         const steps = 5;
         const palette = definePaletteFromHexColor(value, steps, rootName);
-        return defineColorProperties(
-          rootName,
-          palette,
-          this._cssProperties,
-          steps
-        );
+        defineColorProperties(rootName, palette, this._cssProperties, steps);
       },
       'error-color': (value: string) => {
         const rootName = '--jp-error-color';
         const steps = 4;
         const palette = definePaletteFromHexColor(value, steps, rootName);
-        return defineColorProperties(
-          rootName,
-          palette,
-          this._cssProperties,
-          steps
-        );
+        defineColorProperties(rootName, palette, this._cssProperties, steps);
       },
       'info-color': (value: string) => {
         const rootName = '--jp-info-color';
         const steps = 4;
         const palette = definePaletteFromHexColor(value, steps, rootName);
-        return defineColorProperties(
-          rootName,
-          palette,
-          this._cssProperties,
-          steps
-        );
+        defineColorProperties(rootName, palette, this._cssProperties, steps);
       },
       'layout-color': (value: string) => {
         const colorRGBA64 = parseColorHexRGB(
@@ -367,38 +335,31 @@ export class ThemeEditorModel extends VDomModel {
           inverseColorRGBA64,
           5
         );
-        const layoutColorList = defineColorProperties(
+        defineColorProperties(
           '--jp-layout-color',
           palette,
           this.cssProperties,
           5
         );
-        const inverseLayoutColorList = defineColorProperties(
+        defineColorProperties(
           '--jp-inverse-layout-color',
           inversePalette,
           this.cssProperties,
           4
         );
 
-        const uiFontColorList = defineColorProperties(
+        defineColorProperties(
           '--jp-ui-font-color',
           inversePalette,
           this.cssProperties,
           4
         );
-        const uiInverseFontColorList = defineColorProperties(
+        defineColorProperties(
           '--jp-ui-inverse-font-color',
           palette,
           this.cssProperties,
           4
         );
-
-        return [
-          layoutColorList,
-          inverseLayoutColorList,
-          uiFontColorList,
-          uiInverseFontColorList
-        ];
       },
       'success-color': (value: string) => {
         const rootName = '--jp-success-color';
@@ -423,9 +384,6 @@ export class ThemeEditorModel extends VDomModel {
         );
       }
     };
-  }
-  public get schema(): any {
-    return this._schema;
   }
 
   public get cssProperties(): any {
