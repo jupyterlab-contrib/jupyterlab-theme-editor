@@ -31,7 +31,6 @@ interface IProps {
   formData: any;
   schema: any;
   uiSchema: any;
-  cssProperties: any;
   onSubmit: () => void;
   setformData: (value: any) => void;
 }
@@ -42,7 +41,7 @@ function FormComponent(props: IProps) {
       schema={props.schema}
       formData={props.formData}
       uiSchema={props.uiSchema}
-      onSubmit={(formData, event) => sendPostRequest(props.cssProperties)}
+      onSubmit={props.onSubmit}
       onChange={event => {
         props.setformData(event.formData);
       }}
@@ -130,11 +129,8 @@ export class ThemeEditorView extends VDomRenderer<ThemeEditorModel> {
       <FormComponent
         schema={this.model.schema}
         formData={this.model.formData}
-        cssProperties={this.model.cssProperties}
         uiSchema={this.uiSchema}
-        onSubmit={() => {
-          console.log('Form is submitted');
-        }}
+        onSubmit={() => sendPostRequest(this.model.cssProperties)}
         setformData={(value: any) => {
           this.model.formData = value;
         }}
