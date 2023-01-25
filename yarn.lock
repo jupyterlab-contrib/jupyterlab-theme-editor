@@ -1696,6 +1696,19 @@
     node-fetch "^2.6.0"
     ws "^7.4.6"
 
+"@jupyterlab/settingregistry@^3.1.0 || ^4.0.0-alpha.16":
+  version "3.5.2"
+  resolved "https://registry.yarnpkg.com/@jupyterlab/settingregistry/-/settingregistry-3.5.2.tgz#6b70f5387c1285f2ad6fcb2612b9090960f0114b"
+  integrity sha512-ZiJojTy/Vd15f217tp8zkE4z0I7cTYZvFJkwNXeM+IoEXMzZG5A8dSkdVugWjfjs9VeCXCzRyut1kb8z0aA+BQ==
+  dependencies:
+    "@jupyterlab/statedb" "^3.5.2"
+    "@lumino/commands" "^1.19.0"
+    "@lumino/coreutils" "^1.11.0"
+    "@lumino/disposable" "^1.10.0"
+    "@lumino/signaling" "^1.10.0"
+    ajv "^6.12.3"
+    json5 "^2.1.1"
+
 "@jupyterlab/settingregistry@^3.5.1":
   version "3.5.1"
   resolved "https://registry.yarnpkg.com/@jupyterlab/settingregistry/-/settingregistry-3.5.1.tgz#3b310790adef3dabfba3ab873810375ca2bf3ca3"
@@ -1725,6 +1738,17 @@
   version "3.5.1"
   resolved "https://registry.yarnpkg.com/@jupyterlab/statedb/-/statedb-3.5.1.tgz#9c1488400681f9ad9d707433ad5fe1b8c08487b5"
   integrity sha512-1khy4VrpgB2+rQFebAy+GbTE1F3qMEVxTANqxOsQ13PS/Z6i9DdKE67uHZpxLigw4T7UGKN1PsDuwmDSG7/xBw==
+  dependencies:
+    "@lumino/commands" "^1.19.0"
+    "@lumino/coreutils" "^1.11.0"
+    "@lumino/disposable" "^1.10.0"
+    "@lumino/properties" "^1.8.0"
+    "@lumino/signaling" "^1.10.0"
+
+"@jupyterlab/statedb@^3.5.2":
+  version "3.5.2"
+  resolved "https://registry.yarnpkg.com/@jupyterlab/statedb/-/statedb-3.5.2.tgz#36ce3ba6101097113f7b2d1b439ec05bd30b2b35"
+  integrity sha512-BrxWSbCJ5MvDn0OiTC/Gv8vuPFIz6mbiQ6JTojcknK1YxDfMOqE5Hvl+f/oODSGnoaVu3s2czCjTMo1sPDjW8g==
   dependencies:
     "@lumino/commands" "^1.19.0"
     "@lumino/coreutils" "^1.11.0"
@@ -8589,7 +8613,7 @@ style-search@^0.1.0:
   resolved "https://registry.yarnpkg.com/style-search/-/style-search-0.1.0.tgz#7958c793e47e32e07d2b5cafe5c0bf8e12e77902"
   integrity sha512-Dj1Okke1C3uKKwQcetra4jSuk0DqbzbYtXipzFlFMZtowbF1x7BKJwB9AayVMyFARvU8EDrZdcax4At/452cAg==
 
-stylelint-config-prettier@^9.0.3:
+stylelint-config-prettier@^9.0.4:
   version "9.0.4"
   resolved "https://registry.yarnpkg.com/stylelint-config-prettier/-/stylelint-config-prettier-9.0.4.tgz#1b1dda614d5b3ef6c1f583fa6fa55f88245eb00b"
   integrity sha512-38nIGTGpFOiK5LjJ8Ma1yUgpKENxoKSOhbDNSemY7Ep0VsJoXIW9Iq/2hSt699oB9tReynfWicTAoIHiq8Rvbg==
