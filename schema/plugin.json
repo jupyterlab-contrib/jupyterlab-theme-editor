@@ -6,80 +6,99 @@
     "useSettings": {
       "type": "boolean",
       "title": "Use the settings style",
-      "description": "If useSettings is true the settings styles are used. If it is false, the ones from the theme editor are selected.",
       "default": true
     },
     "customStyles": {
       "title": "Tunable CSS properties",
-      "description": "CSS properties that can be tuned by the user.",
       "type": "object",
+      "default": {
+        "accent-color" : "#388e3c",
+        "border-color" : "#bdbdbd",
+        "brand-color": "#1976d2",
+        "error-color": "#d32f2f",
+        "info-color": "#0097a7",
+        "layout-color" :"#111111",
+        "success-color":"#388e3c",
+        "warn-color": "#f57c00",
+        "border-radius": 2,
+        "border-width": 1,
+        "ui-font-family": "system-ui",
+        "ui-font-size": 13,
+        "code-font-family": "monospace",
+        "code-font-size": 14,
+        "content-font-family": "system-ui",
+        "content-font-size": 13
+    },
       "properties": {
         "layout-color": {
-          "title": "Layout color",
-          "type": "string"
+          "type": "string",
+          "title": "Layout color"
+
         },
+
         "accent-color": {
-          "title": "Accent color",
-          "type": "string"
+          "type": "string",
+          "title": "Accent color"
         },
         "border-color": {
-          "title": "Border color",
-          "type": "string"
+          "type": "string",
+          "title": "Border color"
         },
         "brand-color": {
-          "title": "Brand color",
           "type": "string",
-          "default": ""
+          "title": "Brand color"
+
         },
         "error-color": {
-          "title": "Error color",
-          "type": "string"
+          "type": "string",
+          "title": "Error color"
         },
         "info-color": {
-          "title": "Info color",
-          "type": "string"
+          "type": "string",
+          "title": "Info color"
         },
         "success-color": {
-          "title": "Success color",
-          "type": "string"
+          "type": "string",
+          "title": "Success color"
+
         },
         "warn-color": {
-          "title": "Warn color",
-          "type": "string"
+          "type": "string",
+          "title": "Warn color"
         },
         "ui-font-size": {
-          "title": "User Interface Font family",
           "type": "integer",
+          "title": "UI font size",
           "minimum": 6,
           "maximum": 30
         },
         "content-font-size": {
-          "title": "Content font size",
           "type": "integer",
+          "title": "Content font size",
           "minimum": 6,
           "maximum": 30
         },
         "code-font-size": {
-          "title": "Code font size",
           "type": "integer",
+          "title": "Code font size",
           "minimum": 6,
           "maximum": 30
         },
         "border-width": {
-          "title": "Border width",
           "type": "integer",
+          "title": "Border width",
           "minimum": 1,
           "maximum": 10
         },
         "border-radius": {
-          "title": "Border radius",
           "type": "integer",
+          "title": "Border radius",
           "minimum": 1,
           "maximum": 10
         },
         "ui-font-family": {
-          "title": "User Interface Font family",
           "type": "string",
+          "title": "User Interface Font family",
           "enum": [
             "Arial",
             "Dancing Script",
@@ -100,8 +119,8 @@
           ]
         },
         "content-font-family": {
-          "title": "Content Font family",
           "type": "string",
+          "title": "Content Font family",
           "enum": [
             "Arial",
             "Dancing Script",
@@ -122,11 +141,13 @@
           ]
         },
         "code-font-family": {
-          "title": "Code Font family",
           "type": "string",
+          "title": "Code Font family",
           "enum": ["monospace", "Space Mono", "DejaVuSans Mono"]
         }
       }
     }
-  }
+  },
+
+  "additionalProperties": false
 }
