@@ -39,9 +39,9 @@ const plugin: JupyterFrontEndPlugin<void> = {
 
       Promise.all([app.restored, settingRegistry.load(PLUGIN_ID)]).then(
         ([, setting]) => {
-          model.schema = setting.schema.properties?.customStyles;
+          model.schema = setting.schema.properties?.customStyles ?? {};
           model.stateChanged.emit();
-          let useSettings = false;
+          let useSettings = null;
           let customStyles: any = {};
           const onModelChanged = () => {
             for (const key of Object.keys(model.formData)) {
