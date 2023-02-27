@@ -28,7 +28,7 @@
         "code-font-size": 14,
         "content-font-family": "system-ui",
         "content-font-size": 13
-    },
+      },
       "properties": {
         "layout-color": {
           "type": "string",
