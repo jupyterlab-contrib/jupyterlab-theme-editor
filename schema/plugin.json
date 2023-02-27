@@ -12,13 +12,13 @@
       "title": "Tunable CSS properties",
       "type": "object",
       "default": {
-        "accent-color" : "#388e3c",
-        "border-color" : "#bdbdbd",
+        "accent-color": "#388e3c",
+        "border-color": "#bdbdbd",
         "brand-color": "#1976d2",
         "error-color": "#d32f2f",
         "info-color": "#0097a7",
-        "layout-color" :"#111111",
-        "success-color":"#388e3c",
+        "layout-color": "#111111",
+        "success-color": "#388e3c",
         "warn-color": "#f57c00",
         "border-radius": 2,
         "border-width": 1,
@@ -33,9 +33,7 @@
         "layout-color": {
           "type": "string",
           "title": "Layout color"
-
         },
-
         "accent-color": {
           "type": "string",
           "title": "Accent color"
@@ -47,7 +45,6 @@
         "brand-color": {
           "type": "string",
           "title": "Brand color"
-
         },
         "error-color": {
           "type": "string",
@@ -60,7 +57,6 @@
         "success-color": {
           "type": "string",
           "title": "Success color"
-
         },
         "warn-color": {
           "type": "string",
@@ -148,6 +144,5 @@
       }
     }
   },
-
   "additionalProperties": false
 }
