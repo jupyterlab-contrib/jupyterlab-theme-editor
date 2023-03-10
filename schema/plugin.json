@@ -94,7 +94,7 @@
         },
         "ui-font-family": {
           "type": "string",
-          "title": "User Interface Font family",
+          "title": "User Interface font family",
           "enum": [
             "Arial",
             "Dancing Script",
