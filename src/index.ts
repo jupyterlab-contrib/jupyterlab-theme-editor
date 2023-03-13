@@ -6,7 +6,6 @@ import { IThemeManager } from '@jupyterlab/apputils';
 import { themeEditorIcon } from './icons';
 import { ThemeEditorModel } from './model';
 import { ThemeEditorView } from './view';
-import { requestAPI } from './handler';
 import { ISettingRegistry } from '@jupyterlab/settingregistry';
 import { ITranslator } from '@jupyterlab/translation';
 
@@ -79,15 +78,6 @@ const plugin: JupyterFrontEndPlugin<void> = {
       );
     };
     themeManager.themeChanged.connect(onThemeChanged);
-    requestAPI<any>('get_example')
-      .then(data => {
-        console.log(data);
-      })
-      .catch(reason => {
-        console.error(
-          `The jupyter_theme_editor server extension appears to be missing.\n${reason}`
-        );
-      });
   }
 };
 
