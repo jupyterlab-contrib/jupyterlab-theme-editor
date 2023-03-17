@@ -111,6 +111,7 @@
             }
         },
         "extension": true,
-        "outputDir": "jupyter_theme_editor/labextension"
+        "outputDir": "jupyter_theme_editor/labextension",
+        "schemaDir":"schema"
     }
 }
