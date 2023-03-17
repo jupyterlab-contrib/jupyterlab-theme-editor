@@ -15,19 +15,19 @@
         "accent-color": "#388e3c",
         "border-color": "#bdbdbd",
         "brand-color": "#1976d2",
-        "error-color": "#d32f2f",
+        "error-color": "#d41818",
         "info-color": "#0097a7",
-        "layout-color": "#111111",
+        "layout-color": "#6d91e0",
         "success-color": "#388e3c",
         "warn-color": "#f57c00",
         "border-radius": 2,
         "border-width": 1,
-        "ui-font-family": "system-ui",
-        "ui-font-size": 13,
+        "ui-font-family": "Helvetica",
+        "ui-font-size": 18,
         "code-font-family": "monospace",
         "code-font-size": 14,
-        "content-font-family": "system-ui",
-        "content-font-size": 13
+        "content-font-family": "Helvetica",
+        "content-font-size": 14
       },
       "properties": {
         "layout-color": {
