@@ -97,6 +97,7 @@
           "title": "User Interface font family",
           "enum": [
             "Arial",
+            "Courier",
             "Dancing Script",
             "Dosis",
             "Helvetica",
@@ -111,7 +112,8 @@
             "Satisfy",
             "Times New Roman",
             "Ultra",
-            "Urbanist"
+            "Urbanist",
+            "Verdana"
           ]
         },
         "content-font-family": {
@@ -119,6 +121,7 @@
           "title": "Content Font family",
           "enum": [
             "Arial",
+            "Courier",
             "Dancing Script",
             "Dosis",
             "Helvetica",
@@ -133,13 +136,14 @@
             "Satisfy",
             "Times New Roman",
             "Ultra",
-            "Urbanist"
+            "Urbanist",
+            "Verdana"
           ]
         },
         "code-font-family": {
           "type": "string",
           "title": "Code Font family",
-          "enum": ["monospace", "Space Mono", "DejaVuSans Mono"]
+          "enum": ["monospace", "Space Mono"]
         }
       }
     }

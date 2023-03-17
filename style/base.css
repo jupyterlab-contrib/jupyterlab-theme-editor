@@ -3,14 +3,11 @@
 
     https://jupyterlab.readthedocs.io/en/stable/developer/css.html
 */
-@import url('https://fonts.googleapis.com/css2?family=Arial');
+@import url('https://fonts.googleapis.com/css2?family=Courier');
 @import url('https://fonts.googleapis.com/css2?family=Dancing+Script');
+@import url('https://fonts.googleapis.com/css2?family=Dosis');
 @import url('https://fonts.googleapis.com/css2?family=Helvetica');
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono');
-@import url('https://fonts.googleapis.com/css2?family=Menlo');
-@import url('https://fonts.googleapis.com/css2?family=Consola+Mono');
-@import url('https://fonts.googleapis.com/css2?family=DejaVu+Sans+Mono');
-@import url('https://fonts.googleapis.com/css2?family=Space+Mono');
 @import url('https://fonts.googleapis.com/css2?family=Lobster');
 @import url('https://fonts.googleapis.com/css2?family=Oxygen');
 @import url('https://fonts.googleapis.com/css2?family=Pacifico');
@@ -18,10 +15,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Righteous');
 @import url('https://fonts.googleapis.com/css2?family=Satisfy');
 @import url('https://fonts.googleapis.com/css2?family=Single+Day');
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono');
 @import url('https://fonts.googleapis.com/css2?family=Times+New+Roman');
 @import url('https://fonts.googleapis.com/css2?family=Ultra');
 @import url('https://fonts.googleapis.com/css2?family=Urbanist');
-@import url('https://fonts.googleapis.com/css2?family=Dosis');
+@import url('https://fonts.googleapis.com/css2?family=Verdana');
+
+
 
 .jp-theme-editor-panel {
   overflow-y: auto;
@@ -46,11 +46,11 @@
 }
 
 :root {
-  --jp-ui-font-family: 'Arial', 'Dancing Script', 'Dosis', 'Helvetica',
+  --jp-ui-font-family: 'Arial','Courier','Dancing Script', 'Dosis', 'Helvetica',
     'Lobster', 'JetBrains Mono', 'Pacifico', 'Prompt', 'Righteous', 'Sans Serif',
-    'Satisfy', 'Single Day', 'system-ui', 'Times New Roman', 'Urbanist';
-  --jp-content-font-family: 'Arial', 'Dancing Script', 'Helvetica', 'Dosis',
+    'Satisfy', 'Single Day', 'system-ui', 'Times New Roman', 'Urbanist', 'Verdana';
+  --jp-content-font-family: 'Arial','Courier','Dancing Script', 'Helvetica', 'Dosis',
     'Lobster', 'JetBrains Mono', 'Pacifico', 'Prompt', 'Righteous', 'Sans Serif',
-    'Satisfy', 'Single Day', 'system-ui', 'Times New Roman', 'Urbanist';
-  --jp-code-font-family: 'DejaVu Sans Mono', 'Space Mono';
+    'Satisfy', 'Single Day', 'system-ui', 'Times New Roman', 'Urbanist', 'Verdana';
+  --jp-code-font-family: 'monospace', 'Space Mono';
 }
