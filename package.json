@@ -1,6 +1,6 @@
 {
     "name": "jupyter-theme-editor",
-    "version": "0.2.0",
+    "version": "0.2.1",
     "description": "Extension to create a theme",
     "keywords": [
         "jupyter",
@@ -112,6 +112,6 @@
         },
         "extension": true,
         "outputDir": "jupyter_theme_editor/labextension",
-        "schemaDir":"schema"
+        "schemaDir": "schema"
     }
 }
