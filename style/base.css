@@ -21,8 +21,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Urbanist');
 @import url('https://fonts.googleapis.com/css2?family=Verdana');
 
-
-
 .jp-theme-editor-panel {
   overflow-y: auto;
 }
@@ -46,11 +44,13 @@
 }
 
 :root {
-  --jp-ui-font-family: 'Arial','Courier','Dancing Script', 'Dosis', 'Helvetica',
-    'Lobster', 'JetBrains Mono', 'Pacifico', 'Prompt', 'Righteous', 'Sans Serif',
-    'Satisfy', 'Single Day', 'system-ui', 'Times New Roman', 'Urbanist', 'Verdana';
-  --jp-content-font-family: 'Arial','Courier','Dancing Script', 'Helvetica', 'Dosis',
-    'Lobster', 'JetBrains Mono', 'Pacifico', 'Prompt', 'Righteous', 'Sans Serif',
-    'Satisfy', 'Single Day', 'system-ui', 'Times New Roman', 'Urbanist', 'Verdana';
+  --jp-ui-font-family: 'Arial', 'Courier', 'Dancing Script', 'Dosis',
+    'Helvetica', 'Lobster', 'JetBrains Mono', 'Pacifico', 'Prompt', 'Righteous',
+    'Sans Serif', 'Satisfy', 'Single Day', 'system-ui', 'Times New Roman',
+    'Urbanist', 'Verdana';
+  --jp-content-font-family: 'Arial', 'Courier', 'Dancing Script', 'Helvetica',
+    'Dosis', 'Lobster', 'JetBrains Mono', 'Pacifico', 'Prompt', 'Righteous',
+    'Sans Serif', 'Satisfy', 'Single Day', 'system-ui', 'Times New Roman',
+    'Urbanist', 'Verdana';
   --jp-code-font-family: 'monospace', 'Space Mono';
 }
