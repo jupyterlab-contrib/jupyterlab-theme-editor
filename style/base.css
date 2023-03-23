@@ -28,19 +28,26 @@
 .jp-theme-editor-button-color {
   height: var(--jp-ui-font-size0);
   width: 25px;
+  position: absolute;
+  right: 0;
+  margin-right: 5%;
+}
+
+.form-control {
+  right: 0;
+  width: 95%;
 }
 
 .jp-theme-editor-color-picker {
   position: relative;
   left: 0;
-  top: 0;
 }
 
 .form-class {
-  display: flex;
   background-color: var(--jp-layout-color1);
   color: var(--jp-ui-font-color1);
   font-size: var(--jp-ui-font-size0);
+  line-height: 2em;
 }
 
 :root {
