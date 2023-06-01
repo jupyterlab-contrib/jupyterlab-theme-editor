@@ -16,6 +16,8 @@ test('should emit an activation console message', async ({ page }) => {
   await page.goto();
 
   expect(
-    logs.filter(s => s === 'JupyterLab extension jupyter-theme-editor is activated!')
+    logs.filter(
+      s => s === 'JupyterLab extension jupyter-theme-editor is activated!'
+    )
   ).toHaveLength(1);
 });

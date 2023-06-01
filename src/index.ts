@@ -15,17 +15,26 @@ const plugin: JupyterFrontEndPlugin<void> = {
   description: 'Extension to create a theme',
   autoStart: true,
   optional: [ISettingRegistry],
-  activate: (app: JupyterFrontEnd, settingRegistry: ISettingRegistry | null) => {
+  activate: (
+    app: JupyterFrontEnd,
+    settingRegistry: ISettingRegistry | null
+  ) => {
     console.log('JupyterLab extension jupyter-theme-editor is activated!');
 
     if (settingRegistry) {
       settingRegistry
         .load(plugin.id)
         .then(settings => {
-          console.log('jupyter-theme-editor settings loaded:', settings.composite);
+          console.log(
+            'jupyter-theme-editor settings loaded:',
+            settings.composite
+          );
         })
         .catch(reason => {
-          console.error('Failed to load settings for jupyter-theme-editor.', reason);
+          console.error(
+            'Failed to load settings for jupyter-theme-editor.',
+            reason
+          );
         });
     }
 
