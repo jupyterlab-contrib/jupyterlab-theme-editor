@@ -1,8 +1,152 @@
 {
-  "jupyter.lab.shortcuts": [],
-  "title": "jupyter-theme-editor",
-  "description": "jupyter-theme-editor settings.",
+  "title": "Theme editor",
+  "description": "Settings of Theme Editor.",
   "type": "object",
-  "properties": {},
+  "properties": {
+    "useSettings": {
+      "type": "boolean",
+      "title": "Use the settings style",
+      "default": true
+    },
+    "customStyles": {
+      "title": "Tunable CSS properties",
+      "type": "object",
+      "default": {
+        "accent-color": "#388e3c",
+        "border-color": "#bdbdbd",
+        "brand-color": "#1976d2",
+        "error-color": "#d41818",
+        "info-color": "#0097a7",
+        "layout-color": "#62aedd",
+        "success-color": "#388e3c",
+        "warn-color": "#f57c00",
+        "border-radius": 2,
+        "border-width": 1,
+        "ui-font-family": "Righteous",
+        "ui-font-size": 18,
+        "code-font-family": "monospace",
+        "code-font-size": 14,
+        "content-font-family": "Helvetica",
+        "content-font-size": 14
+      },
+      "properties": {
+        "layout-color": {
+          "type": "string",
+          "title": "Layout color"
+        },
+        "accent-color": {
+          "type": "string",
+          "title": "Accent color"
+        },
+        "border-color": {
+          "type": "string",
+          "title": "Border color"
+        },
+        "brand-color": {
+          "type": "string",
+          "title": "Brand color"
+        },
+        "error-color": {
+          "type": "string",
+          "title": "Error color"
+        },
+        "info-color": {
+          "type": "string",
+          "title": "Info color"
+        },
+        "success-color": {
+          "type": "string",
+          "title": "Success color"
+        },
+        "warn-color": {
+          "type": "string",
+          "title": "Warn color"
+        },
+        "ui-font-size": {
+          "type": "integer",
+          "title": "UI font size",
+          "minimum": 6,
+          "maximum": 30
+        },
+        "content-font-size": {
+          "type": "integer",
+          "title": "Content font size",
+          "minimum": 6,
+          "maximum": 30
+        },
+        "code-font-size": {
+          "type": "integer",
+          "title": "Code font size",
+          "minimum": 6,
+          "maximum": 30
+        },
+        "border-width": {
+          "type": "integer",
+          "title": "Border width",
+          "minimum": 1,
+          "maximum": 10
+        },
+        "border-radius": {
+          "type": "integer",
+          "title": "Border radius",
+          "minimum": 1,
+          "maximum": 10
+        },
+        "ui-font-family": {
+          "type": "string",
+          "title": "User Interface font family",
+          "enum": [
+            "Arial",
+            "Courier",
+            "Dancing Script",
+            "Dosis",
+            "Helvetica",
+            "JetBrains Mono",
+            "Lobster",
+            "Oxygen",
+            "Pacifico",
+            "Prompt",
+            "Righteous",
+            "Single Day",
+            "system-ui",
+            "Satisfy",
+            "Times New Roman",
+            "Ultra",
+            "Urbanist",
+            "Verdana"
+          ]
+        },
+        "content-font-family": {
+          "type": "string",
+          "title": "Content Font family",
+          "enum": [
+            "Arial",
+            "Courier",
+            "Dancing Script",
+            "Dosis",
+            "Helvetica",
+            "JetBrains Mono",
+            "Lobster",
+            "Oxygen",
+            "Pacifico",
+            "Prompt",
+            "Righteous",
+            "Single Day",
+            "system-ui",
+            "Satisfy",
+            "Times New Roman",
+            "Ultra",
+            "Urbanist",
+            "Verdana"
+          ]
+        },
+        "code-font-family": {
+          "type": "string",
+          "title": "Code Font family",
+          "enum": ["monospace", "Space Mono"]
+        }
+      }
+    }
+  },
   "additionalProperties": false
 }

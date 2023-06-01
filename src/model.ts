@@ -107,7 +107,7 @@ function definePaletteFromHexColor(
   const colorRGBA64 = parseColorHexRGB(
     hexcolor.replace(/\s/g, '').toUpperCase()
   );
-  const palette = definePaletteFromColorRGBA64(colorRGBA64!, steps);
+  const palette = definePaletteFromColorRGBA64(colorRGBA64, steps);
   return palette;
 }
 
@@ -321,13 +321,13 @@ export class ThemeEditorModel extends VDomModel {
         const colorRGBA64 = parseColorHexRGB(
           value.replace(/\s/g, '').toUpperCase()
         );
-        const colorRGBA64shifted = shiftLuminanceRGBAColor(colorRGBA64!);
+        const colorRGBA64shifted = shiftLuminanceRGBAColor(colorRGBA64);
         const palette = definePaletteFromColorRGBA64(colorRGBA64shifted, 5);
         const shiftedLuminance = getLuminanceRGBAColor(colorRGBA64shifted);
         const complementaryL = 1 - shiftedLuminance;
         const inverseColorHSL = new ColorHSL(
-          getHueRGBAColor(colorRGBA64!),
-          getSaturationRGBAColor(colorRGBA64!),
+          getHueRGBAColor(colorRGBA64),
+          getSaturationRGBAColor(colorRGBA64),
           complementaryL
         );
         const inverseColorRGBA64 = hslToRGB(inverseColorHSL, 1);

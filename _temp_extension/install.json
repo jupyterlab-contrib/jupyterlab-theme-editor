@@ -1,5 +1,0 @@
-{
-  "packageManager": "python",
-  "packageName": "jupyter_theme_editor",
-  "uninstallInstructions": "Use your Python package manager (pip, conda, etc.) to uninstall the package jupyter_theme_editor"
-}

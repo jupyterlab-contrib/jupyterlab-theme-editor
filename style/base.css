@@ -3,3 +3,61 @@
 
     https://jupyterlab.readthedocs.io/en/stable/developer/css.html
 */
+@import 'https://fonts.googleapis.com/css2?family=Courier';
+@import 'https://fonts.googleapis.com/css2?family=Dancing+Script';
+@import 'https://fonts.googleapis.com/css2?family=Dosis';
+@import 'https://fonts.googleapis.com/css2?family=Helvetica';
+@import 'https://fonts.googleapis.com/css2?family=JetBrains+Mono';
+@import 'https://fonts.googleapis.com/css2?family=Lobster';
+@import 'https://fonts.googleapis.com/css2?family=Oxygen';
+@import 'https://fonts.googleapis.com/css2?family=Pacifico';
+@import 'https://fonts.googleapis.com/css2?family=Prompt';
+@import 'https://fonts.googleapis.com/css2?family=Righteous';
+@import 'https://fonts.googleapis.com/css2?family=Satisfy';
+@import 'https://fonts.googleapis.com/css2?family=Single+Day';
+@import 'https://fonts.googleapis.com/css2?family=Space+Mono';
+@import 'https://fonts.googleapis.com/css2?family=Times+New+Roman';
+@import 'https://fonts.googleapis.com/css2?family=Ultra';
+@import 'https://fonts.googleapis.com/css2?family=Urbanist';
+@import 'https://fonts.googleapis.com/css2?family=Verdana';
+
+.jp-theme-editor-panel {
+  overflow-y: auto;
+}
+
+.jp-theme-editor-button-color {
+  height: var(--jp-ui-font-size0);
+  width: 25px;
+  position: absolute;
+  right: 0;
+  margin-right: 5%;
+}
+
+.form-control {
+  right: 0;
+  width: 95%;
+}
+
+.jp-theme-editor-color-picker {
+  position: relative;
+  left: 0;
+}
+
+.form-class {
+  background-color: var(--jp-layout-color1);
+  color: var(--jp-ui-font-color1);
+  font-size: var(--jp-ui-font-size0);
+  line-height: 2em;
+}
+
+:root {
+  --jp-ui-font-family: 'Arial', 'Courier', 'Dancing Script', 'Dosis',
+    'Helvetica', 'Lobster', 'JetBrains Mono', 'Pacifico', 'Prompt', 'Righteous',
+    'Sans Serif', 'Satisfy', 'Single Day', 'system-ui', 'Times New Roman',
+    'Urbanist', 'Verdana';
+  --jp-content-font-family: 'Arial', 'Courier', 'Dancing Script', 'Helvetica',
+    'Dosis', 'Lobster', 'JetBrains Mono', 'Pacifico', 'Prompt', 'Righteous',
+    'Sans Serif', 'Satisfy', 'Single Day', 'system-ui', 'Times New Roman',
+    'Urbanist', 'Verdana';
+  --jp-code-font-family: 'monospace', 'Space Mono';
+}
