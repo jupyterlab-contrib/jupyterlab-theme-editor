@@ -78,5 +78,5 @@ build_dir = "jupyter_theme_editor/labextension"
 version_cmd = "hatch version"
 
 [tool.jupyter-releaser.hooks]
-before-build-npm = ["python -m pip install jupyterlab~=3.1", "jlpm", "jlpm build:prod"]
+before-build-npm = ["python -m pip install jupyterlab~=4.0", "jlpm", "jlpm build:prod"]
 before-build-python = ["jlpm clean:all"]
