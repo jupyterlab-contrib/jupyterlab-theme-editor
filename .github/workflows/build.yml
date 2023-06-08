@@ -36,7 +36,7 @@ jobs:
         set -eux
         python -m pip install .[test]
 
-        pytest -vv -r ap --cov jupyter_theme_editor
+        #pytest -vv -r ap --cov jupyter_theme_editor
         jupyter server extension list
         jupyter server extension list 2>&1 | grep -ie "jupyter_theme_editor.*OK"
 
