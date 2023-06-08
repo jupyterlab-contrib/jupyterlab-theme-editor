@@ -1,6 +1,7 @@
 *.bundle.*
 lib/
 node_modules/
+*.log
 .eslintcache
 .stylelintcache
 *.egg-info/
@@ -119,3 +120,6 @@ dmypy.json
 
 # OSX files
 .DS_Store
+
+# Yarn cache
+.yarn/
