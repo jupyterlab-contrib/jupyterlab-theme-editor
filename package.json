@@ -1,6 +1,6 @@
 {
   "name": "jupyter-theme-editor",
-  "version": "0.1.0",
+  "version": "0.3.0",
   "description": "Extension to create a theme.",
   "keywords": [
     "jupyter",
@@ -28,9 +28,6 @@
     "type": "git",
     "url": "https://github.com/jupyterlab-contrib/jupyterlab-theme-editor.git"
   },
-  "workspaces": [
-    "ui-tests"
-  ],
   "scripts": {
     "build": "jlpm build:lib && jlpm build:labextension:dev",
     "build:prod": "jlpm clean && jlpm build:lib:prod && jlpm build:labextension",
