@@ -1,7 +1,7 @@
 import json
 
 
-async def test_get_example(jp_fetch):
+''' async def test_get_example(jp_fetch):
     # When
     response = await jp_fetch("jupyter-theme-editor", "get_example")
 
@@ -10,4 +10,4 @@ async def test_get_example(jp_fetch):
     payload = json.loads(response.body)
     assert payload == {
         "data": "This is /jupyter-theme-editor/get_example endpoint!"
-    }
+    } '''

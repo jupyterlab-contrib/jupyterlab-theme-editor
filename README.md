@@ -1,8 +1,7 @@
 # jupyter_theme_editor
 
-[![Extension status](https://img.shields.io/badge/status-draft-critical 'Not yet working')](https://jupyterlab-contrib.github.io/index.html)[![Github Actions Status](https://github.com/jupyterlab-contrib/jupyterlab-theme-editor/workflows/Build/badge.svg)](https://github.com/jupyterlab-contrib/jupyterlab-theme-editor/actions/workflows/build.yml)[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/jupyterlab-contrib/jupyterlab-theme-editor/main?urlpath=lab)
-
-Extension to create a theme
+[![Github Actions Status](https://github.com/jupyterlab-contrib/jupyterlab-theme-editor/workflows/Build/badge.svg)](https://github.com/jupyterlab-contrib/jupyterlab-theme-editor/actions/workflows/build.yml)[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/jupyterlab-contrib/jupyterlab-theme-editor/main?urlpath=lab)
+Extension to create a theme.
 
 This extension is composed of a Python package named `jupyter_theme_editor`
 for the server extension and a NPM package named `jupyter-theme-editor`
@@ -10,7 +9,7 @@ for the frontend extension.
 
 ## Requirements
 
-- JupyterLab >= 3.0
+- JupyterLab >= 4.0.0
 
 ## Install
 
@@ -58,7 +57,7 @@ The `jlpm` command is JupyterLab's pinned version of
 # Clone the repo to your local environment
 # Change directory to the jupyter_theme_editor directory
 # Install package in development mode
-pip install -e .
+pip install -e ".[test]"
 # Link your development version of the extension with JupyterLab
 jupyter labextension develop . --overwrite
 # Server extension must be manually installed in develop mode
@@ -106,6 +105,8 @@ Install test dependencies (needed only once):
 
 ```sh
 pip install -e ".[test]"
+# Each time you install the Python package, you need to restore the front-end extension link
+jupyter labextension develop . --overwrite
 ```
 
 To execute them, run:
@@ -127,7 +128,7 @@ jlpm test
 
 #### Integration tests
 
-This extension uses [Playwright](https://playwright.dev/docs/intro/) for the integration tests (aka user level tests).
+This extension uses [Playwright](https://playwright.dev/docs/intro) for the integration tests (aka user level tests).
 More precisely, the JupyterLab helper [Galata](https://github.com/jupyterlab/jupyterlab/tree/master/galata) is used to handle testing the extension in JupyterLab.
 
 More information are provided within the [ui-tests](./ui-tests/README.md) README.

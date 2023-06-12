@@ -36,14 +36,6 @@ _(
     sys.executable,
     "-m",
     "jupyter",
-    "serverextension",
-    "enable",
-    "jupyter_theme_editor",
-)
-_(
-    sys.executable,
-    "-m",
-    "jupyter",
     "server",
     "extension",
     "enable",
