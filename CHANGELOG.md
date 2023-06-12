@@ -2,6 +2,26 @@
 
 <!-- <START NEW CHANGELOG ENTRY> -->
 
+## 0.4.1
+
+([Full Changelog](https://github.com/jupyterlab-contrib/jupyterlab-theme-editor/compare/v0.3.0...ff9d52347d4b8eb1a03a3ad33b0b830586ebd3a8))
+
+### Bugs fixed
+
+- Fix linting in package.json. [#16](https://github.com/jupyterlab-contrib/jupyterlab-theme-editor/pull/16) ([@HaudinFlorence](https://github.com/HaudinFlorence))
+
+### Maintenance and upkeep improvements
+
+- Migrate extension [#14](https://github.com/jupyterlab-contrib/jupyterlab-theme-editor/pull/14) ([@HaudinFlorence](https://github.com/HaudinFlorence))
+
+### Contributors to this release
+
+([GitHub contributors page for this release](https://github.com/jupyterlab-contrib/jupyterlab-theme-editor/graphs/contributors?from=2023-03-23&to=2023-06-12&type=c))
+
+[@github-actions](https://github.com/search?q=repo%3Ajupyterlab-contrib%2Fjupyterlab-theme-editor+involves%3Agithub-actions+updated%3A2023-03-23..2023-06-12&type=Issues) | [@HaudinFlorence](https://github.com/search?q=repo%3Ajupyterlab-contrib%2Fjupyterlab-theme-editor+involves%3AHaudinFlorence+updated%3A2023-03-23..2023-06-12&type=Issues) | [@jtpio](https://github.com/search?q=repo%3Ajupyterlab-contrib%2Fjupyterlab-theme-editor+involves%3Ajtpio+updated%3A2023-03-23..2023-06-12&type=Issues)
+
+<!-- <END NEW CHANGELOG ENTRY> -->
+
 ## 0.4.0
 
 ([Full Changelog](https://github.com/jupyterlab-contrib/jupyterlab-theme-editor/compare/v0.3.0...a7fd5cf02f6e807b82a9e74d903a454623f98ff4))
@@ -15,8 +35,6 @@
 ([GitHub contributors page for this release](https://github.com/jupyterlab-contrib/jupyterlab-theme-editor/graphs/contributors?from=2023-03-23&to=2023-06-12&type=c))
 
 [@github-actions](https://github.com/search?q=repo%3Ajupyterlab-contrib%2Fjupyterlab-theme-editor+involves%3Agithub-actions+updated%3A2023-03-23..2023-06-12&type=Issues) | [@HaudinFlorence](https://github.com/search?q=repo%3Ajupyterlab-contrib%2Fjupyterlab-theme-editor+involves%3AHaudinFlorence+updated%3A2023-03-23..2023-06-12&type=Issues) | [@jtpio](https://github.com/search?q=repo%3Ajupyterlab-contrib%2Fjupyterlab-theme-editor+involves%3Ajtpio+updated%3A2023-03-23..2023-06-12&type=Issues)
-
-<!-- <END NEW CHANGELOG ENTRY> -->
 
 ## 0.3.0
 
