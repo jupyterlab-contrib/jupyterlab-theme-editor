@@ -2,6 +2,22 @@
 
 <!-- <START NEW CHANGELOG ENTRY> -->
 
+## 0.4.2
+
+([Full Changelog](https://github.com/jupyterlab-contrib/jupyterlab-theme-editor/compare/v0.4.1...4f1966cd827756a3ddcf60ec69790117488f2f4d))
+
+### Maintenance and upkeep improvements
+
+- Use tabwidth of 4 for root package.json [#17](https://github.com/jupyterlab-contrib/jupyterlab-theme-editor/pull/17) ([@fcollonval](https://github.com/fcollonval))
+
+### Contributors to this release
+
+([GitHub contributors page for this release](https://github.com/jupyterlab-contrib/jupyterlab-theme-editor/graphs/contributors?from=2023-06-12&to=2023-06-13&type=c))
+
+[@fcollonval](https://github.com/search?q=repo%3Ajupyterlab-contrib%2Fjupyterlab-theme-editor+involves%3Afcollonval+updated%3A2023-06-12..2023-06-13&type=Issues)
+
+<!-- <END NEW CHANGELOG ENTRY> -->
+
 ## 0.4.1
 
 ([Full Changelog](https://github.com/jupyterlab-contrib/jupyterlab-theme-editor/compare/v0.3.0...ff9d52347d4b8eb1a03a3ad33b0b830586ebd3a8))
@@ -19,8 +35,6 @@
 ([GitHub contributors page for this release](https://github.com/jupyterlab-contrib/jupyterlab-theme-editor/graphs/contributors?from=2023-03-23&to=2023-06-12&type=c))
 
 [@github-actions](https://github.com/search?q=repo%3Ajupyterlab-contrib%2Fjupyterlab-theme-editor+involves%3Agithub-actions+updated%3A2023-03-23..2023-06-12&type=Issues) | [@HaudinFlorence](https://github.com/search?q=repo%3Ajupyterlab-contrib%2Fjupyterlab-theme-editor+involves%3AHaudinFlorence+updated%3A2023-03-23..2023-06-12&type=Issues) | [@jtpio](https://github.com/search?q=repo%3Ajupyterlab-contrib%2Fjupyterlab-theme-editor+involves%3Ajtpio+updated%3A2023-03-23..2023-06-12&type=Issues)
-
-<!-- <END NEW CHANGELOG ENTRY> -->
 
 ## 0.4.0
 
