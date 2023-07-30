@@ -3,23 +3,23 @@
 
     https://jupyterlab.readthedocs.io/en/stable/developer/css.html
 */
-@import 'https://fonts.googleapis.com/css2?family=Courier';
-@import 'https://fonts.googleapis.com/css2?family=Dancing+Script';
-@import 'https://fonts.googleapis.com/css2?family=Dosis';
-@import 'https://fonts.googleapis.com/css2?family=Helvetica';
-@import 'https://fonts.googleapis.com/css2?family=JetBrains+Mono';
-@import 'https://fonts.googleapis.com/css2?family=Lobster';
-@import 'https://fonts.googleapis.com/css2?family=Oxygen';
-@import 'https://fonts.googleapis.com/css2?family=Pacifico';
-@import 'https://fonts.googleapis.com/css2?family=Prompt';
-@import 'https://fonts.googleapis.com/css2?family=Righteous';
-@import 'https://fonts.googleapis.com/css2?family=Satisfy';
-@import 'https://fonts.googleapis.com/css2?family=Single+Day';
-@import 'https://fonts.googleapis.com/css2?family=Space+Mono';
-@import 'https://fonts.googleapis.com/css2?family=Times+New+Roman';
-@import 'https://fonts.googleapis.com/css2?family=Ultra';
-@import 'https://fonts.googleapis.com/css2?family=Urbanist';
-@import 'https://fonts.googleapis.com/css2?family=Verdana';
+@import url('https://fonts.googleapis.com/css2?family=Courier');
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script');
+@import url('https://fonts.googleapis.com/css2?family=Dosis');
+@import url('https://fonts.googleapis.com/css2?family=Helvetica');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono');
+@import url('https://fonts.googleapis.com/css2?family=Lobster');
+@import url('https://fonts.googleapis.com/css2?family=Oxygen');
+@import url('https://fonts.googleapis.com/css2?family=Pacifico');
+@import url('https://fonts.googleapis.com/css2?family=Prompt');
+@import url('https://fonts.googleapis.com/css2?family=Righteous');
+@import url('https://fonts.googleapis.com/css2?family=Satisfy');
+@import url('https://fonts.googleapis.com/css2?family=Single+Day');
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono');
+@import url('https://fonts.googleapis.com/css2?family=Times+New+Roman');
+@import url('https://fonts.googleapis.com/css2?family=Ultra');
+@import url('https://fonts.googleapis.com/css2?family=Urbanist');
+@import url('https://fonts.googleapis.com/css2?family=Verdana');
 
 .jp-theme-editor-panel {
   overflow-y: auto;
