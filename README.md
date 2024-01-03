@@ -1,7 +1,8 @@
 # jupyter_theme_editor
 
 [![Github Actions Status](https://github.com/jupyterlab-contrib/jupyterlab-theme-editor/workflows/Build/badge.svg)](https://github.com/jupyterlab-contrib/jupyterlab-theme-editor/actions/workflows/build.yml)[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/jupyterlab-contrib/jupyterlab-theme-editor/main?urlpath=lab)
-Extension to create a theme.
+
+A theme editor for JupyterLab.
 
 This extension is composed of a Python package named `jupyter_theme_editor`
 for the server extension and a NPM package named `jupyter-theme-editor`
